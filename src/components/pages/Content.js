@@ -1,8 +1,9 @@
-import {useLocation, Link} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
+import ContentHeader from '../ContentHeader';
 
 const Content = () => {
 	let location = useLocation();
-	let pageName = 'Dashboard';
+	let pageName = '';
 
 	if  (location.pathname.includes("inventory")) {
 		pageName = 'Inventory';
@@ -10,59 +11,40 @@ const Content = () => {
 		pageName = 'Reports';
 	} else if  (location.pathname.includes("projects")) {
 		pageName = 'Projects';
-
+	} else {
+		pageName = 'Dashboard'
 	}
 
         return (
-			  <div className="content-wrapper">
-				{/*Content Header (Page header) */}
-				<section className="content-header">
-				  <div className="container-fluid">
-					<div className="row mb-2">
-					  <div className="col-sm-6">
-						<h1>{pageName}</h1>
-					  </div>
-					  <div className="col-sm-6">
-						<ol className="breadcrumb float-sm-right">
-						  <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-						  <li className="breadcrumb-item active">{ pageName }</li>
-						</ol>
-					  </div>
-					</div>
-				  </div>{/*/.container-fluid */}
-				</section>
-
-				{/*Main content */}
+			<>
+				<ContentHeader pageName={pageName}/>
 				<section className="content">
-
-				  {/*Default box */}
-				  <div className="card">
+					{/*Default box */}
+					<div className="card">
 					<div className="card-header">
-					  <h3 className="card-title">Title { pageName }</h3>
+						<h3 className="card-title">Title { pageName }</h3>
 
-					  <div className="card-tools">
+						<div className="card-tools">
 						<button type="button" className="btn btn-tool" data-card-widget="collapse" title="Collapse">
-						  <i className="fas fa-minus"></i>
+							<i className="fas fa-minus"></i>
 						</button>
 						<button type="button" className="btn btn-tool" data-card-widget="remove" title="Remove">
-						  <i className="fas fa-times"></i>
+							<i className="fas fa-times"></i>
 						</button>
-					  </div>
+						</div>
 					</div>
 					<div className="card-body">
-					  Start creating your amazing application!
+						Start creating your amazing application!
 					</div>
 					{/*/.card-body */}
 					<div className="card-footer">
-					  Footer
+						Footer
 					</div>
 					{/*/.card-footer*/}
-				  </div>
-				  {/*/.card */}
-
+					</div>
+					{/*/.card */}
 				</section>
-				{/*/.content */}
-			  </div>
+			</>
         )
     };
 	

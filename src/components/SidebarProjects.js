@@ -6,12 +6,18 @@ class SidebarProjects extends Component {
 	constructor(props) {
 		super(props);
 		this.projects = [];
+		this.keyCount = 0;
+		this.getKey = this.getKey.bind(this);
 		
 		this.state = {
 		  error: null,
 		  isLoaded: false,
 		};
-	  }
+	}
+
+	getKey() {
+		return this.keyCount++;
+	}
 
 	componentDidMount() {
 		// fetch types
@@ -51,20 +57,20 @@ class SidebarProjects extends Component {
 			// build elements
 			this.projects.forEach((project) => {
                 if (elements === undefined || elements.length === 0) {
-                    elements.push(<li className="nav-header" key={Math.random()}>PROJECTS</li>);
+                    elements.push(<li className="nav-header" key={this.getKey()}>PROJECTS</li>);
                 }
  
                 els = [];
                 let projectUrl = `/projects/${project.id}`;
                 els.push(
-					<Link to={projectUrl} className="nav-link" key={Math.random()}>
+					<Link to={projectUrl} className="nav-link" key={this.getKey()}>
 						<i className="far fa-circle nav-icon text-warning"></i>
 						<p>{project.name}</p>
 					</Link>                    
                 );
 
                 elements.push(
-					<li className="nav-item" key={Math.random()}>
+					<li className="nav-item" key={this.getKey()}>
 						{els}
 					</li>
 				);

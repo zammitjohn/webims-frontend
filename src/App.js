@@ -4,8 +4,9 @@ import React, {Component} from 'react';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 
 import Layout from './components/Layout';
-import Content from "./components/pages/Content";
 import Error404 from "./components/pages/Error404";
+import Content from "./components/pages/Content";
+import InventoryItemCreate from './components/pages/Inventory/InventoryItemCreate';
 
 class App extends Component {
 
@@ -23,7 +24,7 @@ class App extends Component {
 				  	<Route path='' element={<Content/>} />
 				  	<Route path='category/:id' element={<Content/>} />
 					<Route path='type/:id' element={<Content/>} />
-					<Route path='create' element={<Content/>} />
+					<Route path='create' element={<InventoryItemCreate/>} />
         			<Route path=':id' element={<Content/>} />
       			  </Route>
 

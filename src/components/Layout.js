@@ -15,7 +15,9 @@ class Layout extends Component {
 			<Preloader />
 			<Header />
 			<Sidebar />
-			<Outlet />
+			<div className="content-wrapper">
+				<Outlet />
+			</div>
 			<Footer />
 		</div>
     );

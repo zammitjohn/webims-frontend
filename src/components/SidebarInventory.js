@@ -7,6 +7,8 @@ class SidebarInventory extends Component {
 		super(props);
 		this.categories = [];
 		this.types = [];
+		this.keyCount = 0;
+		this.getKey = this.getKey.bind(this);
 		
 		this.state = {
 		  error: null,
@@ -14,6 +16,10 @@ class SidebarInventory extends Component {
 		  isTypesLoaded: false,
 		};
 	  }
+
+	getKey() {
+		return this.keyCount++;
+	}
 
 	componentDidMount() {
 		// Note: it's important to handle errors here
@@ -72,21 +78,19 @@ class SidebarInventory extends Component {
 			console.log("Loading...");
 			return null;
 		} else {
-
-
 			// build elements
 			this.categories.forEach((category) => {
 				let els = [];
 				let categoryUrl = `inventory/category/${category.id}`;
 
 				els.push(
-					<Link to="#" className="nav-link"  key={Math.random()}>
+					<Link to="#" className="nav-link" key={this.getKey()}>
 						<i className="far fa-dot-circle nav-icon"></i>
 						<p>{category.name}<i className="right fas fa-angle-left"></i></p>
 					</Link>
 				);
 				els.push(
-					<ul className="nav nav-treeview" key={Math.random()}>
+					<ul className="nav nav-treeview" key={this.getKey()}>
 						<li className="nav-item">
 						<Link to={categoryUrl} className="nav-link">
 							<i className="fas fa-circle nav-icon"></i>
@@ -103,7 +107,7 @@ class SidebarInventory extends Component {
 						let typeUrl = `inventory/type/${type.id}`;
 						
 						els.push(
-							<ul className="nav nav-treeview" key={Math.random()}>
+							<ul className="nav nav-treeview" key={this.getKey()}>
 								<li className="nav-item">
 								<Link to={typeUrl} className="nav-link">
 									<i className="far fa-circle nav-icon"></i>
@@ -116,7 +120,7 @@ class SidebarInventory extends Component {
 				});
 
 				elements.push(
-					<li className="nav-item has-treeview" key={Math.random()}>
+					<li className="nav-item has-treeview" key={this.getKey()}>
 						{els}
 					</li>
 				);
