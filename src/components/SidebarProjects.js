@@ -1,26 +1,22 @@
-import React, { Component } from 'react';
-import {Link} from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 
-class SidebarProjects extends Component {
+function SidebarProjects() {
+// Local variables will get reset every render upon mutation whereas state will update
+let elements = [];
+let key = 0;
+const [projects, setProjects] = useState([]);
+const [states, setStates] = useState({ // fetch states
+	error: null,
+	isLoaded: false,
+});
 
-	constructor(props) {
-		super(props);
-		this.projects = [];
-		this.keyCount = 0;
-		this.getKey = this.getKey.bind(this);
-		
-		this.state = {
-		  error: null,
-		  isLoaded: false,
-		};
-	}
+useEffect(() => {
+		// Note: it's important to handle errors here
+		// instead of a catch() block so that we don't swallow
+		// exceptions from actual bugs in components.		
 
-	getKey() {
-		return this.keyCount++;
-	}
-
-	componentDidMount() {
-		// fetch types
+		// fetch projects
 		fetch('http://site.test/WebIMS/api/projects/types/read', {
 			method: 'GET',
 			credentials: 'include'
@@ -28,49 +24,53 @@ class SidebarProjects extends Component {
 			.then(res => res.json())
 			.then(
 				(projects) => {
-					this.projects = projects;
-					this.setState({
+					setProjects(projects);
+					setStates({
 						isLoaded: true,
-						});
-				},			
+					});
+				},
 				(error) => {
-					this.setState({
+					setStates({
 						isLoaded: true,
 						error
-						});
+					});
 				}
 			)
-	}
+  }, []);
 
-    render() {
-		let elements = [];
+    if (states.error) {
+        console.log(states.error.message);
+        return null;
+    } else if (!(states.isLoaded)) {
+        console.log("Loading...");
+        return null;
+    } else {
         let els = [];
-		const {error, isLoaded} = this.state;
-		if (error) {
-			console.log(error.message);
+		if (states.error) {
+			console.log(states.error.message);
 			return null;
-		} else if (!(isLoaded)) {
+		} else if (!(states.isLoaded)) {
 			console.log("Loading...");
 			return null;
 		} else {
 
 			// build elements
-			this.projects.forEach((project) => {
+			projects.forEach((project) => {
                 if (elements === undefined || elements.length === 0) {
-                    elements.push(<li className="nav-header" key={this.getKey()}>PROJECTS</li>);
+                    elements.push(<li className="nav-header" key={key++}>PROJECTS</li>);
                 }
  
                 els = [];
                 let projectUrl = `/projects/${project.id}`;
                 els.push(
-					<Link to={projectUrl} className="nav-link" key={this.getKey()}>
+					<Link to={projectUrl} className="nav-link" key={key++}>
 						<i className="far fa-circle nav-icon text-warning"></i>
 						<p>{project.name}</p>
 					</Link>                    
                 );
 
                 elements.push(
-					<li className="nav-item" key={this.getKey()}>
+					<li className="nav-item" key={key++}>
 						{els}
 					</li>
 				);
@@ -79,14 +79,12 @@ class SidebarProjects extends Component {
 
 			}
 
-			  return (
-                  <>
-                    {elements}
-                  </>
-
-			);
-        }
+		return (
+			<>
+				{elements}
+			</>
+		);
     }
+}
 
-
-export default SidebarProjects;
+export default SidebarProjects

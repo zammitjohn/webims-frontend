@@ -1,77 +1,59 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
-class LoadTypesDropdown extends Component {
+function LoadTypesDropdown(props) {
+// Local variables will get reset every render upon mutation whereas state will update
+let elements = [];
+let key = 0;
+const [types, setTypes] = useState([]);
+const [states, setStates] = useState({ // form values
+    error: null,
+    isLoaded: false,
+});
 
-	constructor(props) {
-		super(props);
-		this.types = [];
-		this.keyCount = 0;
-		this.getKey = this.getKey.bind(this);
-		
-		this.state = {
-		  error: null,
-		  isLoaded: false,
-		};
-	  }
-
-	getKey() {
-		return this.keyCount++;
-	}
-
-    componentDidMount() {
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.		
-    
-        // fetch types
-        fetch('http://site.test/WebIMS/api/inventory/types/read', {
-          method: 'GET',
-          credentials: 'include'
-          })
-          .then(res => res.json())
-          .then(
+useEffect(() => {
+    // fetch types
+    fetch('http://site.test/WebIMS/api/inventory/types/read', {
+        method: 'GET',
+        credentials: 'include'
+        })
+        .then(res => res.json())
+        .then(
             (types) => {
-              this.types = types;
-              this.setState({
-                isLoaded: true,
+                setTypes(types);
+                setStates({
+                    isLoaded: true
                 });
             },
             (error) => {
-              this.setState({
-                isLoaded: true,
-                error
-                });
+                setStates({
+                    isLoaded: true,
+                    error
+                })
             }
-          )
-      }
+        )
+  }, []);
 
-    render() {
-		let elements = [];
-    elements.push(<option value={null} key={this.getKey()}>Select Type</option>);
-		const {error, isLoaded} = this.state;
-		if (error) {
-			console.log(error.message);
-			return null;
-		} else if (!(isLoaded)) {
-			console.log("Loading...");
-			return null;
-		} else {
 
-        this.types.forEach((type) => {
-          if ((type.type_category == this.props.category)){
-            elements.push(<option value={type.id} key={this.getKey()}>{type.name}</option>);
-          }
-				  
-        });
+  elements.push(<option value={null} key={key++}>Select Type</option>);
+  if (states.error) {
+      console.log(states.error.message);
+      return null;
+  } else if (!(states.isLoaded)) {
+      console.log("Loading...");
+      return null;
+  } else {
+    types.forEach((type) => {
+      if ((type.type_category === props.category)){
+        elements.push(<option value={type.id} key={key++}>{type.name}</option>);
+      }	  
+    });
+  }
 
-            return (
-                <>
-                    {elements}
-                </>
-            );
-
-        }
-    }
+    return (
+        <>
+            {elements}
+        </>
+    );
 }
 
-export default LoadTypesDropdown;
+export default LoadTypesDropdown

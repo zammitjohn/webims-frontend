@@ -1,15 +1,10 @@
-// Sidebar.js
-
-import React, {Component} from 'react';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import SidebarInventory from './SidebarInventory';
 import SidebarProjects from './SidebarProjects';
 
-export default class Sidebar extends Component {	
 
-    render(){
-
-		return (
+function Sidebar() {
+    return (
 		<aside className="main-sidebar sidebar-dark-primary elevation-4">
 			
 			{/* Brand Logo */}
@@ -78,10 +73,7 @@ export default class Sidebar extends Component {
 			</div>
 			{/* /.sidebar */}
 		</aside>
-		)
-
-
-		
-
-	}
+	);
 }
+
+export default Sidebar;

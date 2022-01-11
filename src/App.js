@@ -1,16 +1,12 @@
 // App.js
-
-import React, {Component} from 'react';
-import {BrowserRouter, Routes, Route} from "react-router-dom";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from './components/Layout';
 import Error404 from "./components/pages/Error404";
 import Content from "./components/pages/Content";
-import InventoryItemCreate from './components/pages/Inventory/InventoryItemCreate';
+import CreateInventoryItem from './components/pages/Inventory/CreateInventoryItem';
+import AllInventoryItems from './components/pages/Inventory/AllInventoryItems';
 
-class App extends Component {
-
-  render() {
+function App() {
     return (
 		<div>
 			<BrowserRouter>
@@ -21,10 +17,10 @@ class App extends Component {
 				  <Route path="dashboard" element={<Content/>} />
 				  
 				  <Route path="inventory">
-				  	<Route path='' element={<Content/>} />
+				  	<Route path='' element={<AllInventoryItems/>} />
 				  	<Route path='category/:id' element={<Content/>} />
 					<Route path='type/:id' element={<Content/>} />
-					<Route path='create' element={<InventoryItemCreate/>} />
+					<Route path='create' element={<CreateInventoryItem/>} />
         			<Route path=':id' element={<Content/>} />
       			  </Route>
 
@@ -52,6 +48,5 @@ class App extends Component {
 		</div>
     );
   }
-}
-
-export default App;
+  
+  export default App;

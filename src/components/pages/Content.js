@@ -1,7 +1,7 @@
-import {useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import ContentHeader from '../ContentHeader';
 
-const Content = () => {
+function Content() {
 	let location = useLocation();
 	let pageName = '';
 
