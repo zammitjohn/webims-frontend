@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import Error404 from "./components/pages/Error404";
 import Content from "./components/pages/Content";
 import CreateInventoryItem from './components/pages/Inventory/CreateInventoryItem';
+import EditInventoryItem from './components/pages/Inventory/EditInventoryItem';
 import AllInventoryItems from './components/pages/Inventory/AllInventoryItems';
 
 function App() {
@@ -21,13 +22,13 @@ function App() {
 				  	<Route path='category/:id' element={<Content/>} />
 					<Route path='type/:id' element={<Content/>} />
 					<Route path='create' element={<CreateInventoryItem/>} />
-        			<Route path=':id' element={<Content/>} />
+        			<Route path='edit/:id' element={<EditInventoryItem/>} />
       			  </Route>
 
 				  <Route path="reports">
 				  	<Route path='' element={<Content/>} />
 					<Route path='create' element={<Content/>} />
-        			<Route path=':id' element={<Content/>} />
+        			<Route path='edit/:id' element={<Content/>} />
       			  </Route>
 
 				  <Route path="projects">

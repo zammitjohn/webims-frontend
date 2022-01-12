@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
+import { getInventoryCategories, getInventoryTypes } from '../functions/getInventoryTypesCategories';
 
 function SidebarInventory() {
 // Local variables will get reset every render upon mutation whereas state will update
@@ -19,11 +20,7 @@ useEffect(() => {
 		// exceptions from actual bugs in components.		
 
 		// fetch categories
-		fetch('http://site.test/WebIMS/api/inventory/categories/read', {
-			method: 'GET',
-			credentials: 'include'
-		  })
-			.then(res => res.json())
+		getInventoryCategories()
 			.then(
 				(categories) => {
 					setCategories(categories);
@@ -42,11 +39,7 @@ useEffect(() => {
 			)
 			
 		// fetch types
-		fetch('http://site.test/WebIMS/api/inventory/types/read', {
-			method: 'GET',
-			credentials: 'include'
-		  })
-			.then(res => res.json())
+		getInventoryTypes(undefined)
 			.then(
 				(types) => {
 					setTypes(types);

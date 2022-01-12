@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ContentHeader from '../../ContentHeader';
-import LoadCategoriesDropdown from './LoadCategoriesDropdown';
-import LoadTypesDropdown from './LoadTypesDropdown';
+import { getInventoryCategories, getInventoryTypes } from '../../../functions/getInventoryTypesCategories';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 
 function CreateInventoryItem() {
-  const [submitted, setSubmitted] = useState(false); // submitted state
+  const [categories, setCategories] = useState([]);
+  const [types, setTypes] = useState([]);
   const [values, setValues] = useState({ // form values
     SKU: '',
     category: '',
@@ -18,11 +18,36 @@ function CreateInventoryItem() {
     qtyIn: '',
     qtyOut: '',
     notes: '',
-});
+  });
 
-let navigate = useNavigate();
+  let navigate = useNavigate();
 
-const handleChange = (event) => {
+  const dropdownData = (category) => { // fetch dropdown data
+    getInventoryTypes(category) //types
+    .then(
+      (response) => {
+        setTypes(response);
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
+    getInventoryCategories() //categories
+    .then(
+      (response) => {
+        setCategories(response);
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
+  }
+
+  useEffect(() => { 
+    dropdownData(null);  
+  }, []);
+
+  const handleChange = (event) => {
     const { id, value } = event.target;
     const fieldValue = { [id]: value };
 
@@ -32,9 +57,23 @@ const handleChange = (event) => {
     });
   };
 
+  const handleCategoryChange = (event) => {
+    const { value } = event.target;
+    const fieldValue = { 
+      category : value,
+      type : '',
+    };
+    
+    dropdownData(value);
+
+    setValues({
+      ...values,
+      ...fieldValue,
+    });
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    setSubmitted(true);
     let formData = new FormData();
     formData.append('SKU', values.SKU);
     formData.append('category', values.category);
@@ -64,7 +103,7 @@ const handleChange = (event) => {
           toast.error('Error occured');
         }
       )
-};
+  };
   return (
     <>
       <ContentHeader pageName={'Add Item'}/>
@@ -85,21 +124,31 @@ const handleChange = (event) => {
                     </div>
                     
                     <div className="form-group">
-                      <div className="row">
-                        <div className="col-6 col-sm-3">
-                          <label htmlFor="category">Category</label>
-                          <select value={values.category} onChange={handleChange} id="category" className="form-control">
-                            <LoadCategoriesDropdown/>
-                          </select>
+                        <div className="row">
+                          <div className="col-6 col-sm-3">
+                            <label htmlFor="category">Category</label>
+                            <select value={values.category} onChange={handleCategoryChange} id="category" className="form-control">
+                              <option value='null'>Select Category</option>
+                              {categories.map(category => (
+                                  <option key={category.id} value={category.id}>
+                                    {category.name}
+                                  </option>
+                                ))}    
+                            </select>                          
+                          </div>
+                          <div className="col-6 col-sm-3">
+                            <label htmlFor="type">Type</label>
+                            <select value={values.type} onChange={handleChange} id="type" className="form-control">
+                              <option value='null'>Select Type</option>
+                              {types.map(type => (
+                                <option key={type.id} value={type.id}>
+                                  {type.name}
+                                </option>
+                              ))}  
+                            </select>
+                          </div>
                         </div>
-                        <div className="col-6 col-sm-3">
-                          <label htmlFor="type">Type</label>
-                          <select value={values.type} onChange={handleChange} id="type" className="form-control">
-                            <LoadTypesDropdown category={values.category}/>
-                          </select>
-                        </div>
-                      </div>
-                    </div>                 
+                      </div>                   
 
                     <div className="form-group">
                       <label htmlFor="description">Description</label>
@@ -141,7 +190,7 @@ const handleChange = (event) => {
                   {/* /.card-body */}
                   
                   <div className="card-footer">
-                    <button type="submit" className="btn btn-primary button_action_create">Submit</button>
+                    <button type="submit" className="btn btn-primary">Create</button>
                   </div>
                 </form>
               </div>
