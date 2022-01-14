@@ -4,6 +4,7 @@ import { getInventoryCategories, getInventoryTypes } from '../../../functions/ge
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
+import InventoryForm from './InventoryForm';
 
 function CreateInventoryItem() {
   const [categories, setCategories] = useState([]);
@@ -117,75 +118,7 @@ function CreateInventoryItem() {
                 {/* form start */}
                 <form id="item_form" onSubmit={handleSubmit}>
                   <div className="card-body">
-
-                    <div className="form-group">
-                      <label htmlFor="SKU">SKU</label>
-                      <input value={values.SKU} onChange={handleChange} type="text" maxLength="255" className="form-control" id="SKU" placeholder="Enter SKU"/>
-                    </div>
-                    
-                    <div className="form-group">
-                        <div className="row">
-                          <div className="col-6 col-sm-3">
-                            <label htmlFor="category">Category</label>
-                            <select value={values.category} onChange={handleCategoryChange} id="category" className="form-control">
-                              <option value='null'>Select Category</option>
-                              {categories.map(category => (
-                                  <option key={category.id} value={category.id}>
-                                    {category.name}
-                                  </option>
-                                ))}    
-                            </select>                          
-                          </div>
-                          <div className="col-6 col-sm-3">
-                            <label htmlFor="type">Type</label>
-                            <select value={values.type} onChange={handleChange} id="type" className="form-control">
-                              <option value='null'>Select Type</option>
-                              {types.map(type => (
-                                <option key={type.id} value={type.id}>
-                                  {type.name}
-                                </option>
-                              ))}  
-                            </select>
-                          </div>
-                        </div>
-                      </div>                   
-
-                    <div className="form-group">
-                      <label htmlFor="description">Description</label>
-                      <input value={values.description} onChange={handleChange} type="text" maxLength="255" className="form-control" id="description" placeholder="Enter description"/>
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="supplier">Supplier</label>
-                      <input value={values.supplier} onChange={handleChange} type="text" maxLength="255" className="form-control" id="supplier" placeholder="Enter supplier"/>
-                    </div>              
-
-                    <div className="row">
-                      <div className="col-sm-6">
-                        <div className="form-group">
-                          <label htmlFor="qty">Quantity</label>
-                          <input value={values.qty} onChange={handleChange} type="number" min="0" max="9999" className="form-control" id="qty" placeholder="Enter quantity"/>
-                        </div>
-                      </div>
-                      <div className="col-sm-3">
-                        <div className="form-group">
-                          <label htmlFor="qtyIn">Provisional In</label>
-                          <input value={values.qtyIn} onChange={handleChange} type="number" min="0" max="9999" className="form-control" id="qtyIn" placeholder="Enter quantity"/>
-                        </div>
-                      </div>
-                      <div className="col-sm-3">
-                        <div className="form-group">
-                        <label htmlFor="qtyOut">Provisional Out</label>
-                        <input value={values.qtyOut} onChange={handleChange} type="number" min="0" max="9999" className="form-control" id="qtyOut" placeholder="Enter quantity"/>
-                        </div>
-                      </div>
-                    </div>
-                      
-                    <div className="form-group">
-                      <label htmlFor="notes">Miscellaneous</label>
-                      <input value={values.notes} onChange={handleChange} type="text" maxLength="255" className="form-control" id="notes" placeholder="Notes"/>
-                    </div>
-
+                    <InventoryForm values={values} handleCategoryChange={handleCategoryChange} handleChange={handleChange} categories={categories} types={types}/>
                   </div>
                   {/* /.card-body */}
                   
