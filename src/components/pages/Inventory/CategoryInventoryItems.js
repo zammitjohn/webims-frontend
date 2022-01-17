@@ -19,7 +19,7 @@ function CategoryInventoryItems() {
             name: 'Type',
             selector: row => row.type_name,
             sortable: true,
-            cell: (row)=><Link to={'../type/' + row.type_id}>{row.type_name}</Link>,
+            cell: (row)=><Link to={'../type/' + row.type_id}>{row.type_name + ' (' + row.type_altname + ')'}</Link>,
             hide: 'sm',
         },
         {
@@ -70,7 +70,7 @@ function CategoryInventoryItems() {
     };
     
     const [data, setData] = useState([]); // data from api
-    const [categoryName, setCategoryName] = useState('');
+    const [categoryName, setCategoryName] = useState(' ');
     const [states, setStates] = useState({ // form values
         error: null,
         isDataLoaded: false,

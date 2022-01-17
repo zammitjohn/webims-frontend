@@ -63,7 +63,7 @@ function TypeInventoryItems() {
     };
     
     const [data, setData] = useState([]); // data from api
-    const [typeName, setTypeName] = useState('');
+    const [typeName, setTypeName] = useState(' ');
     const [categoryName, setCategoryName] = useState('');
     const [states, setStates] = useState({ // form values
         error: null,

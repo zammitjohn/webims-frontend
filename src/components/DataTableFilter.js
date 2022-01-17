@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createSearchParams, useNavigate } from "react-router-dom";
 
 function DataTableFilter(props) {
@@ -30,8 +30,13 @@ function DataTableFilter(props) {
                 search: e.target.value
             })}`
         });
-
     };
+
+    useEffect(() => {
+        if (props.filterText) {
+            setIcon(<i className="fa fa-times" aria-hidden="true"></i>);
+        }
+	}, [props.filterText]);
 
     return (
         <div className="input-group input-group-sm" style={{paddingLeft: "10px", width:"225px"}} >
