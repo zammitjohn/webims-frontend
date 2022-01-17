@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ContentHeader from '../../ContentHeader';
 import DataTable from 'react-data-table-component';
 import DataTableFilter from "../../DataTableFilter"
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 function AllInventoryItems() {
     const columns = [
@@ -58,11 +58,10 @@ function AllInventoryItems() {
         },
     ];
 
-
     const customStyles = {
         rows: {
             style: {
-                fontSize: '16px',
+                fontSize: '15px',
                 paddingLeft: '10px', // override the cell padding for data cells
                 paddingRight: '10px',
             },
@@ -73,19 +72,17 @@ function AllInventoryItems() {
                 fontWeight: 'bold',
             },
         },
-        cells: {
-            style: {
-
-            },
-        },
     };
     
-    const [data, setData] = useState([]);
+    const [data, setData] = useState([]); // data from api
     const [states, setStates] = useState({ // form values
         error: null,
         isLoaded: false,
       });
-    const [filterText, setFilterText] = useState('');
+
+    const [searchParams] = useSearchParams(); // search params
+    const [filterText, setFilterText] = useState((searchParams.get('search')) ?  searchParams.get('search') : '');
+
     const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
 
     const filteredItems = data.filter(function(item) {
@@ -99,13 +96,6 @@ function AllInventoryItems() {
             return false;
         }
     });
-    
-    const handleClear = () => {
-        if (filterText) {
-            setResetPaginationToggle(!resetPaginationToggle);
-            setFilterText('');
-        }
-    };
 
     const fetchData = () => { // fetch inventory
         fetch('http://site.test/WebIMS/api/inventory/read', {
@@ -149,7 +139,7 @@ function AllInventoryItems() {
                             <div className="card-header">
                                 <h3 className="card-title">All items</h3>
                                     <div className="card-tools">
-                                        <DataTableFilter placeholderText={"SKU, Description or Supplier"} onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />
+                                        <DataTableFilter placeholderText={"SKU, Description or Supplier"} setResetPaginationToggle={setResetPaginationToggle} resetPaginationToggle={resetPaginationToggle} setFilterText={setFilterText} filterText={filterText} />
                                     </div>     
                                     <div className="card-tools">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}

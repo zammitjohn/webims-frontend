@@ -1,12 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { getInventoryCategories, getInventoryTypes } from '../../../functions/getInventoryTypesCategories';
 
 function InventoryForm(props) {    
     const [categories, setCategories] = useState([]);
     const [types, setTypes] = useState([]);
 
     const dropdownData = (category) => { // fetch dropdown data
-        getInventoryTypes(category) //types
+
+        // form types fetch URL
+        let url = '';
+        if (category === undefined){
+          url = `http://site.test/WebIMS/api/inventory/types/read`;
+        } else {
+          url = `http://site.test/WebIMS/api/inventory/types/read?category=${category}`;
+        }
+
+        //types
+        fetch(url, {
+            method: 'GET',
+            credentials: 'include'
+        })
+        .then(res => res.json()) 
         .then(
           (response) => {
             setTypes(response);
@@ -15,7 +28,13 @@ function InventoryForm(props) {
             console.log(error);
           }
         )
-        getInventoryCategories() //categories
+
+        //categories
+        fetch('http://site.test/WebIMS/api/inventory/categories/read', {
+            method: 'GET',
+            credentials: 'include'
+        })
+        .then(res => res.json())
         .then(
           (response) => {
             setCategories(response);
@@ -24,7 +43,7 @@ function InventoryForm(props) {
             console.log(error);
           }
         )
-      }
+    }
 
     useEffect(() => {
         if (props.values.category){ // if edit

@@ -6,6 +6,8 @@ import Content from "./components/pages/Content";
 import CreateInventoryItem from './components/pages/Inventory/CreateInventoryItem';
 import EditInventoryItem from './components/pages/Inventory/EditInventoryItem';
 import AllInventoryItems from './components/pages/Inventory/AllInventoryItems';
+import CategoryInventoryItems from "./components/pages/Inventory/CategoryInventoryItems";
+import TypeInventoryItems from "./components/pages/Inventory/TypeInventoryItems";
 
 function App() {
     return (
@@ -19,8 +21,8 @@ function App() {
 				  
 				  <Route path="inventory">
 				  	<Route path='' element={<AllInventoryItems/>} />
-				  	<Route path='category/:id' element={<Content/>} />
-					<Route path='type/:id' element={<Content/>} />
+				  	<Route path='category/:id' element={<CategoryInventoryItems/>} />
+					<Route path='type/:id' element={<TypeInventoryItems/>} />
 					<Route path='create' element={<CreateInventoryItem/>} />
         			<Route path='edit/:id' element={<EditInventoryItem/>} />
       			  </Route>

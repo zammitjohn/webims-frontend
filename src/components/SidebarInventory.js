@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
-import { getInventoryCategories, getInventoryTypes } from '../functions/getInventoryTypesCategories';
 
 function SidebarInventory() {
 // Local variables will get reset every render upon mutation whereas state will update
@@ -20,7 +19,11 @@ useEffect(() => {
 		// exceptions from actual bugs in components.		
 
 		// fetch categories
-		getInventoryCategories()
+		fetch('http://site.test/WebIMS/api/inventory/categories/read', {
+            method: 'GET',
+            credentials: 'include'
+        	})
+			.then(res => res.json()) 
 			.then(
 				(categories) => {
 					setCategories(categories);
@@ -39,7 +42,11 @@ useEffect(() => {
 			)
 			
 		// fetch types
-		getInventoryTypes(undefined)
+		fetch('http://site.test/WebIMS/api/inventory/types/read', {
+            method: 'GET',
+            credentials: 'include'
+        	})
+			.then(res => res.json()) 
 			.then(
 				(types) => {
 					setTypes(types);
@@ -68,7 +75,6 @@ if (states.error) {
 	// build elements
 	categories.forEach((category) => {
 		let els = [];
-		let categoryUrl = `inventory/category/${category.id}`;
 
 		els.push(
 			<Link to="#" className="nav-link" key={key++}>
@@ -79,7 +85,7 @@ if (states.error) {
 		els.push(
 			<ul className="nav nav-treeview" key={key++}>
 				<li className="nav-item">
-				<Link to={categoryUrl} className="nav-link">
+				<Link to={`inventory/category/${category.id}`} className="nav-link">
 					<i className="fas fa-circle nav-icon"></i>
 					<p>All items</p>
 				</Link>
@@ -91,12 +97,11 @@ if (states.error) {
 		// loop types
 		types.forEach((type) => {
 			if (category.id === type.type_category) {
-				let typeUrl = `inventory/type/${type.id}`;
 				
 				els.push(
 					<ul className="nav nav-treeview" key={key++}>
 						<li className="nav-item">
-						<Link to={typeUrl} className="nav-link">
+						<Link to={`inventory/type/${type.id}`} className="nav-link">
 							<i className="far fa-circle nav-icon"></i>
 							<p>{type.name}</p>
 						</Link>
