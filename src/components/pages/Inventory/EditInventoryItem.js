@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import ContentHeader from '../../ContentHeader';
-import { getInventoryCategories, getInventoryTypes } from '../../../functions/getInventoryTypesCategories';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate, useParams } from "react-router-dom";
@@ -8,12 +7,8 @@ import Error404 from '../Error404';
 import InventoryForm from './InventoryForm';
 
 function EditInventoryItem() {
-  const [categories, setCategories] = useState([]);
-  const [types, setTypes] = useState([]);
-  const [states, setStates] = useState({ // form values
-    error: null,
-    isLoaded: false,
-  });
+  const { id } = useParams();
+  let navigate = useNavigate();
   const [values, setValues] = useState({ // form values
     SKU: '',
     category: '',
@@ -25,29 +20,10 @@ function EditInventoryItem() {
     qtyOut: '',
     notes: '',
   });
-  const { id } = useParams();
-  let navigate = useNavigate();
-
-  const dropdownData = (category) => { // fetch dropdown data
-    getInventoryTypes(category) //types
-    .then(
-      (response) => {
-        setTypes(response);
-      },
-      (error) => {
-        console.log(error);
-      }
-    )
-    getInventoryCategories() //categories
-    .then(
-      (response) => {
-        setCategories(response);
-      },
-      (error) => {
-        console.log(error);
-      }
-    )
-  }
+  const [states, setStates] = useState({ // form values
+    error: null,
+    isLoaded: false,
+  });
 
   useEffect(() => { 
     // fetch form data
@@ -69,9 +45,6 @@ function EditInventoryItem() {
             qtyOut: (response.qtyOut) ? response.qtyOut : '',
             notes: (response.notes) ? response.notes : '',
           }));
-
-          dropdownData((response.category) ? response.category : '');
-
           setStates({
             isLoaded: true,
           });
@@ -85,31 +58,6 @@ function EditInventoryItem() {
       )
   }, [id]);
 
-  const handleChange = (event) => {
-      const { id, value } = event.target;
-      const fieldValue = { [id]: value };
-
-      setValues({
-        ...values,
-        ...fieldValue,
-      });
-    };
-
-  const handleCategoryChange = (event) => {
-    const { value } = event.target;
-    const fieldValue = { 
-      category : value,
-      type : '',
-    };
-    
-    dropdownData(value);
-
-    setValues({
-      ...values,
-      ...fieldValue,
-    });
-  };
-    
   const handleSubmit = (event) => {
     event.preventDefault();
     let formData = new FormData();
@@ -163,7 +111,7 @@ function EditInventoryItem() {
                   {/* form start */}
                   <form id="item_form" onSubmit={handleSubmit}>
                     <div className="card-body">
-                      <InventoryForm values={values} handleCategoryChange={handleCategoryChange} handleChange={handleChange} categories={categories} types={types}/>
+                      <InventoryForm values={values} setValues={setValues}/>
                     </div>
                     {/* /.card-body */}
                     

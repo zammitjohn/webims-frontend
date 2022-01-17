@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import ContentHeader from '../../ContentHeader';
-import { getInventoryCategories, getInventoryTypes } from '../../../functions/getInventoryTypesCategories';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import InventoryForm from './InventoryForm';
 
 function CreateInventoryItem() {
-  const [categories, setCategories] = useState([]);
-  const [types, setTypes] = useState([]);
+  let navigate = useNavigate();
   const [values, setValues] = useState({ // form values
     SKU: '',
     category: '',
@@ -20,58 +18,6 @@ function CreateInventoryItem() {
     qtyOut: '',
     notes: '',
   });
-
-  let navigate = useNavigate();
-
-  const dropdownData = (category) => { // fetch dropdown data
-    getInventoryTypes(category) //types
-    .then(
-      (response) => {
-        setTypes(response);
-      },
-      (error) => {
-        console.log(error);
-      }
-    )
-    getInventoryCategories() //categories
-    .then(
-      (response) => {
-        setCategories(response);
-      },
-      (error) => {
-        console.log(error);
-      }
-    )
-  }
-
-  useEffect(() => { 
-    dropdownData(null);  
-  }, []);
-
-  const handleChange = (event) => {
-    const { id, value } = event.target;
-    const fieldValue = { [id]: value };
-
-    setValues({
-      ...values,
-      ...fieldValue,
-    });
-  };
-
-  const handleCategoryChange = (event) => {
-    const { value } = event.target;
-    const fieldValue = { 
-      category : value,
-      type : '',
-    };
-    
-    dropdownData(value);
-
-    setValues({
-      ...values,
-      ...fieldValue,
-    });
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -118,10 +64,9 @@ function CreateInventoryItem() {
                 {/* form start */}
                 <form id="item_form" onSubmit={handleSubmit}>
                   <div className="card-body">
-                    <InventoryForm values={values} handleCategoryChange={handleCategoryChange} handleChange={handleChange} categories={categories} types={types}/>
+                    <InventoryForm values={values} setValues={setValues}/>
                   </div>
                   {/* /.card-body */}
-                  
                   <div className="card-footer">
                     <button type="submit" className="btn btn-primary">Create</button>
                   </div>
