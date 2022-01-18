@@ -114,7 +114,7 @@ function TypeInventoryItems() {
     };
 
     useEffect(() => {
-
+        fetchData();
 		fetch(`http://site.test/WebIMS/api/inventory/types/read?id=${id}`, {
             method: 'GET',
             credentials: 'include'
@@ -137,8 +137,6 @@ function TypeInventoryItems() {
                     }));
                 }
             )
-
-        fetchData();
 	}, [id]);
 
     if (states.error) {

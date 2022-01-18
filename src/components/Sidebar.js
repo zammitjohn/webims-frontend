@@ -1,9 +1,34 @@
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import SidebarInventory from './SidebarInventory';
 import SidebarProjects from './SidebarProjects';
 
 
 function Sidebar() {
+	const [userFullName, setUserFullName] = useState('')
+
+	function getUserFullName() {
+		if ((localStorage.getItem('UserSession'))) {
+			return JSON.parse(localStorage.getItem('UserSession'))[0].fullName;
+		} else {
+			return '';
+		}
+	}
+
+	useEffect(()=> {
+		
+		setUserFullName(getUserFullName());
+
+		//event local storage value changes
+		function handleChangeStorage() {
+			setUserFullName(getUserFullName());
+		}
+		window.addEventListener('storage', handleChangeStorage);
+		return () => window.removeEventListener('storage', handleChangeStorage)
+
+	},[])
+
+
     return (
 		<aside className="main-sidebar sidebar-dark-primary elevation-4">
 			
@@ -21,7 +46,7 @@ function Sidebar() {
 				<img src="/images/generic-user.png" className="img-circle elevation-2" alt=""/>
 				</div>
 				<div className="info">
-				<Link to="#" className="d-block">John Zammit</Link>
+				<Link to="#" className="d-block">{userFullName}</Link>
 				</div>
 			</div>
 

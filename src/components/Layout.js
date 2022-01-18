@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify'
 
 function Layout() {
 	return (
-		<div>
+		<>
 			<Preloader />
 			<Header />
 			<Sidebar />
@@ -16,7 +16,7 @@ function Layout() {
 				<Outlet />
 			</div>
 			<Footer />
-		</div>
+		</>
     );
 }
 

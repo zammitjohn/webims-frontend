@@ -5,6 +5,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate, useParams } from "react-router-dom";
 import Error404 from '../Error404';
 import InventoryForm from './InventoryForm';
+import UpdateButton from '../../UpdateButton';
+import DeleteButton from '../../DeleteButton';
 
 function EditInventoryItem() {
   const { id } = useParams();
@@ -57,6 +59,31 @@ function EditInventoryItem() {
         }
       )
   }, [id]);
+
+
+  const deleteObject = () => {
+    let formData = new FormData();
+    formData.append('id', id);
+    fetch('http://site.test/WebIMS/api/inventory/delete', {
+      method: 'POST',
+      credentials: 'include',
+      body: formData,
+      })
+      .then(res => res.json())
+      .then(
+        (response) => {
+          if (response.status) {
+            toast.success(values.SKU + ': ' + response.message);
+            navigate("/inventory", { replace: true });
+          } else {
+            toast.error(response.message);  
+          }
+        },
+        (error) => {
+          toast.error('Error occured');
+        }
+      )
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -116,7 +143,9 @@ function EditInventoryItem() {
                     {/* /.card-body */}
                     
                     <div className="card-footer">
-                      <button type="submit" className="btn btn-primary">Update</button>
+                      <UpdateButton />
+                      &nbsp;
+                      <DeleteButton deleteObject={deleteObject}/>
                     </div>
                   </form>
                 </div>

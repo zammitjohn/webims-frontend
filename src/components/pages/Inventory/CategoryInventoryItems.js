@@ -120,7 +120,7 @@ function CategoryInventoryItems() {
     };
 
     useEffect(() => {
-
+        fetchData();
 		fetch(`http://site.test/WebIMS/api/inventory/categories/read?id=${id}`, {
             method: 'GET',
             credentials: 'include'
@@ -142,8 +142,6 @@ function CategoryInventoryItems() {
                     }));
                 }
             )
-
-        fetchData();
 	}, [id]);
 
     if (states.error) {

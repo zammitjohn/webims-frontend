@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import InventoryForm from './InventoryForm';
+import CreateButton from '../../CreateButton';
 
 function CreateInventoryItem() {
   let navigate = useNavigate();
@@ -68,7 +69,7 @@ function CreateInventoryItem() {
                   </div>
                   {/* /.card-body */}
                   <div className="card-footer">
-                    <button type="submit" className="btn btn-primary">Create</button>
+                    <CreateButton />
                   </div>
                 </form>
               </div>
