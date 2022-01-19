@@ -69,6 +69,7 @@ function CategoryInventoryItems() {
         },
     };
     
+    let isMounted = true;  //flag is changed in the cleanup callback, as soon as the component is unmounted
     const [data, setData] = useState([]); // data from api
     const [categoryName, setCategoryName] = useState(' ');
     const [states, setStates] = useState({ // form values
@@ -103,18 +104,22 @@ function CategoryInventoryItems() {
             .then(res => res.json())
             .then(
                 (data) => {
-                    setData(data);
-                    setStates(prevState => ({
-						...prevState,
-                        isDataLoaded: true,
-                    }));
+                    if (isMounted) {
+                        setData(data);
+                        setStates(prevState => ({
+                            ...prevState,
+                            isDataLoaded: true,
+                        }));
+                    }
                 },
                 (error) => {
-                    setStates(prevState => ({
-						...prevState,
-                        isDataLoaded: true,
-                        error
-                    }));
+                    if (isMounted) {
+                        setStates(prevState => ({
+                            ...prevState,
+                            isDataLoaded: true,
+                            error
+                        }));
+                    }
                 }
             )
     };
@@ -128,20 +133,25 @@ function CategoryInventoryItems() {
             .then(res => res.json())
             .then(
                 (response) => {
-                    setCategoryName(response[0].name);
-                    setStates(prevState => ({
-						...prevState,
-                        isLoaded: true,
-                    }));
+                    if (isMounted) {
+                        setCategoryName(response[0].name);
+                        setStates(prevState => ({
+                            ...prevState,
+                            isLoaded: true,
+                        }));
+                    }
                 },
                 (error) => {
-                    setStates(prevState => ({
-						...prevState,
-                        isLoaded: true,
-                        error
-                    }));
+                    if (isMounted) {
+                        setStates(prevState => ({
+                            ...prevState,
+                            isLoaded: true,
+                            error
+                        }));
+                    }
                 }
             )
+        return () => { isMounted = false }; // toggle flag, if unmounted
 	}, [id]);
 
     if (states.error) {

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 function SidebarInventory() {
 // Local variables will get reset every render upon mutation whereas state will update
+let isMounted = true;  //flag is changed in the cleanup callback, as soon as the component is unmounted
 let elements = [];
 let key = 0;
 const [types, setTypes] = useState([]);
@@ -14,55 +15,64 @@ const [states, setStates] = useState({ // fetch states
 });
 
 useEffect(() => {
-		// Note: it's important to handle errors here
-		// instead of a catch() block so that we don't swallow
-		// exceptions from actual bugs in components.		
+	// Note: it's important to handle errors here
+	// instead of a catch() block so that we don't swallow
+	// exceptions from actual bugs in components.	
 
-		// fetch categories
-		fetch('http://site.test/WebIMS/api/inventory/categories/read', {
-            method: 'GET',
-            credentials: 'include'
-        	})
-			.then(res => res.json()) 
-			.then(
-				(categories) => {
+	// fetch categories
+	fetch('http://site.test/WebIMS/api/inventory/categories/read', {
+		method: 'GET',
+		credentials: 'include'
+		})
+		.then(res => res.json()) 
+		.then(
+			(categories) => {
+				if (isMounted) {
 					setCategories(categories);
 					setStates(prevState => ({
 						...prevState,
 						isCategoriesLoaded: true,
 					}));
-				},
-				(error) => {
+				}
+			},
+			(error) => {
+				if (isMounted) {
 					setStates(prevState => ({
 						...prevState,
 						isCategoriesLoaded: true,
 						error
 					}));
 				}
-			)
-			
-		// fetch types
-		fetch('http://site.test/WebIMS/api/inventory/types/read', {
-            method: 'GET',
-            credentials: 'include'
-        	})
-			.then(res => res.json()) 
-			.then(
-				(types) => {
+			}
+		)
+		
+	// fetch types
+	fetch('http://site.test/WebIMS/api/inventory/types/read', {
+		method: 'GET',
+		credentials: 'include'
+		})
+		.then(res => res.json()) 
+		.then(
+			(types) => {
+				if (isMounted) {
 					setTypes(types);
 					setStates(prevState => ({
 						...prevState,
 						isTypesLoaded: true,
 					}));
-				},			
-				(error) => {
+				}
+			},			
+			(error) => {
+				if (isMounted) {
 					setStates(prevState => ({
 						...prevState,
 						isTypesLoaded: true,
 						error
 					}));
 				}
-			)
+			}
+		)
+		return () => { isMounted = false }; // toggle flag, if unmounted
   }, []);
 
 if (states.error) {

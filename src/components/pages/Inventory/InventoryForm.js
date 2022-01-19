@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 function InventoryForm(props) {    
     const [categories, setCategories] = useState([]);
     const [types, setTypes] = useState([]);
+    let isMounted = true;  //flag is changed in the cleanup callback, as soon as the component is unmounted
 
     const dropdownData = (category) => { // fetch dropdown data
 
@@ -22,7 +23,9 @@ function InventoryForm(props) {
         .then(res => res.json()) 
         .then(
           (response) => {
-            setTypes(response);
+              if (isMounted) {
+                setTypes(response);
+              }
           },
           (error) => {
             console.log(error);
@@ -37,7 +40,9 @@ function InventoryForm(props) {
         .then(res => res.json())
         .then(
           (response) => {
-            setCategories(response);
+              if (isMounted) {
+                setCategories(response);
+              }
           },
           (error) => {
             console.log(error);
@@ -51,6 +56,7 @@ function InventoryForm(props) {
         } else { // if create
             dropdownData(null);  
         }
+        return () => { isMounted = false }; // toggle flag, if unmounted
     }, [props.values.category]);
 
 

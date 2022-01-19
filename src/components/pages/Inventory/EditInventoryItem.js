@@ -11,6 +11,7 @@ import DeleteButton from '../../DeleteButton';
 function EditInventoryItem() {
   const { id } = useParams();
   let navigate = useNavigate();
+  let isMounted = true;  //flag is changed in the cleanup callback, as soon as the component is unmounted
   const [values, setValues] = useState({ // form values
     SKU: '',
     category: '',
@@ -36,28 +37,33 @@ function EditInventoryItem() {
       .then(res => res.json())
       .then(
         (response) => {
-          setValues(values => ({ 
-            SKU: (response.SKU) ? response.SKU : '',
-            category: (response.category) ? response.category : '',
-            type: (response.type) ? response.type : '',
-            description: (response.description) ? response.description : '',
-            supplier: (response.supplier) ? response.supplier : '',
-            qty: (response.qty) ? response.qty : '',
-            qtyIn: (response.qtyIn) ? response.qtyIn : '',
-            qtyOut: (response.qtyOut) ? response.qtyOut : '',
-            notes: (response.notes) ? response.notes : '',
-          }));
-          setStates({
-            isLoaded: true,
-          });
+          if (isMounted) {
+            setValues(values => ({ 
+              SKU: (response.SKU) ? response.SKU : '',
+              category: (response.category) ? response.category : '',
+              type: (response.type) ? response.type : '',
+              description: (response.description) ? response.description : '',
+              supplier: (response.supplier) ? response.supplier : '',
+              qty: (response.qty) ? response.qty : '',
+              qtyIn: (response.qtyIn) ? response.qtyIn : '',
+              qtyOut: (response.qtyOut) ? response.qtyOut : '',
+              notes: (response.notes) ? response.notes : '',
+            }));
+            setStates({
+              isLoaded: true,
+            });
+          }
         },
         (error) => {
-          setStates({
-            isLoaded: true,
-            error
-          });
+          if (isMounted) {
+            setStates({
+              isLoaded: true,
+              error
+            });
+          }
         }
       )
+    return () => { isMounted = false }; // toggle flag, if unmounted
   }, [id]);
 
 

@@ -1,10 +1,12 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 function Login() {
     // page specific styling
     document.body.classList.add("login-page");
-    document.body.style.height = "";
+
+    const navigate = useNavigate()
 
     const [values, setValues] = useState({
         email: '',
@@ -44,10 +46,11 @@ function Login() {
                 let userSessionData = {
                     fullName: response.firstname + ' ' + response.lastname ,
                     sessionId: response.sessionId,
-                    expiry: (values.remember) ? null : tomorrow
+                    expiry: (values.remember) ? null : tomorrow.toISOString()
                 }
 
                 localStorage.setItem('UserSession', JSON.stringify([userSessionData]));
+                navigate("/");
                 window.location.reload();
 
               } else {

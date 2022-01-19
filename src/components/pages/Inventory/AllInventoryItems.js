@@ -74,6 +74,7 @@ function AllInventoryItems() {
         },
     };
     
+    let isMounted = true;  //flag is changed in the cleanup callback, as soon as the component is unmounted
     const [data, setData] = useState([]); // data from api
     const [states, setStates] = useState({ // form values
         error: null,
@@ -105,22 +106,27 @@ function AllInventoryItems() {
             .then(res => res.json())
             .then(
                 (data) => {
-                    setData(data);
-                    setStates({
-                        isLoaded: true,
-                    });
+                    if (isMounted) {
+                        setData(data);
+                        setStates({
+                            isLoaded: true,
+                        });
+                    }
                 },
                 (error) => {
-                    setStates({
-                        isLoaded: true,
-                        error
-                    });
+                    if (isMounted) {
+                        setStates({
+                            isLoaded: true,
+                            error
+                        });
+                    }
                 }
             )
     };
 
     useEffect(() => {
         fetchData();
+        return () => { isMounted = false }; // toggle flag, if unmounted
 	}, []);
 
 

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 function SidebarProjects() {
 // Local variables will get reset every render upon mutation whereas state will update
+let isMounted = true;  //flag is changed in the cleanup callback, as soon as the component is unmounted
 let elements = [];
 let key = 0;
 const [projects, setProjects] = useState([]);
@@ -12,30 +13,35 @@ const [states, setStates] = useState({ // fetch states
 });
 
 useEffect(() => {
-		// Note: it's important to handle errors here
-		// instead of a catch() block so that we don't swallow
-		// exceptions from actual bugs in components.		
+	// Note: it's important to handle errors here
+	// instead of a catch() block so that we don't swallow
+	// exceptions from actual bugs in components.		
 
-		// fetch projects
-		fetch('http://site.test/WebIMS/api/projects/types/read', {
-			method: 'GET',
-			credentials: 'include'
-		  })
-			.then(res => res.json())
-			.then(
-				(projects) => {
+	// fetch projects
+	fetch('http://site.test/WebIMS/api/projects/types/read', {
+		method: 'GET',
+		credentials: 'include'
+		})
+		.then(res => res.json())
+		.then(
+			(projects) => {
+				if (isMounted) {
 					setProjects(projects);
 					setStates({
 						isLoaded: true,
 					});
-				},
-				(error) => {
+				}
+			},
+			(error) => {
+				if (isMounted) {
 					setStates({
 						isLoaded: true,
 						error
 					});
 				}
-			)
+			}
+		)
+	return () => { isMounted = false }; // toggle flag, if unmounted
   }, []);
 
     if (states.error) {

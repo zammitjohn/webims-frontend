@@ -5,29 +5,15 @@ import SidebarProjects from './SidebarProjects';
 
 
 function Sidebar() {
-	const [userFullName, setUserFullName] = useState('')
-
-	function getUserFullName() {
-		if ((localStorage.getItem('UserSession'))) {
-			return JSON.parse(localStorage.getItem('UserSession'))[0].fullName;
-		} else {
-			return '';
-		}
-	}
+	const [userFullName, setUserFullName] = useState(null)
 
 	useEffect(()=> {
-		
-		setUserFullName(getUserFullName());
-
-		//event local storage value changes
-		function handleChangeStorage() {
-			setUserFullName(getUserFullName());
+		if ((localStorage.getItem('UserSession'))) {
+			setUserFullName(JSON.parse(localStorage.getItem('UserSession'))[0].fullName);
+		} else {
+			setUserFullName(null);
 		}
-		window.addEventListener('storage', handleChangeStorage);
-		return () => window.removeEventListener('storage', handleChangeStorage)
-
 	},[])
-
 
     return (
 		<aside className="main-sidebar sidebar-dark-primary elevation-4">
