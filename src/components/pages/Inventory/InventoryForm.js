@@ -5,59 +5,57 @@ function InventoryForm(props) {
     const [types, setTypes] = useState([]);
     let isMounted = useRef(true); // mutable flag is changed in the cleanup callback, as soon as the component is unmounted
 
-    const dropdownData = (category) => { // fetch dropdown data
+    const populateTypes = (category) => { // fetch types dropdown data
 
-        // form types fetch URL
-        let url = '';
-        if (category === undefined){
-          url = `http://site.test/WebIMS/api/inventory/types/read`;
+        if (category) {
+            let url = `http://site.test/WebIMS/api/inventory/types/read?category=${category}`;
+
+            fetch(url, {
+                method: 'GET',
+                credentials: 'include'
+            })
+                .then(res => res.json()) 
+                .then(
+                (response) => {
+                    if (isMounted.current) {
+                        setTypes(response);
+                    }
+                },
+                (error) => {
+                    console.log(error);
+                }
+            )
         } else {
-          url = `http://site.test/WebIMS/api/inventory/types/read?category=${category}`;
+            setTypes([])
         }
 
-        //types
-        fetch(url, {
-            method: 'GET',
-            credentials: 'include'
-        })
-        .then(res => res.json()) 
-        .then(
-          (response) => {
-              if (isMounted) {
-                setTypes(response);
-              }
-          },
-          (error) => {
-            console.log(error);
-          }
-        )
+    }
 
-        //categories
+    useEffect(() => {
+        //populate categories
         fetch('http://site.test/WebIMS/api/inventory/categories/read', {
             method: 'GET',
             credentials: 'include'
         })
         .then(res => res.json())
         .then(
-          (response) => {
-              if (isMounted) {
-                setCategories(response);
-              }
-          },
-          (error) => {
-            console.log(error);
-          }
+            (response) => {
+                if (isMounted.current) {
+                    setCategories(response);
+                }
+            },
+            (error) => {
+                console.log(error);
+            }
         )
-    }
 
-    useEffect(() => {
         if (props.values.category){ // if edit
-            dropdownData(props.values.category);
-        } else { // if create
-            dropdownData(null);  
+            populateTypes(props.values.category);
         }
+
         return () => { isMounted.current = false }; // toggle flag, if unmounted
-    }, [props.values.category]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
 
     const handleChange = (event) => {
@@ -77,7 +75,7 @@ function InventoryForm(props) {
         type : '',
     };
     
-    dropdownData(value);
+    populateTypes(value);
 
         props.setValues({
             ...props.values,

@@ -107,7 +107,7 @@ function CategoryInventoryItems() {
             .then(res => res.json())
             .then(
                 (data) => {
-                    if (isMounted) {
+                    if (isMounted.current) {
                         setData(data);
                         setStates(prevState => ({
                             ...prevState,
@@ -116,7 +116,7 @@ function CategoryInventoryItems() {
                     }
                 },
                 (error) => {
-                    if (isMounted) {
+                    if (isMounted.current) {
                         setStates(prevState => ({
                             ...prevState,
                             isDataLoaded: true,
@@ -136,7 +136,7 @@ function CategoryInventoryItems() {
             .then(res => res.json())
             .then(
                 (response) => {
-                    if (isMounted) {
+                    if (isMounted.current) {
                         setCategoryName(response[0].name);
                         setStates(prevState => ({
                             ...prevState,
@@ -145,7 +145,7 @@ function CategoryInventoryItems() {
                     }
                 },
                 (error) => {
-                    if (isMounted) {
+                    if (isMounted.current) {
                         setStates(prevState => ({
                             ...prevState,
                             isLoaded: true,

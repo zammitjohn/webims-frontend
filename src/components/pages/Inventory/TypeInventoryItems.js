@@ -101,7 +101,7 @@ function TypeInventoryItems() {
             .then(res => res.json())
             .then(
                 (data) => {
-                    if (isMounted) {
+                    if (isMounted.current) {
                         setData(data);
                         setStates(prevState => ({
                             ...prevState,
@@ -110,7 +110,7 @@ function TypeInventoryItems() {
                     }
                 },
                 (error) => {
-                    if (isMounted) {
+                    if (isMounted.current) {
                         setStates(prevState => ({
                             ...prevState,
                             isDataLoaded: true,
@@ -130,7 +130,7 @@ function TypeInventoryItems() {
             .then(res => res.json())
             .then(
                 (response) => {
-                    if (isMounted) {
+                    if (isMounted.current) {
                         setTypeName(response[0].name);
                         setCategoryName(response[0].category_name);
                         setStates(prevState => ({
@@ -140,7 +140,7 @@ function TypeInventoryItems() {
                     }
                 },
                 (error) => {
-                    if (isMounted) {
+                    if (isMounted.current) {
                         setStates(prevState => ({
                             ...prevState,
                             isLoaded: true,

@@ -56,7 +56,8 @@ function Login() {
                 
                 //redirect
                 if (referrer) {
-                    window.location.replace(referrer);
+                    navigate(referrer);
+                    window.location.reload();
                 } else {
                     navigate("/");
                     window.location.reload();

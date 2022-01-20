@@ -37,7 +37,7 @@ function EditInventoryItem() {
       .then(res => res.json())
       .then(
         (response) => {
-          if (isMounted) {
+          if (isMounted.current) {
             setValues(values => ({ 
               SKU: (response.SKU) ? response.SKU : '',
               category: (response.category) ? response.category : '',
@@ -55,7 +55,7 @@ function EditInventoryItem() {
           }
         },
         (error) => {
-          if (isMounted) {
+          if (isMounted.current) {
             setStates({
               isLoaded: true,
               error

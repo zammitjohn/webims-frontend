@@ -27,7 +27,7 @@ useEffect(() => {
 		.then(res => res.json()) 
 		.then(
 			(categories) => {
-				if (isMounted) {
+				if (isMounted.current) {
 					setCategories(categories);
 					setStates(prevState => ({
 						...prevState,
@@ -36,7 +36,7 @@ useEffect(() => {
 				}
 			},
 			(error) => {
-				if (isMounted) {
+				if (isMounted.current) {
 					setStates(prevState => ({
 						...prevState,
 						isCategoriesLoaded: true,
@@ -54,7 +54,7 @@ useEffect(() => {
 		.then(res => res.json()) 
 		.then(
 			(types) => {
-				if (isMounted) {
+				if (isMounted.current) {
 					setTypes(types);
 					setStates(prevState => ({
 						...prevState,
@@ -63,7 +63,7 @@ useEffect(() => {
 				}
 			},			
 			(error) => {
-				if (isMounted) {
+				if (isMounted.current) {
 					setStates(prevState => ({
 						...prevState,
 						isTypesLoaded: true,

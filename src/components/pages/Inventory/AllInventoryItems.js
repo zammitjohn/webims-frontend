@@ -106,7 +106,7 @@ function AllInventoryItems() {
             .then(res => res.json())
             .then(
                 (data) => {
-                    if (isMounted) {
+                    if (isMounted.current) {
                         setData(data);
                         setStates({
                             isLoaded: true,
@@ -114,7 +114,7 @@ function AllInventoryItems() {
                     }
                 },
                 (error) => {
-                    if (isMounted) {
+                    if (isMounted.current) {
                         setStates({
                             isLoaded: true,
                             error

@@ -25,7 +25,7 @@ useEffect(() => {
 		.then(res => res.json())
 		.then(
 			(projects) => {
-				if (isMounted) {
+				if (isMounted.current) {
 					setProjects(projects);
 					setStates({
 						isLoaded: true,
@@ -33,7 +33,7 @@ useEffect(() => {
 				}
 			},
 			(error) => {
-				if (isMounted) {
+				if (isMounted.current) {
 					setStates({
 						isLoaded: true,
 						error

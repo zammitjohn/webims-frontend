@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import Preloader from './Preloader';
 import Header from './Header';
 import Sidebar from './Sidebar';
@@ -9,12 +9,11 @@ import { ToastContainer } from 'react-toastify'
 function ProtectedRoute() {
 
 	let navigate = useNavigate();
-	const [loginstate, setLoginState] = useState(false);
+	const location = useLocation();
+	const [loginstate, setLoginState] = useState(true);
 
 	useEffect(() => {
 		if (localStorage.getItem('UserSession')) {
-
-			setLoginState(true);
 
 			//check expiry
 			const today = new Date()
@@ -22,7 +21,7 @@ function ProtectedRoute() {
 				localStorage.removeItem('UserSession');
 				localStorage.removeItem('Privileges');
 				setLoginState(false);
-				navigate(`/login?referrer=${window.location}`, { replace: true });
+				navigate(`/login?referrer=${location.pathname}`, { replace: true });
 
 			} else {
 
@@ -46,18 +45,18 @@ function ProtectedRoute() {
 									canDelete: (response.canDelete.toString() === '1') ? true : false,
 								}
 								localStorage.setItem('Privileges', JSON.stringify([privilegesData]));
-								setLoginState(true);
-								
+				
 							} else {
 								console.log("Session ID not valid or deleted remotely");
 								localStorage.removeItem('UserSession');
 								localStorage.removeItem('Privileges');
 								setLoginState(false);
-								navigate(`/login?referrer=${window.location}`, { replace: true });
+								navigate(`/login?referrer=${location.pathname}`, { replace: true });
 							}
 						},
 						(error) => {
 							console.log(error);
+							setLoginState(false);
 						}
 					)
 			}
@@ -66,8 +65,9 @@ function ProtectedRoute() {
 			localStorage.removeItem('UserSession');
 			localStorage.removeItem('Privileges');
 			setLoginState(false);
-			navigate(`/login?referrer=${window.location}`, { replace: true });
+			navigate(`/login?referrer=${location.pathname}`, { replace: true });
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [navigate]); // perform check whenever the current location changes
 
 if (loginstate) {	
