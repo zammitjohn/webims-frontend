@@ -137,7 +137,7 @@ function CategoryInventoryItems() {
             .then(
                 (response) => {
                     if (isMounted.current) {
-                        setCategoryName(response[0].name);
+                        setCategoryName( (response[0]) ? response[0].name : null );
                         setStates(prevState => ({
                             ...prevState,
                             isLoaded: true,

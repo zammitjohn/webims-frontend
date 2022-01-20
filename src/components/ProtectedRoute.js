@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation, Outlet } from "react-router-dom";
-import Preloader from './Preloader';
-import Header from './Header';
-import Sidebar from './Sidebar';
-import Footer from './Footer';
-import { ToastContainer } from 'react-toastify'
+import { useNavigate, Outlet } from "react-router-dom";
+import Login from './Login';
 
 function ProtectedRoute() {
 
 	let navigate = useNavigate();
-	const location = useLocation();
 	const [loginstate, setLoginState] = useState(true);
 
 	useEffect(() => {
@@ -21,7 +16,6 @@ function ProtectedRoute() {
 				localStorage.removeItem('UserSession');
 				localStorage.removeItem('Privileges');
 				setLoginState(false);
-				navigate(`/login?referrer=${location.pathname}`, { replace: true });
 
 			} else {
 
@@ -51,11 +45,12 @@ function ProtectedRoute() {
 								localStorage.removeItem('UserSession');
 								localStorage.removeItem('Privileges');
 								setLoginState(false);
-								navigate(`/login?referrer=${location.pathname}`, { replace: true });
 							}
 						},
 						(error) => {
 							console.log(error);
+							localStorage.removeItem('UserSession');
+							localStorage.removeItem('Privileges');
 							setLoginState(false);
 						}
 					)
@@ -65,28 +60,15 @@ function ProtectedRoute() {
 			localStorage.removeItem('UserSession');
 			localStorage.removeItem('Privileges');
 			setLoginState(false);
-			navigate(`/login?referrer=${location.pathname}`, { replace: true });
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [navigate]); // perform check whenever the current location changes
 
-if (loginstate) {	
-	return (
-		<div className="wrapper">
-			<Preloader />
-			<Header />
-			<Sidebar />
-			<div className="content-wrapper">
-				<ToastContainer />
-				<Outlet />
-			</div>
-			<Footer />
-		</div>
-    );
+	if (loginstate) {	
+		return (<Outlet/>);
 
-} else {
-	return (null);
-}
+	} else {
+		return (<Login self={true} />);
+	}
 
 }
 

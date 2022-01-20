@@ -131,8 +131,8 @@ function TypeInventoryItems() {
             .then(
                 (response) => {
                     if (isMounted.current) {
-                        setTypeName(response[0].name);
-                        setCategoryName(response[0].category_name);
+                        setTypeName( (response[0]) ? response[0].name : null  );
+                        setCategoryName( (response[0]) ? response[0].category_name : null );
                         setStates(prevState => ({
                             ...prevState,
                             isLoaded: true,
