@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ContentHeader from '../../ContentHeader';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,7 +11,7 @@ import DeleteButton from '../../DeleteButton';
 function EditInventoryItem() {
   const { id } = useParams();
   let navigate = useNavigate();
-  let isMounted = true;  //flag is changed in the cleanup callback, as soon as the component is unmounted
+  let isMounted = useRef(true); // mutable flag is changed in the cleanup callback, as soon as the component is unmounted
   const [values, setValues] = useState({ // form values
     SKU: '',
     category: '',
@@ -63,7 +63,7 @@ function EditInventoryItem() {
           }
         }
       )
-    return () => { isMounted = false }; // toggle flag, if unmounted
+    return () => { isMounted.current = false }; // toggle flag, if unmounted
   }, [id]);
 
 

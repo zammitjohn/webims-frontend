@@ -1,4 +1,15 @@
+import { useNavigate } from "react-router-dom";
+
 function Header() {
+
+	let navigate = useNavigate();
+
+	const handleLogOut = () => {
+		localStorage.removeItem('UserSession');
+		localStorage.removeItem('Privileges');
+		navigate(`/login`, { replace: true });
+	  };
+
 	return (
 		<nav className="main-header navbar navbar-expand navbar-light">
 		   {/* Left navbar links */}
@@ -14,7 +25,8 @@ function Header() {
 		   {/* Right navbar links */}
 		   <ul className="navbar-nav ml-auto">
 			  <li className="nav-item">
-				 <i className="fas fa-sign-out-alt"></i>
+				{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+			  	<a className="nav-link" onClick={handleLogOut} style={{cursor:'pointer'}}><i className="fas fa-sign-out-alt"></i></a>
 			  </li>
 		   </ul>
 		</nav>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ContentHeader from '../../ContentHeader';
 import DataTable from 'react-data-table-component';
 import DataTableFilter from "../../DataTableFilter"
@@ -74,7 +74,7 @@ function AllInventoryItems() {
         },
     };
     
-    let isMounted = true;  //flag is changed in the cleanup callback, as soon as the component is unmounted
+    let isMounted = useRef(true); // mutable flag is changed in the cleanup callback, as soon as the component is unmounted
     const [data, setData] = useState([]); // data from api
     const [states, setStates] = useState({ // form values
         error: null,
@@ -126,7 +126,7 @@ function AllInventoryItems() {
 
     useEffect(() => {
         fetchData();
-        return () => { isMounted = false }; // toggle flag, if unmounted
+        return () => { isMounted.current = false }; // toggle flag, if unmounted
 	}, []);
 
 

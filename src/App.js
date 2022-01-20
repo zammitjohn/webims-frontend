@@ -1,7 +1,6 @@
 // App.js
-import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from './components/Layout';
+import ProtectedRoute from './components/ProtectedRoute';
 import Error404 from "./components/pages/Error404";
 import Content from "./components/pages/Content";
 import CreateInventoryItem from './components/pages/Inventory/CreateInventoryItem';
@@ -12,62 +11,12 @@ import TypeInventoryItems from "./components/pages/Inventory/TypeInventoryItems"
 import Login from "./components/Login";
 
 function App() {
-
-	// useEffect(()=> {
-
-	// 	if (localStorage.getItem('UserSession')) {
-
-	// 		//check expiry
-	// 		const today = new Date()
-	// 		if ( (JSON.parse(localStorage.getItem('UserSession'))[0].expiry <= today.toISOString()) && (JSON.parse(localStorage.getItem('UserSession'))[0].expiry !== null) ){
-	// 			localStorage.removeItem('UserSession');
-	// 			localStorage.removeItem('Privileges');
-	// 			window.location.reload();
-	// 		}
-
-	// 		//validate session using API
-	// 		fetch('http://site.test/WebIMS/api/users/validate_session', {
-	// 			method: 'GET',
-	// 			credentials: 'include',
-	// 			})
-	// 			.then(res => res.json())
-	// 			.then(
-	// 				(response) => {
-	// 					if (response.status) {
-
-	// 						let privilegesData = {
-	// 							canCreate : (response.canCreate) ? true : false,
-	// 							canImport : (response.canImport) ? true : false,
-	// 							canUpdate: (response.canUpdate) ? true : false,
-	// 							canDelete: (response.canDelete) ? true : false,
-	// 						}
-	// 						localStorage.setItem('Privileges', JSON.stringify([privilegesData]));
-
-	// 					} else {
-	// 						console.log("Session ID not valid or deleted remotely");
-	// 						localStorage.removeItem('UserSession');
-	// 						localStorage.removeItem('Privileges');
-	// 						//window.location.reload();
-	// 					}
-	// 				},
-	// 				(error) => {
-	// 					console.log(error);
-	// 				}
-	// 			)
-	
-	// 	} else {
-	// 		//window.location.reload();
-	// 	}
-
-	// },[])
-
-
 	return (
 		<>
 			<BrowserRouter>
 			<Routes>
 				<Route path="login" element={<Login/>} />
-				<Route path="/" element={<Layout />}>
+				<Route path="/" element={<ProtectedRoute/>}>
 				<Route index element={<Content/>} />
 
 				<Route path="dashboard" element={<Content/>} />

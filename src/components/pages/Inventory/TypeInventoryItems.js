@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import ContentHeader from '../../ContentHeader';
 import DataTable from 'react-data-table-component';
 import DataTableFilter from "../../DataTableFilter"
@@ -62,7 +62,7 @@ function TypeInventoryItems() {
         },
     };
     
-    let isMounted = true;  //flag is changed in the cleanup callback, as soon as the component is unmounted
+    let isMounted = useRef(true); // mutable flag is changed in the cleanup callback, as soon as the component is unmounted
     const [data, setData] = useState([]); // data from api
     const [typeName, setTypeName] = useState(' ');
     const [categoryName, setCategoryName] = useState('');
@@ -90,7 +90,10 @@ function TypeInventoryItems() {
     });
 
 
-    const fetchData = () => { // fetch inventory
+    const fetchData = useCallback(() => { // fetch inventory
+        // useCallback: React creates a new function on every render
+        // Here we useCallback to memoize (store) the function.
+        // Therefore, this function only change if 'id' changes
         fetch(`http://site.test/WebIMS/api/inventory/read?type=${id}`, {
             method: 'GET',
             credentials: 'include'
@@ -116,7 +119,7 @@ function TypeInventoryItems() {
                     }
                 }
             )
-    };
+    }, [id]);
 
     useEffect(() => {
         fetchData();
@@ -146,8 +149,8 @@ function TypeInventoryItems() {
                     }
                 }
             )
-        return () => { isMounted = false }; // toggle flag, if unmounted
-	}, [id]);
+        return () => { isMounted.current = false }; // toggle flag, if unmounted
+	}, [id, fetchData]);
 
     if (states.error) {
         console.log(states.error.message);

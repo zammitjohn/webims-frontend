@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 function InventoryForm(props) {    
     const [categories, setCategories] = useState([]);
     const [types, setTypes] = useState([]);
-    let isMounted = true;  //flag is changed in the cleanup callback, as soon as the component is unmounted
+    let isMounted = useRef(true); // mutable flag is changed in the cleanup callback, as soon as the component is unmounted
 
     const dropdownData = (category) => { // fetch dropdown data
 
@@ -56,7 +56,7 @@ function InventoryForm(props) {
         } else { // if create
             dropdownData(null);  
         }
-        return () => { isMounted = false }; // toggle flag, if unmounted
+        return () => { isMounted.current = false }; // toggle flag, if unmounted
     }, [props.values.category]);
 
 

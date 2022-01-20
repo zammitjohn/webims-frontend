@@ -1,12 +1,15 @@
 
 import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 function Login() {
     // page specific styling
     document.body.classList.add("login-page");
+    document.body.style.height = "";
 
     const navigate = useNavigate()
+    const [urlParams] = useSearchParams(); // for referrer param
+    const referrer = urlParams.get('referrer') ?  urlParams.get('referrer') : null
 
     const [values, setValues] = useState({
         email: '',
@@ -50,8 +53,14 @@ function Login() {
                 }
 
                 localStorage.setItem('UserSession', JSON.stringify([userSessionData]));
-                navigate("/");
-                window.location.reload();
+                
+                //redirect
+                if (referrer) {
+                    window.location.replace(referrer);
+                } else {
+                    navigate("/");
+                    window.location.reload();
+                }
 
               } else {
                 console.log(response.message); 

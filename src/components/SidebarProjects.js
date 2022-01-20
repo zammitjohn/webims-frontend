@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from "react-router-dom";
 
 function SidebarProjects() {
 // Local variables will get reset every render upon mutation whereas state will update
-let isMounted = true;  //flag is changed in the cleanup callback, as soon as the component is unmounted
+let isMounted = useRef(true); // mutable flag is changed in the cleanup callback, as soon as the component is unmounted
 let elements = [];
 let key = 0;
 const [projects, setProjects] = useState([]);
@@ -41,7 +41,7 @@ useEffect(() => {
 				}
 			}
 		)
-	return () => { isMounted = false }; // toggle flag, if unmounted
+	return () => { isMounted.current = false }; // toggle flag, if unmounted
   }, []);
 
     if (states.error) {

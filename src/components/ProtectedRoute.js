@@ -6,7 +6,7 @@ import Sidebar from './Sidebar';
 import Footer from './Footer';
 import { ToastContainer } from 'react-toastify'
 
-function Layout() {
+function ProtectedRoute() {
 
 	let navigate = useNavigate();
 	const [loginstate, setLoginState] = useState(false);
@@ -22,7 +22,7 @@ function Layout() {
 				localStorage.removeItem('UserSession');
 				localStorage.removeItem('Privileges');
 				setLoginState(false);
-				navigate("/login", { replace: true });
+				navigate(`/login?referrer=${window.location}`, { replace: true });
 
 			} else {
 
@@ -40,10 +40,10 @@ function Layout() {
 							if (response.status) {
 
 								let privilegesData = {
-									canCreate : (response.canCreate === 1) ? true : false,
-									canImport : (response.canImport === 1) ? true : false,
-									canUpdate: (response.canUpdate === 1) ? true : false,
-									canDelete: (response.canDelete === 1) ? true : false,
+									canCreate : (response.canCreate.toString() === '1') ? true : false,
+									canImport : (response.canImport.toString() === '1') ? true : false,
+									canUpdate: (response.canUpdate.toString() === '1') ? true : false,
+									canDelete: (response.canDelete.toString() === '1') ? true : false,
 								}
 								localStorage.setItem('Privileges', JSON.stringify([privilegesData]));
 								setLoginState(true);
@@ -53,7 +53,7 @@ function Layout() {
 								localStorage.removeItem('UserSession');
 								localStorage.removeItem('Privileges');
 								setLoginState(false);
-								navigate("/login", { replace: true });
+								navigate(`/login?referrer=${window.location}`, { replace: true });
 							}
 						},
 						(error) => {
@@ -66,9 +66,9 @@ function Layout() {
 			localStorage.removeItem('UserSession');
 			localStorage.removeItem('Privileges');
 			setLoginState(false);
-			navigate("/login", { replace: true });
+			navigate(`/login?referrer=${window.location}`, { replace: true });
 		}
-	}, []);
+	}, [navigate]); // perform check whenever the current location changes
 
 if (loginstate) {	
 	return (
@@ -90,4 +90,4 @@ if (loginstate) {
 
 }
 
-export default Layout;
+export default ProtectedRoute;
