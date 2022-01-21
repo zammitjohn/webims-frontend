@@ -18,14 +18,12 @@ function ProtectedRoute() {
 				setLoginState(false);
 
 			} else {
-
 				//validate session using API
 				fetch('http://site.test/WebIMS/api/users/validate_session', {
 					headers: {
-						'Auth-Key': (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId),
+						'Auth-Key': JSON.parse(localStorage.getItem('UserSession'))[0].sessionId,
 					},
 					method: 'GET',
-					credentials: 'include',
 					})
 					.then(res => res.json())
 					.then(
@@ -33,8 +31,8 @@ function ProtectedRoute() {
 							if (response.status) {
 
 								let privilegesData = {
-									canCreate : (response.canCreate.toString() === '1') ? true : false,
-									canImport : (response.canImport.toString() === '1') ? true : false,
+									canCreate: (response.canCreate.toString() === '1') ? true : false,
+									canImport: (response.canImport.toString() === '1') ? true : false,
 									canUpdate: (response.canUpdate.toString() === '1') ? true : false,
 									canDelete: (response.canDelete.toString() === '1') ? true : false,
 								}

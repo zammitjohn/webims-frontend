@@ -11,9 +11,11 @@ function InventoryForm(props) {
             let url = `http://site.test/WebIMS/api/inventory/types/read?category=${category}`;
 
             fetch(url, {
-                method: 'GET',
-                credentials: 'include'
-            })
+                headers: {
+                    'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
+                },
+                method: 'GET'
+                })
                 .then(res => res.json()) 
                 .then(
                 (response) => {
@@ -25,6 +27,7 @@ function InventoryForm(props) {
                     console.log(error);
                 }
             )
+
         } else {
             setTypes([])
         }
@@ -34,20 +37,22 @@ function InventoryForm(props) {
     useEffect(() => {
         //populate categories
         fetch('http://site.test/WebIMS/api/inventory/categories/read', {
-            method: 'GET',
-            credentials: 'include'
-        })
-        .then(res => res.json())
-        .then(
-            (response) => {
-                if (isMounted.current) {
-                    setCategories(response);
-                }
+            headers: {
+                'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
             },
-            (error) => {
-                console.log(error);
-            }
-        )
+            method: 'GET'
+            })
+            .then(res => res.json())
+            .then(
+                (response) => {
+                    if (isMounted.current) {
+                        setCategories(response);
+                    }
+                },
+                (error) => {
+                    console.log(error);
+                }
+            )
 
         if (props.values.category){ // if edit
             populateTypes(props.values.category);

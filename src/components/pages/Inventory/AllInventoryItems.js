@@ -100,8 +100,10 @@ function AllInventoryItems() {
 
     const fetchData = () => { // fetch inventory
         fetch('http://site.test/WebIMS/api/inventory/read', {
-            method: 'GET',
-            credentials: 'include'
+            headers: {
+                'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
+            },
+            method: 'GET'
             })
             .then(res => res.json())
             .then(

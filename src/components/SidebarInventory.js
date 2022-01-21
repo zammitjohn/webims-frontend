@@ -21,8 +21,10 @@ useEffect(() => {
 
 	// fetch categories
 	fetch('http://site.test/WebIMS/api/inventory/categories/read', {
-		method: 'GET',
-		credentials: 'include'
+		headers: {
+			'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
+		},
+		method: 'GET'
 		})
 		.then(res => res.json()) 
 		.then(
@@ -48,8 +50,10 @@ useEffect(() => {
 		
 	// fetch types
 	fetch('http://site.test/WebIMS/api/inventory/types/read', {
-		method: 'GET',
-		credentials: 'include'
+		headers: {
+			'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
+		},
+		method: 'GET'
 		})
 		.then(res => res.json()) 
 		.then(

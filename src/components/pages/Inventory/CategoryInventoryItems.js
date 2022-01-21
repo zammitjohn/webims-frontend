@@ -101,8 +101,10 @@ function CategoryInventoryItems() {
         // Here we useCallback to memoize (store) the function.
         // Therefore, this function only change if 'id' changes
         fetch(`http://site.test/WebIMS/api/inventory/read?category=${id}`, {
-            method: 'GET',
-            credentials: 'include'
+            headers: {
+                'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
+            },
+            method: 'GET'
             })
             .then(res => res.json())
             .then(
@@ -130,8 +132,10 @@ function CategoryInventoryItems() {
     useEffect(() => {
         fetchData();
 		fetch(`http://site.test/WebIMS/api/inventory/categories/read?id=${id}`, {
-            method: 'GET',
-            credentials: 'include'
+            headers: {
+	            'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
+            },
+            method: 'GET'
         	})
             .then(res => res.json())
             .then(

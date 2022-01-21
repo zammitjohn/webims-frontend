@@ -1,13 +1,28 @@
-import { useNavigate } from "react-router-dom";
-
 function Header() {
 
-	let navigate = useNavigate();
-
 	const handleLogOut = () => {
-		localStorage.removeItem('UserSession');
-		localStorage.removeItem('Privileges');
-		navigate(`/login`, { replace: true });
+		fetch('http://site.test/WebIMS/api/users/logout', {
+			headers: {
+				'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
+			},
+            method: 'POST'
+            })
+            .then(res => res.json())
+            .then(
+                (response) => {
+                    if (response.status) {
+						localStorage.removeItem('UserSession');
+						localStorage.removeItem('Privileges');
+						window.location.href = '/login';
+
+                    } else {
+                        alert(response.message); 
+                    }
+                },
+                (error) => {
+                    console.log(error);
+                }
+            )
 	  };
 
 	return (

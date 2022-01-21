@@ -31,8 +31,10 @@ function EditInventoryItem() {
   useEffect(() => { 
     // fetch form data
     fetch(`http://site.test/WebIMS/api/inventory/read_single?id=${id}`, {
-      method: 'GET',
-      credentials: 'include',
+      headers: {
+        'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
+      },
+      method: 'GET'
       })
       .then(res => res.json())
       .then(
@@ -68,27 +70,31 @@ function EditInventoryItem() {
 
 
   const deleteObject = () => {
-    let formData = new FormData();
-    formData.append('id', id);
-    fetch('http://site.test/WebIMS/api/inventory/delete', {
-      method: 'POST',
-      credentials: 'include',
-      body: formData,
-      })
-      .then(res => res.json())
-      .then(
-        (response) => {
-          if (response.status) {
-            toast.success(values.SKU + ': ' + response.message);
-            navigate("/inventory", { replace: true });
-          } else {
-            toast.error(response.message);  
-          }
-        },
-        (error) => {
-          toast.error('Error occured');
-        }
-      )
+    if (window.confirm("Are you sure you want to delete the item? You cannot delete Inventory items associated to any Fault Reports, Projects or Registry items!")) {
+      let formData = new FormData();
+      formData.append('id', id);
+      fetch('http://site.test/WebIMS/api/inventory/delete', {
+          headers: {
+            'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
+          },
+          method: 'POST',
+          body: formData
+          })
+          .then(res => res.json())
+          .then(
+            (response) => {
+              if (response.status) {
+                toast.success(values.SKU + ': ' + response.message);
+                navigate("/inventory", { replace: true });
+              } else {
+                toast.error(response.message);  
+              }
+            },
+            (error) => {
+              toast.error('Error occured');
+            }
+          )
+      }
   };
 
   const handleSubmit = (event) => {
@@ -105,9 +111,11 @@ function EditInventoryItem() {
     formData.append('qtyOut', values.qtyOut);
     formData.append('notes', values.notes);
     fetch('http://site.test/WebIMS/api/inventory/update', {
-      method: 'POST',
-      credentials: 'include',
-      body: formData,
+      headers: {
+        'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
+      },  
+      method: 'POST',    
+      body: formData
       })
       .then(res => res.json())
       .then(

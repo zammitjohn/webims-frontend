@@ -1,13 +1,10 @@
 
 import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
 
 function Login(props) {
     // page specific styling
     document.body.classList.add("login-page");
     document.body.style.height = "";
-
-    const navigate = useNavigate()
 
     const [values, setValues] = useState({
         email: '',
@@ -32,40 +29,40 @@ function Login(props) {
         formData.append('password', values.password);
         formData.append('remember', values.remember);
         fetch('http://site.test/WebIMS/api/users/login', {
-          method: 'POST',
-          credentials: 'include',
-          body: formData,
-          })
-          .then(res => res.json())
-          .then(
-            (response) => {
-              if (response.status) {
-                const today = new Date()
-                const tomorrow = new Date(today)
-                tomorrow.setDate(tomorrow.getDate() + 1)
+            method: 'POST',
+            body: formData,
+            })
+            .then(res => res.json())
+            .then(
+                (response) => {
+                    if (response.status) {
+                        const today = new Date()
+                        const tomorrow = new Date(today)
+                        tomorrow.setDate(tomorrow.getDate() + 1)
 
-                let userSessionData = {
-                    fullName: response.firstname + ' ' + response.lastname ,
-                    sessionId: response.sessionId,
-                    expiry: (values.remember) ? null : tomorrow.toISOString()
+                        let userSessionData = {
+                            fullName: response.firstname + ' ' + response.lastname ,
+                            sessionId: response.sessionId,
+                            expiry: (values.remember) ? null : tomorrow.toISOString()
+                        }
+
+                        localStorage.setItem('UserSession', JSON.stringify([userSessionData]));
+                    
+                        if (!(props.self)) {
+                            window.location.href = '/';
+                        } else {
+                            window.location.reload();
+                        }
+
+                    } else {
+                        alert(response.message); 
+                    }
+                },
+                (error) => {
+                    console.log(error);
                 }
-
-                localStorage.setItem('UserSession', JSON.stringify([userSessionData]));
-                
-                if (!(props.self)) {
-                    navigate("/");
-                }
-                window.location.reload();
-
-              } else {
-                alert(response.message); 
-              }
-            },
-            (error) => {
-              console.log('Error occured');
-            }
-          )
-      };
+            )
+    };
 
     return (
         <>

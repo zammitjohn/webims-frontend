@@ -33,23 +33,25 @@ function CreateInventoryItem() {
     formData.append('qtyOut', values.qtyOut);
     formData.append('notes', values.notes);
     fetch('http://site.test/WebIMS/api/inventory/create', {
+      headers: {
+        'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
+      },
       method: 'POST',
-      credentials: 'include',
-      body: formData,
+      body: formData
       })
       .then(res => res.json())
       .then(
-        (response) => {
-          if (response.status) {
-            toast.success(response.SKU + ': ' + response.message);
-            navigate("/inventory", { replace: false });
-          } else {
-            toast.error(response.message);  
+          (response) => {
+            if (response.status) {
+              toast.success(response.SKU + ': ' + response.message);
+              navigate("/inventory", { replace: false });
+            } else {
+              toast.error(response.message);  
+            }
+          },
+          (error) => {
+            toast.error('Error occured');
           }
-        },
-        (error) => {
-          toast.error('Error occured');
-        }
       )
   };
   return (
