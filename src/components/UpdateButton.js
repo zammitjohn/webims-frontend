@@ -6,7 +6,7 @@ function UpdateButton() {
 
 	function getUserPrivilege() {
 		if ((localStorage.getItem('Privileges'))) {
-            if (JSON.parse(localStorage.getItem('Privileges'))[0].canUpdate === true) {
+            if (JSON.parse(localStorage.getItem('Privileges')).canUpdate === true) {
                 return <button type="submit" className="btn btn-primary">Update</button>;
             } else {
                 return <button disabled type="submit" className="btn btn-primary">Update</button>;
@@ -19,7 +19,7 @@ function UpdateButton() {
 	useEffect(()=> {
 		setState(getUserPrivilege());
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	},[])
+	},[localStorage.getItem('Privileges')])
 
     return (
         state

@@ -12,7 +12,7 @@ function ProtectedRoute() {
 
 			//check expiry
 			const today = new Date()
-			if ( (JSON.parse(localStorage.getItem('UserSession'))[0].expiry <= today.toISOString()) && (JSON.parse(localStorage.getItem('UserSession'))[0].expiry !== null) ){
+			if ( (JSON.parse(localStorage.getItem('UserSession')).expiry <= today.toISOString()) && (JSON.parse(localStorage.getItem('UserSession')).expiry !== null) ){
 				localStorage.removeItem('UserSession');
 				localStorage.removeItem('Privileges');
 				setLoginState(false);
@@ -21,7 +21,7 @@ function ProtectedRoute() {
 				//validate session using API
 				fetch('http://site.test/WebIMS/api/users/validate_session', {
 					headers: {
-						'Auth-Key': JSON.parse(localStorage.getItem('UserSession'))[0].sessionId,
+						'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId,
 					},
 					method: 'GET',
 					})
@@ -36,7 +36,7 @@ function ProtectedRoute() {
 									canUpdate: (response.canUpdate.toString() === '1') ? true : false,
 									canDelete: (response.canDelete.toString() === '1') ? true : false,
 								}
-								localStorage.setItem('Privileges', JSON.stringify([privilegesData]));
+								localStorage.setItem('Privileges', JSON.stringify(privilegesData));
 				
 							} else {
 								console.log("Session ID not valid or deleted remotely");

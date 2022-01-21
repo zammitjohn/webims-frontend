@@ -5,14 +5,14 @@ import DataTableFilter from "../../DataTableFilter"
 import { Link, useSearchParams, useParams } from "react-router-dom";
 import Error404 from '../Error404';
 
-function TypeInventoryItems() {
+function ProjectItems() {
     const { id } = useParams();
     const columns = [
         {
             name: 'SKU',
-            selector: row => row.SKU,
+            selector: row => row.inventory_SKU,
             sortable: true,
-            cell: (row)=><Link to={'../edit/' + row.id}>{row.SKU}</Link>,
+            cell: (row)=><Link to={'../edit/' + row.id}>{row.inventory_SKU}</Link>,
             grow: 2,
         },
         {
@@ -27,20 +27,14 @@ function TypeInventoryItems() {
             sortable: true,
         },
         {
-            name: 'Allocated',
-            selector: row => (row.qty_projects_allocated == null) ? "" : row.qty_projects_allocated,
+            name: 'Notes',
+            selector: row => (row.notes == null) ? "" : row.notes,
             sortable: true,
             hide: 'md',
         },
         {
-            name: 'Supplier',
-            selector: row => (row.supplier == null) ? "" : row.supplier,
-            sortable: true,
-            hide: 'md',
-        },
-        {
-            name: 'Import Date',
-            selector: row => (row.importDate == null) ? "" : row.importDate,
+            name: 'Added By',
+            selector: row => (row.user_fullname == null) ? "" : row.user_fullname,
             sortable: true,
             hide: 'md',
         },
@@ -64,7 +58,6 @@ function TypeInventoryItems() {
     
     const [data, setData] = useState([]); // data from api
     const [typeName, setTypeName] = useState(' ');
-    const [categoryName, setCategoryName] = useState('');
     const [states, setStates] = useState({ // form values
         error: null,
         isDataLoaded: false,
@@ -77,11 +70,10 @@ function TypeInventoryItems() {
     const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
 
     const filteredItems = data.filter(function(item) {
-        let itemSKU = (item.SKU == null) ? "" : item.SKU;
+        let itemSKU = (item.inventory_SKU == null) ? "" : item.inventory_SKU;
         let itemDescription = (item.description == null) ? "" : item.description;
-        let itemSupplier = (item.supplier == null) ? "" : item.supplier;
-
-        if ((itemSKU.toLowerCase().includes(filterText.toLowerCase())) || (itemDescription.toLowerCase().includes(filterText.toLowerCase()) || (itemSupplier.toLowerCase().includes(filterText.toLowerCase())))) {
+    
+        if ((itemSKU.toLowerCase().includes(filterText.toLowerCase())) || (itemDescription.toLowerCase().includes(filterText.toLowerCase()) )) {
             return true;
         } else {
             return false;
@@ -93,7 +85,8 @@ function TypeInventoryItems() {
         // useCallback: React creates a new function on every render
         // Here we useCallback to memoize (store) the function.
         // Therefore, this function only change if 'id' changes
-        fetch(`http://site.test/WebIMS/api/inventory/read?type=${id}`, {
+
+        fetch(`http://site.test/WebIMS/api/projects/read?type=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -106,9 +99,9 @@ function TypeInventoryItems() {
                     setStates(prevState => ({
                         ...prevState,
                         isDataLoaded: true,
-                    }));
+                    }));     
                 },
-                (error) => {
+                (error) => {            
                     setStates(prevState => ({
                         ...prevState,
                         isDataLoaded: true,
@@ -116,12 +109,14 @@ function TypeInventoryItems() {
                     }));
                 }
             )
+
+
     }, [id]);
 
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
             fetchData();
-            fetch(`http://site.test/WebIMS/api/inventory/types/read?id=${id}`, {
+            fetch(`http://site.test/WebIMS/api/projects/types/read?id=${id}`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -130,12 +125,12 @@ function TypeInventoryItems() {
                 .then(res => res.json())
                 .then(
                     (response) => {
-                        setTypeName( (response[0]) ? response[0].name : null  );
-                        setCategoryName( (response[0]) ? response[0].category_name : null );
+                        setTypeName( (response[0]) ? response[0].name : null );
                         setStates(prevState => ({
                             ...prevState,
                             isTypeNameLoaded: true,
                         }));
+                        
                     },
                     (error) => {
                         setStates(prevState => ({
@@ -146,6 +141,8 @@ function TypeInventoryItems() {
                     }
                 )
         }
+
+
 	}, [id, fetchData]);
 
     if (states.error) {
@@ -168,7 +165,7 @@ function TypeInventoryItems() {
                                 <div className="card-header">
                                     <h3 className="card-title">{typeName}</h3>
                                         <div className="card-tools">
-                                            <DataTableFilter placeholderText={"SKU, Description or Supplier"} setResetPaginationToggle={setResetPaginationToggle} resetPaginationToggle={resetPaginationToggle} setFilterText={setFilterText} filterText={filterText} />
+                                            <DataTableFilter placeholderText={"SKU or Description"} setResetPaginationToggle={setResetPaginationToggle} resetPaginationToggle={resetPaginationToggle} setFilterText={setFilterText} filterText={filterText} />
                                         </div>     
                                         <div className="card-tools">
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
@@ -195,4 +192,4 @@ function TypeInventoryItems() {
         );
     }
 }
-export default TypeInventoryItems;
+export default ProjectItems;

@@ -1,5 +1,6 @@
 // App.js
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./components/Login";
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from "./components/Layout";
 import Error404 from "./components/pages/Error404";
@@ -9,7 +10,7 @@ import EditInventoryItem from './components/pages/Inventory/EditInventoryItem';
 import AllInventoryItems from './components/pages/Inventory/AllInventoryItems';
 import CategoryInventoryItems from "./components/pages/Inventory/CategoryInventoryItems";
 import TypeInventoryItems from "./components/pages/Inventory/TypeInventoryItems";
-import Login from "./components/Login";
+import ProjectItems from "./components/pages/Projects/ProjectItems";
 
 function App() {
 	return (
@@ -40,12 +41,14 @@ function App() {
 						</Route>
 
 						<Route path="projects">
+							<Route path='' element={<Error404/>} />
 							<Route path='edit/:id' element={<Content/>} />
 							<Route path='create' element={<Content/>} />
-							<Route path=':id' element={<Content/>} />
+							<Route path=':id' element={<ProjectItems/>} />
 						</Route>
 
 						<Route path="registry">
+							<Route path='' element={<Error404/>} />
 							<Route path='create' element={<Content/>} />
 							<Route path=':id' element={<Content/>} />
 						</Route>

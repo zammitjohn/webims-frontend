@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ContentHeader from '../../ContentHeader';
 import DataTable from 'react-data-table-component';
 import DataTableFilter from "../../DataTableFilter"
@@ -69,13 +69,12 @@ function CategoryInventoryItems() {
         },
     };
     
-    let isMounted = useRef(true); // mutable flag is changed in the cleanup callback, as soon as the component is unmounted
     const [data, setData] = useState([]); // data from api
     const [categoryName, setCategoryName] = useState(' ');
     const [states, setStates] = useState({ // form values
         error: null,
         isDataLoaded: false,
-        isCategoryLoaded: false,
+        isCategoryNameLoaded: false,
       });
 
     const [searchParams] = useSearchParams(); // search params
@@ -102,63 +101,56 @@ function CategoryInventoryItems() {
         // Therefore, this function only change if 'id' changes
         fetch(`http://site.test/WebIMS/api/inventory/read?category=${id}`, {
             headers: {
-                'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
+                'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
             method: 'GET'
             })
             .then(res => res.json())
             .then(
                 (data) => {
-                    if (isMounted.current) {
-                        setData(data);
-                        setStates(prevState => ({
-                            ...prevState,
-                            isDataLoaded: true,
-                        }));
-                    }
+                    setData(data);
+                    setStates(prevState => ({
+                        ...prevState,
+                        isDataLoaded: true,
+                    }));
                 },
                 (error) => {
-                    if (isMounted.current) {
-                        setStates(prevState => ({
+                    setStates(prevState => ({
                             ...prevState,
                             isDataLoaded: true,
                             error
                         }));
-                    }
                 }
             )
     }, [id]);
 
     useEffect(() => {
-        fetchData();
-		fetch(`http://site.test/WebIMS/api/inventory/categories/read?id=${id}`, {
-            headers: {
-	            'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
-            },
-            method: 'GET'
-        	})
-            .then(res => res.json())
-            .then(
-                (response) => {
-                    if (isMounted.current) {
+        if (localStorage.getItem('UserSession')) {
+            fetchData();
+            fetch(`http://site.test/WebIMS/api/inventory/categories/read?id=${id}`, {
+                headers: {
+                    'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
+                },
+                method: 'GET'
+                })
+                .then(res => res.json())
+                .then(
+                    (response) => {
                         setCategoryName( (response[0]) ? response[0].name : null );
                         setStates(prevState => ({
                             ...prevState,
-                            isLoaded: true,
+                            isCategoryNameLoaded: true,
                         }));
-                    }
-                },
-                (error) => {
-                    if (isMounted.current) {
+                    },
+                    (error) => {
                         setStates(prevState => ({
                             ...prevState,
-                            isLoaded: true,
+                            isCategoryNameLoaded: true,
                             error
                         }));
                     }
-                }
-            )
-        return () => { isMounted.current = false }; // toggle flag, if unmounted
+                )
+        }
 	}, [id, fetchData]);
 
     if (states.error) {
@@ -166,7 +158,7 @@ function CategoryInventoryItems() {
         return null;
     } else if (!categoryName) {
         return <>{<Error404/>}</>;
-    } else if (!(states.isLoaded)) {
+    } else if (!(states.isCategoryNameLoaded)) {
         console.log("Loading...");
         return null;
     } else {

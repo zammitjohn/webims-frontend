@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 
 function SidebarProjects() {
 // Local variables will get reset every render upon mutation whereas state will update
-let isMounted = useRef(true); // mutable flag is changed in the cleanup callback, as soon as the component is unmounted
 let elements = [];
 let key = 0;
 const [projects, setProjects] = useState([]);
@@ -18,32 +17,29 @@ useEffect(() => {
 	// exceptions from actual bugs in components.		
 
 	// fetch projects
-	fetch('http://site.test/WebIMS/api/projects/types/read', {
-		headers: {
-			'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
-		},
-		method: 'GET'
-		})
-		.then(res => res.json())
-		.then(
-			(projects) => {
-				if (isMounted.current) {
+	if (localStorage.getItem('UserSession')) {
+		fetch('http://site.test/WebIMS/api/projects/types/read', {
+			headers: {
+				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
+			},
+			method: 'GET'
+			})
+			.then(res => res.json())
+			.then(
+				(projects) => {
 					setProjects(projects);
 					setStates({
 						isLoaded: true,
 					});
-				}
-			},
-			(error) => {
-				if (isMounted.current) {
+				},
+				(error) => {
 					setStates({
 						isLoaded: true,
 						error
 					});
 				}
-			}
-		)
-	return () => { isMounted.current = false }; // toggle flag, if unmounted
+			)
+	}
   }, []);
 
     if (states.error) {

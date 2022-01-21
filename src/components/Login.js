@@ -46,7 +46,7 @@ function Login(props) {
                             expiry: (values.remember) ? null : tomorrow.toISOString()
                         }
 
-                        localStorage.setItem('UserSession', JSON.stringify([userSessionData]));
+                        localStorage.setItem('UserSession', JSON.stringify(userSessionData));
                     
                         if (!(props.self)) {
                             window.location.href = '/';

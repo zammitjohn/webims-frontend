@@ -34,7 +34,7 @@ function CreateInventoryItem() {
     formData.append('notes', values.notes);
     fetch('http://site.test/WebIMS/api/inventory/create', {
       headers: {
-        'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
+        'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },
       method: 'POST',
       body: formData

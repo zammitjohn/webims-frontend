@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import ContentHeader from '../../ContentHeader';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,7 +11,6 @@ import DeleteButton from '../../DeleteButton';
 function EditInventoryItem() {
   const { id } = useParams();
   let navigate = useNavigate();
-  let isMounted = useRef(true); // mutable flag is changed in the cleanup callback, as soon as the component is unmounted
   const [values, setValues] = useState({ // form values
     SKU: '',
     category: '',
@@ -29,17 +28,16 @@ function EditInventoryItem() {
   });
 
   useEffect(() => { 
-    // fetch form data
-    fetch(`http://site.test/WebIMS/api/inventory/read_single?id=${id}`, {
-      headers: {
-        'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
-      },
-      method: 'GET'
-      })
-      .then(res => res.json())
-      .then(
-        (response) => {
-          if (isMounted.current) {
+    if (localStorage.getItem('UserSession')) {
+      fetch(`http://site.test/WebIMS/api/inventory/read_single?id=${id}`, { // fetch form data
+        headers: {
+          'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
+        },
+        method: 'GET'
+        })
+        .then(res => res.json())
+        .then(
+          (response) => {
             setValues(values => ({ 
               SKU: (response.SKU) ? response.SKU : '',
               category: (response.category) ? response.category : '',
@@ -54,18 +52,15 @@ function EditInventoryItem() {
             setStates({
               isLoaded: true,
             });
-          }
-        },
-        (error) => {
-          if (isMounted.current) {
+          },
+          (error) => {
             setStates({
               isLoaded: true,
               error
             });
           }
-        }
-      )
-    return () => { isMounted.current = false }; // toggle flag, if unmounted
+        )
+    }
   }, [id]);
 
 
@@ -75,7 +70,7 @@ function EditInventoryItem() {
       formData.append('id', id);
       fetch('http://site.test/WebIMS/api/inventory/delete', {
           headers: {
-            'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
+            'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },
           method: 'POST',
           body: formData
@@ -112,7 +107,7 @@ function EditInventoryItem() {
     formData.append('notes', values.notes);
     fetch('http://site.test/WebIMS/api/inventory/update', {
       headers: {
-        'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
+        'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },  
       method: 'POST',    
       body: formData

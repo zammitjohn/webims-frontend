@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import ContentHeader from '../../ContentHeader';
 import DataTable from 'react-data-table-component';
 import DataTableFilter from "../../DataTableFilter"
@@ -73,8 +73,7 @@ function AllInventoryItems() {
             },
         },
     };
-    
-    let isMounted = useRef(true); // mutable flag is changed in the cleanup callback, as soon as the component is unmounted
+
     const [data, setData] = useState([]); // data from api
     const [states, setStates] = useState({ // form values
         error: null,
@@ -101,34 +100,33 @@ function AllInventoryItems() {
     const fetchData = () => { // fetch inventory
         fetch('http://site.test/WebIMS/api/inventory/read', {
             headers: {
-                'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
+                'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
             method: 'GET'
             })
             .then(res => res.json())
             .then(
                 (data) => {
-                    if (isMounted.current) {
-                        setData(data);
-                        setStates({
-                            isLoaded: true,
-                        });
-                    }
+                    setData(data);
+                    setStates({
+                        isLoaded: true,
+                    });
+                
                 },
                 (error) => {
-                    if (isMounted.current) {
-                        setStates({
-                            isLoaded: true,
-                            error
-                        });
-                    }
+                    setStates({
+                        isLoaded: true,
+                        error
+                    });
+                
                 }
             )
     };
 
     useEffect(() => {
-        fetchData();
-        return () => { isMounted.current = false }; // toggle flag, if unmounted
+        if (localStorage.getItem('UserSession')) {
+            fetchData();
+        }
 	}, []);
 
 

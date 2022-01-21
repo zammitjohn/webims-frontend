@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 
 function SidebarInventory() {
 // Local variables will get reset every render upon mutation whereas state will update
-let isMounted = useRef(true); // mutable flag is changed in the cleanup callback, as soon as the component is unmounted
 let elements = [];
 let key = 0;
 const [types, setTypes] = useState([]);
@@ -20,63 +19,56 @@ useEffect(() => {
 	// exceptions from actual bugs in components.	
 
 	// fetch categories
-	fetch('http://site.test/WebIMS/api/inventory/categories/read', {
-		headers: {
-			'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
-		},
-		method: 'GET'
-		})
-		.then(res => res.json()) 
-		.then(
-			(categories) => {
-				if (isMounted.current) {
+	if (localStorage.getItem('UserSession')) {
+		fetch('http://site.test/WebIMS/api/inventory/categories/read', {
+			headers: {
+				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
+			},
+			method: 'GET'
+			})
+			.then(res => res.json()) 
+			.then(
+				(categories) => {
 					setCategories(categories);
 					setStates(prevState => ({
 						...prevState,
 						isCategoriesLoaded: true,
 					}));
-				}
-			},
-			(error) => {
-				if (isMounted.current) {
+				},
+				(error) => {
 					setStates(prevState => ({
 						...prevState,
 						isCategoriesLoaded: true,
 						error
 					}));
 				}
-			}
-		)
-		
-	// fetch types
-	fetch('http://site.test/WebIMS/api/inventory/types/read', {
-		headers: {
-			'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
-		},
-		method: 'GET'
-		})
-		.then(res => res.json()) 
-		.then(
-			(types) => {
-				if (isMounted.current) {
+			)	
+	
+		// fetch types
+		fetch('http://site.test/WebIMS/api/inventory/types/read', {
+			headers: {
+				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
+			},
+			method: 'GET'
+			})
+			.then(res => res.json()) 
+			.then(
+				(types) => {
 					setTypes(types);
 					setStates(prevState => ({
 						...prevState,
 						isTypesLoaded: true,
 					}));
-				}
-			},			
-			(error) => {
-				if (isMounted.current) {
+				},			
+				(error) => {
 					setStates(prevState => ({
 						...prevState,
 						isTypesLoaded: true,
 						error
 					}));
 				}
-			}
-		)
-		return () => { isMounted.current = false }; // toggle flag, if unmounted
+			)
+	}
   }, []);
 
 if (states.error) {

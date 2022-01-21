@@ -9,7 +9,7 @@ function Sidebar() {
 
 	useEffect(()=> {
 		if ((localStorage.getItem('UserSession'))) {
-			setUserFullName(JSON.parse(localStorage.getItem('UserSession'))[0].fullName);
+			setUserFullName(JSON.parse(localStorage.getItem('UserSession')).fullName);
 		} else {
 			setUserFullName(null);
 		}

@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function InventoryForm(props) {    
     const [categories, setCategories] = useState([]);
     const [types, setTypes] = useState([]);
-    let isMounted = useRef(true); // mutable flag is changed in the cleanup callback, as soon as the component is unmounted
 
     const populateTypes = (category) => { // fetch types dropdown data
 
@@ -12,16 +11,14 @@ function InventoryForm(props) {
 
             fetch(url, {
                 headers: {
-                    'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
+                    'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
                 method: 'GET'
                 })
                 .then(res => res.json()) 
                 .then(
                 (response) => {
-                    if (isMounted.current) {
-                        setTypes(response);
-                    }
+                    setTypes(response);
                 },
                 (error) => {
                     console.log(error);
@@ -35,30 +32,28 @@ function InventoryForm(props) {
     }
 
     useEffect(() => {
-        //populate categories
-        fetch('http://site.test/WebIMS/api/inventory/categories/read', {
-            headers: {
-                'Auth-Key': (localStorage.getItem('UserSession')) ? (JSON.parse(localStorage.getItem('UserSession'))[0].sessionId) : null,
-            },
-            method: 'GET'
-            })
-            .then(res => res.json())
-            .then(
-                (response) => {
-                    if (isMounted.current) {
-                        setCategories(response);
-                    }
+        if (localStorage.getItem('UserSession')) {
+            //populate categories
+            fetch('http://site.test/WebIMS/api/inventory/categories/read', {
+                headers: {
+                    'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
-                (error) => {
-                    console.log(error);
-                }
-            )
+                method: 'GET'
+                })
+                .then(res => res.json())
+                .then(
+                    (response) => {
+                        setCategories(response);
+                    },
+                    (error) => {
+                        console.log(error);
+                    }
+                )
 
-        if (props.values.category){ // if edit
-            populateTypes(props.values.category);
+            if (props.values.category){ // if edit
+                populateTypes(props.values.category);
+            }
         }
-
-        return () => { isMounted.current = false }; // toggle flag, if unmounted
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
