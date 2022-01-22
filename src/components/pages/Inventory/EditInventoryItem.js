@@ -155,6 +155,8 @@ function EditInventoryItem() {
                       <UpdateButton />
                       &nbsp;
                       <DeleteButton deleteObject={deleteObject}/>
+                      &nbsp;
+                      <button type="button"  className="btn btn-default" onClick={() => { navigate(`../../projects/create/${id}`) }}>Add to Project</button>                     
                     </div>
                   </form>
                 </div>

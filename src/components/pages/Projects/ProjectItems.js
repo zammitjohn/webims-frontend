@@ -169,7 +169,11 @@ function ProjectItems() {
                                         </div>     
                                         <div className="card-tools">
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                            <a href="#" className="btn btn-tool btn-sm" data-toggle="modal" data-target="#modal-transaction" onClick={fetchData}> <i className="fas fa-dolly-flatbed"></i> </a> 
+                                            <a href="#" className="btn btn-tool btn-sm" data-toggle="modal" data-target="#modal-transaction" onClick={fetchData}> <i className="fas fa-download"></i> </a> 
+                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                            <a href="#" className="btn btn-tool btn-sm" data-toggle="modal" data-target="#modal-transaction" onClick={fetchData}> <i className="fas fa-upload"></i> </a> 
+                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                            <a href="#" className="btn btn-tool btn-sm" data-toggle="modal" data-target="#modal-transaction" onClick={fetchData}> <i className="fas fa-trash"></i> </a> 
                                         </div>      
                                 </div>                   
                                 <DataTable
@@ -178,7 +182,6 @@ function ProjectItems() {
                                     data={filteredItems}
                                     customStyles={customStyles}
                                     highlightOnHover
-                                    striped
                                     pagination
                                     paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
                                     persistTableHead

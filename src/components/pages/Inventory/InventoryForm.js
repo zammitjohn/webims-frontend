@@ -59,28 +59,28 @@ function InventoryForm(props) {
 
 
     const handleChange = (event) => {
-    const { id, value } = event.target;
-    const fieldValue = { [id]: value };
+        const { id, value } = event.target;
+        const fieldValue = { [id]: value };
 
-        props.setValues({
-            ...props.values,
-            ...fieldValue,
-        });
+            props.setValues({
+                ...props.values,
+                ...fieldValue,
+            });
     };
 
     const handleCategoryChange = (event) => {
-    const { value } = event.target;
-    const fieldValue = { 
-        category : value,
-        type : '',
-    };
-    
-    populateTypes(value);
+        const { value } = event.target;
+        const fieldValue = { 
+            category : value,
+            type : '',
+        };
+        
+        populateTypes(value);
 
-        props.setValues({
-            ...props.values,
-            ...fieldValue,
-        });
+            props.setValues({
+                ...props.values,
+                ...fieldValue,
+            });
     };
 
 	return (
