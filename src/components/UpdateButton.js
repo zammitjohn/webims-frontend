@@ -1,29 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useContext } from 'react';
+import { UserPrivilegesContext } from "./ProtectedRoute";
 
 function UpdateButton() {
-
-	const [state, setState] = useState('')
-
-	function getUserPrivilege() {
-		if ((localStorage.getItem('Privileges'))) {
-            if (JSON.parse(localStorage.getItem('Privileges')).canUpdate === true) {
-                return <button type="submit" className="btn btn-primary">Update</button>;
-            } else {
-                return <button disabled type="submit" className="btn btn-primary">Update</button>;
-            }
-		} else {
-			return <button disabled type="submit" className="btn btn-primary">Update</button>;
-		}
-	}
-
-	useEffect(()=> {
-		setState(getUserPrivilege());
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	},[localStorage.getItem('Privileges')])
-
-    return (
-        state
-    );
+	const privileges = useContext(UserPrivilegesContext);
+	return <button disabled={!privileges.canUpdate} type="submit" className="btn btn-primary">Update</button>;
 }
 
 export default UpdateButton;

@@ -12,7 +12,6 @@ function Header() {
                 (response) => {
                     if (response.status) {
 						localStorage.removeItem('UserSession');
-						localStorage.removeItem('Privileges');
 						window.location.href = '/login';
 
                     } else {
