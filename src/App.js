@@ -12,6 +12,7 @@ import CategoryInventoryItems from "./components/pages/Inventory/CategoryInvento
 import TypeInventoryItems from "./components/pages/Inventory/TypeInventoryItems";
 import ProjectItems from "./components/pages/Projects/ProjectItems";
 import CreateProjectItem from "./components/pages/Projects/CreateProjectItem";
+import EditProjectItem from "./components/pages/Projects/EditProjectItem";
 
 function App() {
 	return (
@@ -43,7 +44,7 @@ function App() {
 
 						<Route path="projects">
 							<Route path='' element={<Error404/>} />
-							<Route path='edit/:id' element={<Content/>} />
+							<Route path='edit/:id' element={<EditProjectItem/>} />
 							<Route path='create/:id' element={<CreateProjectItem/>} />
 							<Route path=':id' element={<ProjectItems/>} />
 						</Route>

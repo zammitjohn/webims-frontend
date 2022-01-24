@@ -72,7 +72,10 @@ function ProtectedRoute() {
 		);
 
 	} else {
-		return (<Login self={true} />);
+		return (
+		<Login self={true} />
+			
+		);
 	}
 
 }

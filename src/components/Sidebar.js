@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import SidebarInventory from './SidebarInventory';
 import SidebarProjects from './SidebarProjects';
 
-
 function Sidebar() {
 	const [userFullName, setUserFullName] = useState(null)
 

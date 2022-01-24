@@ -6,7 +6,6 @@ function ProjectForm(props) {
 
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
-
             // populate inventory dropdown
             fetch(`http://site.test/webims/api/inventory/read`, {
                 headers: {
@@ -62,21 +61,21 @@ function ProjectForm(props) {
                 <select value={props.values.inventoryId} onChange={handleChange} id="inventoryId" className="form-control">
                     <option value='null'>Select Inventory Item</option>
                     {inventoryItems.map(item => (
-                        <option key={item.id} value={item.id}>
-                        {item.SKU + " (" + item.category_name + ") "}
-                        </option>
+                    <option key={item.id} value={item.id}>
+                    {item.SKU + " (" + item.category_name + ") "}
+                    </option>
                     ))}
                 </select>
             </div>        
 
             <div className="form-group">
-                <label htmlFor="typeId">Project</label>
-                <select value={props.values.typeId} onChange={handleChange} id="typeId" className="form-control">
+                <label htmlFor="type">Project</label>
+                <select value={props.values.type} onChange={handleChange} id="type" className="form-control">
                     <option value='null'>Select Project</option>
                     {types.map(type => (
-                            <option key={type.id} value={type.id}>
-                            {type.name}
-                            </option>
+                    <option key={type.id} value={type.id}>
+                    {type.name}
+                    </option>
                     ))}
                 </select>
             </div>

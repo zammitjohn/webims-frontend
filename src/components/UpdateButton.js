@@ -1,9 +1,10 @@
 import { useContext } from 'react';
 import { UserPrivilegesContext } from "./ProtectedRoute";
+import { Button } from 'react-bootstrap';
 
 function UpdateButton() {
 	const privileges = useContext(UserPrivilegesContext);
-	return <button disabled={!privileges.canUpdate} type="submit" className="btn btn-primary">Update</button>;
+	return <Button disabled={!privileges.canUpdate} type="submit" variant="primary">Update</Button>
 }
 
 export default UpdateButton;

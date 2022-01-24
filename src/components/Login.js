@@ -1,11 +1,14 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function Login(props) {
     // page specific styling
     document.body.classList.add("login-page");
     document.body.style.height = "";
+    document.title = "Login";
 
+
+    const [referrer, setReferrer] = useState(null);
     const [values, setValues] = useState({
         email: '',
         password: '',
@@ -51,7 +54,7 @@ function Login(props) {
                         if (!(props.self)) {
                             window.location.href = '/';
                         } else {
-                            window.location.reload();
+                            window.location.href = referrer;
                         }
 
                     } else {
@@ -63,6 +66,14 @@ function Login(props) {
                 }
             )
     };
+
+
+    useEffect(() => {
+        setReferrer(window.location.href);
+        if (props.self) {
+            window.history.replaceState(null, '', '/login?referrer='+window.location.href);
+        }
+    }, []);
 
     return (
         <>

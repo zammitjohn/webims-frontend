@@ -12,7 +12,7 @@ function CreateProjectItem() {
   const { id } = useParams();
   const [values, setValues] = useState({ // form values
     inventoryId: id,
-    typeId: '',
+    type: '',
     description: '',
     qty: '',
     notes: '',
@@ -22,7 +22,7 @@ function CreateProjectItem() {
     event.preventDefault();
     let formData = new FormData();
     formData.append('inventoryId', values.inventoryId);
-    formData.append('type', values.typeId);
+    formData.append('type', values.type);
     formData.append('description', values.description);
     formData.append('qty', values.qty);
     formData.append('notes', values.notes);
@@ -38,7 +38,7 @@ function CreateProjectItem() {
           (response) => {
             if (response.status) {
               toast.success(response.message);
-              navigate(`/projects/${values.typeId}`, { replace: false });
+              navigate(`/projects/${values.type}`, { replace: false });
             } else {
               toast.error(response.message);  
             }
@@ -50,7 +50,7 @@ function CreateProjectItem() {
   };
   return (
     <>
-      <ContentHeader pageName={'Add Item'}/>
+      <ContentHeader pageName={'Add Project Item'}/>
       <section className="content">
         <div className="container-fluid">
           <div className="row">

@@ -78,13 +78,13 @@ function AllInventoryItems() {
     const [states, setStates] = useState({ // form values
         error: null,
         isLoaded: false,
-      });
+    });
 
+
+    // table search
     const [searchParams] = useSearchParams(); // search params
     const [filterText, setFilterText] = useState((searchParams.get('search')) ?  searchParams.get('search') : '');
-
     const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
-
     const filteredItems = data.filter(function(item) {
         let itemSKU = (item.SKU == null) ? "" : item.SKU;
         let itemDescription = (item.description == null) ? "" : item.description;
@@ -145,7 +145,13 @@ function AllInventoryItems() {
                             <div className="card-header">
                                 <h3 className="card-title">All items</h3>
                                     <div className="card-tools">
-                                        <DataTableFilter placeholderText={"SKU, Description or Supplier"} setResetPaginationToggle={setResetPaginationToggle} resetPaginationToggle={resetPaginationToggle} setFilterText={setFilterText} filterText={filterText} />
+                                        <DataTableFilter
+                                            placeholderText={"SKU, Description or Supplier"}
+                                            setResetPaginationToggle={setResetPaginationToggle}
+                                            resetPaginationToggle={resetPaginationToggle}
+                                            setFilterText={setFilterText}
+                                            filterText={filterText}
+                                        />
                                     </div>     
                                     <div className="card-tools">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}

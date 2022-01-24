@@ -1,26 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ContentHeader from '../../ContentHeader';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Error404 from '../Error404';
-import InventoryForm from './InventoryForm';
+import ProjectForm from './ProjectForm';
 import UpdateButton from '../../UpdateButton';
 import DeleteButton from '../../DeleteButton';
-import { Dropdown, ButtonGroup, ButtonToolbar } from 'react-bootstrap';
+import { ButtonGroup, ButtonToolbar } from 'react-bootstrap';
 
-function EditInventoryItem() {
+function EditProjectItem() {
   const { id } = useParams();
   let navigate = useNavigate();
   const [values, setValues] = useState({ // form values
-    SKU: '',
-    category: '',
+    inventoryId: '',
     type: '',
     description: '',
-    supplier: '',
     qty: '',
-    qtyIn: '',
-    qtyOut: '',
     notes: '',
   });
   const [states, setStates] = useState({ // form values
@@ -28,9 +24,10 @@ function EditInventoryItem() {
     isLoaded: false,
   });
 
+
   useEffect(() => { 
     if (localStorage.getItem('UserSession')) {
-      fetch(`http://site.test/WebIMS/api/inventory/read_single?id=${id}`, { // fetch form data
+      fetch(`http://site.test/WebIMS/api/projects/read_single?id=${id}`, { // fetch form data
         headers: {
           'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },
@@ -40,14 +37,10 @@ function EditInventoryItem() {
         .then(
           (response) => {
             setValues(values => ({ 
-              SKU: (response.SKU) ? response.SKU : '',
-              category: (response.category) ? response.category : '',
+              inventoryId: (response.inventoryId) ? response.inventoryId : '',
               type: (response.type) ? response.type : '',
               description: (response.description) ? response.description : '',
-              supplier: (response.supplier) ? response.supplier : '',
               qty: (response.qty) ? response.qty : '',
-              qtyIn: (response.qtyIn) ? response.qtyIn : '',
-              qtyOut: (response.qtyOut) ? response.qtyOut : '',
               notes: (response.notes) ? response.notes : '',
             }));
             setStates({
@@ -65,10 +58,10 @@ function EditInventoryItem() {
   }, [id]);
 
   const deleteObject = () => {
-    if (window.confirm("Are you sure you want to delete the item? You cannot delete Inventory items associated to any Fault Reports, Projects or Registry items!")) {
+    if (window.confirm("Are you sure you want to delete the item?")) {
       let formData = new FormData();
       formData.append('id', id);
-      fetch('http://site.test/WebIMS/api/inventory/delete', {
+      fetch('http://site.test/WebIMS/api/projects/delete', {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },
@@ -79,8 +72,8 @@ function EditInventoryItem() {
           .then(
             (response) => {
               if (response.status) {
-                toast.success(values.SKU + ': ' + response.message);
-                navigate("/inventory", { replace: true });
+                toast.success(response.message);
+                navigate(`../${values.type}`, { replace: true });
               } else {
                 toast.error(response.message);  
               }
@@ -92,39 +85,37 @@ function EditInventoryItem() {
       }
   };
 
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
     let formData = new FormData();
-    formData.append('id', id);
-    formData.append('SKU', values.SKU);
-    formData.append('category', values.category);
+    formData.append('id',id);
+    formData.append('inventoryId', values.inventoryId);
     formData.append('type', values.type);
     formData.append('description', values.description);
-    formData.append('supplier', values.supplier);
     formData.append('qty', values.qty);
-    formData.append('qtyIn', values.qtyIn);
-    formData.append('qtyOut', values.qtyOut);
     formData.append('notes', values.notes);
-    fetch('http://site.test/WebIMS/api/inventory/update', {
+    fetch('http://site.test/WebIMS/api/projects/update', {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
-      },  
-      method: 'POST',    
+      },
+      method: 'POST',
       body: formData
       })
       .then(res => res.json())
       .then(
-        (response) => {
-          if (response.status) {
-            toast.success(values.SKU + ': ' + response.message);
-            navigate("/inventory", { replace: false });
-          } else {
-            toast.error(response.message);  
+          (response) => {
+            if (response.status) {
+              toast.success(response.message);
+              navigate(`/projects/${values.type}`, { replace: false });
+            } else {
+              toast.error(response.message);  
+            }
+          },
+          (error) => {
+            toast.error('Error occured');
           }
-        },
-        (error) => {
-          toast.error('Error occured');
-        }
       )
   };
 
@@ -136,7 +127,7 @@ function EditInventoryItem() {
   } else {
     return (
       <>
-        <ContentHeader pageName={'Edit Item ' + values.SKU}/>
+        <ContentHeader pageName={'Edit Project Item'}/>
         <section className="content">
           <div className="container-fluid">
             <div className="row">
@@ -147,32 +138,19 @@ function EditInventoryItem() {
                   {/* form start */}
                   <form id="item_form" onSubmit={handleSubmit}>
                     <div className="card-body">
-                      <InventoryForm values={values} setValues={setValues}/>
+                      <ProjectForm values={values} setValues={setValues}/>
                     </div>
                     {/* /.card-body */}
-                    
                     <div className="card-footer">
-                    <ButtonToolbar>
-                      <ButtonGroup>
-                        <UpdateButton />
-                      </ButtonGroup>
-                      &nbsp;
-                      <ButtonGroup>
-                        <DeleteButton deleteObject={deleteObject}/>
-                      </ButtonGroup>
-                      &nbsp;
-                      <ButtonGroup>
-                        <Dropdown>
-                          <Dropdown.Toggle variant="default">
-                            Add to...
-                          </Dropdown.Toggle>
-                          <Dropdown.Menu style={{ margin: 0 }}>
-                            <Dropdown.Item as={Link} to={"../../projects/create/"+id}>Projects</Dropdown.Item>
-                            <Dropdown.Item as={Link} to={"../../reports/create/"+id}>Fault Report</Dropdown.Item>
-                          </Dropdown.Menu>
-                        </Dropdown> 
-                      </ButtonGroup>                                            
-                    </ButtonToolbar>
+                      <ButtonToolbar>
+                        <ButtonGroup>
+                          <UpdateButton />
+                        </ButtonGroup>
+                        &nbsp;
+                        <ButtonGroup>
+                          <DeleteButton deleteObject={deleteObject}/>
+                        </ButtonGroup>
+                      </ButtonToolbar>
                     </div>
                   </form>
                 </div>
@@ -183,8 +161,9 @@ function EditInventoryItem() {
           </div>{/* /.container-fluid */}
         </section>      
       </>
+
     );
   }
 }
 
-export default EditInventoryItem
+export default EditProjectItem

@@ -1,11 +1,21 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
+import { UserPrivilegesContext } from "../../ProtectedRoute";
 import ContentHeader from '../../ContentHeader';
 import DataTable from 'react-data-table-component';
 import DataTableFilter from "../../DataTableFilter"
 import { Link, useSearchParams, useParams } from "react-router-dom";
 import Error404 from '../Error404';
+import ProjectsImportModal from './ProjectsImportModal';
 
 function ProjectItems() {
+    // to hide and show buttons
+    const privileges = useContext(UserPrivilegesContext);
+
+    // modal props
+    const [modalShow, setModalShow] = useState(false);
+    const handleModalClose = () => setModalShow(false);
+    const handleModalShow = () => setModalShow(true);
+
     const { id } = useParams();
     const columns = [
         {
@@ -64,11 +74,10 @@ function ProjectItems() {
         isTypeNameLoaded: false,
       });
 
+    // table search
     const [searchParams] = useSearchParams(); // search params
     const [filterText, setFilterText] = useState((searchParams.get('search')) ?  searchParams.get('search') : '');
-
     const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
-
     const filteredItems = data.filter(function(item) {
         let itemSKU = (item.inventory_SKU == null) ? "" : item.inventory_SKU;
         let itemDescription = (item.description == null) ? "" : item.description;
@@ -80,6 +89,51 @@ function ProjectItems() {
         }
     });
 
+    const csvDownload = useCallback(() => {
+        fetch(`http://site.test/WebIMS/api/projects/types/download?id=${id}`, {
+            headers: {
+                'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
+            },
+            method: 'GET'
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = `project_${typeName}.csv`;
+            document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+            a.click();    
+            a.remove();  //afterwards we remove the element again         
+        });
+    }, [id, typeName])
+
+    const projectDelete = useCallback(() => {
+        if (window.confirm("Are you sure you want to delete the project?")) {
+            let formData = new FormData();
+            formData.append('id', id);
+            fetch('http://site.test/WebIMS/api/projects/types/delete', {
+                headers: {
+                    'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
+                },
+                method: 'POST',
+                body: formData
+                })
+                .then(res => res.json())
+                .then(
+                    (response) => {
+                        if (response.status) {
+                            window.location.href = '/';
+                        } else {
+                            alert(response.message); 
+                        }
+                    },
+                    (error) => {
+                        console.log(error);
+                    }
+                )
+        }
+    }, [id])
 
     const fetchData = useCallback(() => { // fetch inventory
         // useCallback: React creates a new function on every render
@@ -109,8 +163,6 @@ function ProjectItems() {
                     }));
                 }
             )
-
-
     }, [id]);
 
     useEffect(() => {
@@ -141,8 +193,6 @@ function ProjectItems() {
                     }
                 )
         }
-
-
 	}, [id, fetchData]);
 
     if (states.error) {
@@ -165,15 +215,21 @@ function ProjectItems() {
                                 <div className="card-header">
                                     <h3 className="card-title">{typeName}</h3>
                                         <div className="card-tools">
-                                            <DataTableFilter placeholderText={"SKU or Description"} setResetPaginationToggle={setResetPaginationToggle} resetPaginationToggle={resetPaginationToggle} setFilterText={setFilterText} filterText={filterText} />
+                                            <DataTableFilter
+                                                placeholderText={"SKU or Description"}
+                                                setResetPaginationToggle={setResetPaginationToggle}
+                                                resetPaginationToggle={resetPaginationToggle}
+                                                setFilterText={setFilterText}
+                                                filterText={filterText}
+                                            />
                                         </div>     
                                         <div className="card-tools">
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                            <a href="#" className="btn btn-tool btn-sm" data-toggle="modal" data-target="#modal-transaction" onClick={fetchData}> <i className="fas fa-download"></i> </a> 
+                                            <a href="#" className="btn btn-tool btn-sm" onClick={csvDownload}> <i className="fas fa-download"></i> </a> 
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                            <a href="#" className="btn btn-tool btn-sm" data-toggle="modal" data-target="#modal-transaction" onClick={fetchData}> <i className="fas fa-upload"></i> </a> 
+                                            <a href="#" hidden={!privileges.canUpdate} className="btn btn-tool btn-sm" onClick={handleModalShow}> <i className="fas fa-upload"></i> </a> 
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                            <a href="#" className="btn btn-tool btn-sm" data-toggle="modal" data-target="#modal-transaction" onClick={fetchData}> <i className="fas fa-trash"></i> </a> 
+                                            <a href="#" hidden={!privileges.canDelete} className="btn btn-tool btn-sm" onClick={projectDelete}> <i className="fas fa-trash"></i> </a> 
                                         </div>      
                                 </div>                   
                                 <DataTable
@@ -186,7 +242,16 @@ function ProjectItems() {
                                     paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
                                     persistTableHead
                                 />
-                    
+
+                                <ProjectsImportModal 
+                                    fetchData={fetchData}
+                                    type={id}
+                                    modalShow={modalShow}
+                                    setModalShow={setModalShow}
+                                    handleModalClose={handleModalClose}
+                                    handleModalShow={handleModalShow}
+                                />
+
                             </div>
                         </div>
                     </div>
