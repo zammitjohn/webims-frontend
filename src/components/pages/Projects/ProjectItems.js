@@ -6,6 +6,7 @@ import DataTableFilter from "../../DataTableFilter"
 import { Link, useSearchParams, useParams } from "react-router-dom";
 import Error404 from '../Error404';
 import ProjectsImportModal from './ProjectsImportModal';
+import { Row, Col }  from 'react-bootstrap';
 
 function ProjectItems() {
     // to hide and show buttons
@@ -208,9 +209,8 @@ function ProjectItems() {
             <>
                 <ContentHeader pageName={typeName}/>
                 <section className="content">
-                    <div className="row">
-                        <div className="col-12">
-
+                    <Row>
+                        <Col>
                             <div className="card"> 
                                 <div className="card-header">
                                     <h3 className="card-title">{typeName}</h3>
@@ -253,8 +253,8 @@ function ProjectItems() {
                                 />
 
                             </div>
-                        </div>
-                    </div>
+                        </Col>
+                    </Row>
                 </section>            
             </>
         );

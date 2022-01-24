@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
+import { Form, Row, Col, Button }  from 'react-bootstrap';
 
 function Login(props) {
     // page specific styling
@@ -16,9 +17,10 @@ function Login(props) {
       });
 
     const handleChange = (event) => {
-        const { id, value } = event.target;
+        const target = event.target;
+        const value = (target.type === 'checkbox') ? target.checked : target.value;
+        const id = target.id;
         const fieldValue = { [id]: value };
-
         setValues({
             ...values,
             ...fieldValue,
@@ -83,44 +85,44 @@ function Login(props) {
                 <div className="card-header text-center">
                 <a href="../" className="h1"><b>Web</b>IMS</a>
                 </div>
-                <div className="card-body">
-                <p className="login-box-msg">Log in with your corporate account</p>
-                <form id="login_form" onSubmit={handleLogin}>
-                    <div className="input-group mb-3">
-                    <input value={values.email} onChange={handleChange} type="email" id="email" className="form-control" placeholder="Email" />
-                    <div className="input-group-append">
-                        <div className="input-group-text">
-                        <span className="fas fa-envelope" />
+                <Form id="login_form" onSubmit={handleLogin}>
+                    <div className="card-body">
+                        <p className="login-box-msg">Log in with your corporate account</p>
+                        
+                        <div className="input-group mb-3">
+                            <Form.Control value={values.email} onChange={handleChange} type="email" id="email" className="form-control" placeholder="Email" />
+                            <div className="input-group-append">
+                                <div className="input-group-text">
+                                <span className="fas fa-envelope" />
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    </div>
-                    <div className="input-group mb-3">
-                    <input value={values.password} onChange={handleChange} type="password" id="password" className="form-control" placeholder="Password" />
-                    <div className="input-group-append">
-                        <div className="input-group-text">
-                        <span className="fas fa-lock" />
+                        <div className="input-group mb-3">
+                            <Form.Control value={values.password} onChange={handleChange} type="password" id="password" className="form-control" placeholder="Password" />
+                            <div className="input-group-append">
+                                <div className="input-group-text">
+                                <span className="fas fa-lock" />
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    </div>
-                    <div className="row">
-                    <div className="col-8">
-                        <div className="icheck-primary">
-                        <input value={values.remember} onChange={handleChange} type="checkbox" id="remember" />
-                        &nbsp;
-                        <label htmlFor="remember">
-                            Remember Me
-                        </label>
+                            <Row>
+                                <Col>
+                                    <Form.Group className="mb-3">
+                                        <Form.Check checked={values.remember} onChange={handleChange} type="checkbox" id="remember" label="Remember Me" />
+                                    </Form.Group>
+                                </Col>
+                            </Row>
                         </div>
+                    <div className="card-footer">
+                        <Row style={{textAlign: 'center'}}>
+                            <Col>
+                                <Button type="submit" variant="default">Log In</Button>
+                            </Col>
+                        </Row>
                     </div>
-                    {/* /.col */}
-                    <div className="col-4">
-                        <button type="submit" className="btn btn-default btn-block">Log In</button>
-                    </div>
-                    {/* /.col */}
-                    </div>
-                </form>
-                </div>
-                {/* /.card-body */}
+                </Form>
+
+
             </div>
             {/* /.card */}
         </div>

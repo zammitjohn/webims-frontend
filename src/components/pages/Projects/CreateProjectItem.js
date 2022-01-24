@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate, useParams } from "react-router-dom";
 import ProjectForm from './ProjectForm';
 import CreateButton from '../../CreateButton';
+import { Form, Row, Container, Col }  from 'react-bootstrap';
 
 function CreateProjectItem() {
 
@@ -52,14 +53,14 @@ function CreateProjectItem() {
     <>
       <ContentHeader pageName={'Add Project Item'}/>
       <section className="content">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-12">
+        <Container fluid>
+          <Row>
+            <Col>
               {/* general form elements */}
               <div className="card">
 
                 {/* form start */}
-                <form id="item_form" onSubmit={handleSubmit}>
+                <Form id="item_form" onSubmit={handleSubmit}>
                   <div className="card-body">
                     <ProjectForm values={values} setValues={setValues}/>
                   </div>
@@ -67,13 +68,12 @@ function CreateProjectItem() {
                   <div className="card-footer">
                     <CreateButton />
                   </div>
-                </form>
+                </Form>
               </div>
               {/* /.card */}
-            </div>
-          </div>
-          {/* /.row */}
-        </div>{/* /.container-fluid */}
+            </Col>
+          </Row>
+        </Container>
       </section>      
     </>
 

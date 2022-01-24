@@ -3,6 +3,7 @@ import ContentHeader from '../../ContentHeader';
 import DataTable from 'react-data-table-component';
 import DataTableFilter from "../../DataTableFilter"
 import { Link, useSearchParams } from "react-router-dom";
+import { Row, Col }  from 'react-bootstrap';
 
 function AllInventoryItems() {
     const columns = [
@@ -138,8 +139,8 @@ function AllInventoryItems() {
         <>
             <ContentHeader pageName={'Inventory'}/>
             <section className="content">
-                <div className="row">
-                    <div className="col-12">
+                <Row>
+                    <Col>
 
                         <div className="card"> 
                             <div className="card-header">
@@ -171,8 +172,8 @@ function AllInventoryItems() {
                             />
                 
                         </div>
-                    </div>
-                </div>
+                    </Col>
+                </Row>
             </section>            
         </>
     );

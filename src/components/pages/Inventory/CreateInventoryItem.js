@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import InventoryForm from './InventoryForm';
 import CreateButton from '../../CreateButton';
+import { Form, Row, Container, Col }  from 'react-bootstrap';
 
 function CreateInventoryItem() {
   let navigate = useNavigate();
@@ -58,14 +59,14 @@ function CreateInventoryItem() {
     <>
       <ContentHeader pageName={'Add Item'}/>
       <section className="content">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-12">
+        <Container fluid>
+          <Row>
+            <Col>
               {/* general form elements */}
               <div className="card">
 
                 {/* form start */}
-                <form id="item_form" onSubmit={handleSubmit}>
+                <Form id="item_form" onSubmit={handleSubmit}>
                   <div className="card-body">
                     <InventoryForm values={values} setValues={setValues}/>
                   </div>
@@ -73,13 +74,12 @@ function CreateInventoryItem() {
                   <div className="card-footer">
                     <CreateButton />
                   </div>
-                </form>
+                </Form>
               </div>
               {/* /.card */}
-            </div>
-          </div>
-          {/* /.row */}
-        </div>{/* /.container-fluid */}
+            </Col>
+          </Row>
+        </Container>
       </section>      
     </>
 

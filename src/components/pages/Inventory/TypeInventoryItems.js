@@ -4,6 +4,7 @@ import DataTable from 'react-data-table-component';
 import DataTableFilter from "../../DataTableFilter"
 import { Link, useSearchParams, useParams } from "react-router-dom";
 import Error404 from '../Error404';
+import { Row, Col }  from 'react-bootstrap';
 
 function TypeInventoryItems() {
     const { id } = useParams();
@@ -160,8 +161,8 @@ function TypeInventoryItems() {
             <>
                 <ContentHeader pageName={typeName}/>
                 <section className="content">
-                    <div className="row">
-                        <div className="col-12">
+                    <Row>
+                        <Col>
 
                             <div className="card"> 
                                 <div className="card-header">
@@ -193,8 +194,8 @@ function TypeInventoryItems() {
                                 />
                     
                             </div>
-                        </div>
-                    </div>
+                        </Col>
+                    </Row>
                 </section>            
             </>
         );

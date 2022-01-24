@@ -8,6 +8,7 @@ import ProjectForm from './ProjectForm';
 import UpdateButton from '../../UpdateButton';
 import DeleteButton from '../../DeleteButton';
 import { ButtonGroup, ButtonToolbar } from 'react-bootstrap';
+import { Form, Row, Container, Col }  from 'react-bootstrap';
 
 function EditProjectItem() {
   const { id } = useParams();
@@ -129,14 +130,14 @@ function EditProjectItem() {
       <>
         <ContentHeader pageName={'Edit Project Item'}/>
         <section className="content">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-12">
+          <Container fluid>
+            <Row>
+              <Col>
                 {/* general form elements */}
                 <div className="card">
 
                   {/* form start */}
-                  <form id="item_form" onSubmit={handleSubmit}>
+                  <Form id="item_form" onSubmit={handleSubmit}>
                     <div className="card-body">
                       <ProjectForm values={values} setValues={setValues}/>
                     </div>
@@ -152,13 +153,12 @@ function EditProjectItem() {
                         </ButtonGroup>
                       </ButtonToolbar>
                     </div>
-                  </form>
+                  </Form>
                 </div>
                 {/* /.card */}
-              </div>
-            </div>
-            {/* /.row */}
-          </div>{/* /.container-fluid */}
+              </Col>
+            </Row>
+          </Container>
         </section>      
       </>
 

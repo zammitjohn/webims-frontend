@@ -8,6 +8,7 @@ import InventoryForm from './InventoryForm';
 import UpdateButton from '../../UpdateButton';
 import DeleteButton from '../../DeleteButton';
 import { Dropdown, ButtonGroup, ButtonToolbar } from 'react-bootstrap';
+import { Form, Row, Container, Col }  from 'react-bootstrap';
 
 function EditInventoryItem() {
   const { id } = useParams();
@@ -138,14 +139,14 @@ function EditInventoryItem() {
       <>
         <ContentHeader pageName={'Edit Item ' + values.SKU}/>
         <section className="content">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-12">
+          <Container fluid>
+            <Row>
+              <Col>
                 {/* general form elements */}
                 <div className="card">
 
                   {/* form start */}
-                  <form id="item_form" onSubmit={handleSubmit}>
+                  <Form id="item_form" onSubmit={handleSubmit}>
                     <div className="card-body">
                       <InventoryForm values={values} setValues={setValues}/>
                     </div>
@@ -174,13 +175,12 @@ function EditInventoryItem() {
                       </ButtonGroup>                                            
                     </ButtonToolbar>
                     </div>
-                  </form>
+                  </Form>
                 </div>
                 {/* /.card */}
-              </div>
-            </div>
-            {/* /.row */}
-          </div>{/* /.container-fluid */}
+              </Col>
+            </Row>
+          </Container>
         </section>      
       </>
     );

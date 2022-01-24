@@ -1,4 +1,4 @@
-import { Button, Modal, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
+import { Form, Button, Modal, ButtonToolbar, ButtonGroup, Row, Col } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify'
 
@@ -141,43 +141,42 @@ function ProjectsImportModal(props) {
                 <p>Select CSV data file to import. Data file must use the following format: SKU,description,quantity,notes (header and blank lines are ignored).</p>
                 <div className="form-group">
                     <b>Allocate items from:</b>
-                    <div className="row">
-                        <div className="col-8">
-                            <select onChange={handleCategoryChange} value={selectedValues.category} className="form-control">
+                    <Row>
+                        <Col md="8">
+                            <Form.Select onChange={handleCategoryChange} value={selectedValues.category} className="form-control">
                                 <option value='null'>Select Category</option>
                                 {categories.map(category => (
                                 <option key={category.id} value={category.id}>
                                     {category.name}
                                 </option>
                                 ))}    
-                            </select>
-                        </div>
-                        <div className="col-4">
-                            <select onChange={handleTypeChange} value={selectedValues.type} className="form-control">
+                            </Form.Select>
+                        </Col>
+                        <Col md="4">
+                            <Form.Select onChange={handleTypeChange} value={selectedValues.type} className="form-control">
                                 <option value='null'>Select Type</option>
                                 {types.map(type => (
                                 <option key={type.id} value={type.id}>
                                     {type.name}
                                 </option>
                                 ))}  
-                            </select>
-                        </div>
-                    </div>
+                            </Form.Select>
+                        </Col>
+                    </Row>
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <form method="post" encType="multipart/form-data"  onSubmit={handleFileUpload}>
+                <Form method="post" encType="multipart/form-data"  onSubmit={handleFileUpload}>
                     <ButtonToolbar>
                         <ButtonGroup> 
                             <div className="custom-file">
-                                <input type="file" onChange={handleSelectedFile} className="custom-file-input" name="file" accept=".csv"/>
-                                <label className="custom-file-label" htmlFor="file">{selectedFilename}</label>
+                                <Form.Control type="file" onChange={handleSelectedFile} className="custom-file-input" name="file" accept=".csv"/>
+                                <Form.Label className="custom-file-label" htmlFor="file">{selectedFilename}</Form.Label>
                             </div>
                             <Button type="submit" variant="primary" onClick={handleFileUpload}>Upload</Button>
                         </ButtonGroup>
-                    </ButtonToolbar>          
-
-              </form>
+                    </ButtonToolbar>
+              </Form>
             </Modal.Footer>
         </Modal>    
     );

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createSearchParams, useNavigate } from "react-router-dom";
+import { FormControl, InputGroup, Button }  from 'react-bootstrap';
 
 function DataTableFilter(props) {
     const [icon, setIcon] = useState(<i className="fas fa-search" aria-hidden="true"></i>);
@@ -39,14 +40,14 @@ function DataTableFilter(props) {
 	}, [props.filterText]);
 
     return (
-        <div className="input-group input-group-sm" style={{paddingLeft: "10px", width:"225px"}} >
-            <input id="search" className="form-control" type="text" placeholder={props.placeholderText} aria-label="Search Input" value={props.filterText} onChange={handleChange} />
+        <InputGroup className="input-group-sm" style={{paddingLeft: "10px"}} >
+            <FormControl id="search" className="form-control" type="text" placeholder={props.placeholderText} aria-label="Search Input" value={props.filterText} onChange={handleChange} />
             <span className="input-group-append">
-                <button type="button" className="btn btn-warning btn-flat" onClick={handleClear}>
+                <Button type="button" variant="warning" onClick={handleClear}>
                     {icon}
-                </button>
+                </Button>
             </span>
-        </div>
+        </InputGroup>    
     );
 }
 

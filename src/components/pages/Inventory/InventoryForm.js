@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Form, Col, Row }  from 'react-bootstrap';
 
 function InventoryForm(props) {    
     const [categories, setCategories] = useState([]);
@@ -85,73 +86,73 @@ function InventoryForm(props) {
 
 	return (
         <>                  
-            <div className="form-group">
-                <label htmlFor="SKU">SKU</label>
-                <input value={props.values.SKU} onChange={handleChange} type="text" maxLength="255" className="form-control" id="SKU" placeholder="Enter SKU"/>
-            </div>
+            <Form.Group className="mb-3">
+                <Form.Label htmlFor="SKU">SKU</Form.Label>
+                <Form.Control value={props.values.SKU} onChange={handleChange} type="text" maxLength="255" className="form-control" id="SKU" placeholder="Enter SKU"/>
+            </Form.Group>
 
-            <div className="form-group">
-                <div className="row">
-                    <div className="col-6 col-sm-3">
-                    <label htmlFor="category">Category</label>
-                    <select value={props.values.category} onChange={handleCategoryChange} id="category" className="form-control">
-                        <option value='null'>Select Category</option>
-                        {categories.map(category => (
-                            <option key={category.id} value={category.id}>
-                            {category.name}
+            <Form.Group className="mb-3">
+                <Row>
+                    <Col sm={3}>
+                    <Form.Label htmlFor="category">Category</Form.Label>
+                        <Form.Select value={props.values.category} onChange={handleCategoryChange} id="category" className="form-control">
+                            <option value='null'>Select Category</option>
+                            {categories.map(category => (
+                                <option key={category.id} value={category.id}>
+                                {category.name}
+                                </option>
+                            ))}    
+                        </Form.Select>                          
+                    </Col>
+                    <Col sm={3}>
+                        <Form.Label htmlFor="type">Type</Form.Label>
+                        <Form.Select value={props.values.type} onChange={handleChange} id="type" className="form-control">
+                            <option value='null'>Select Type</option>
+                            {types.map(type => (
+                            <option key={type.id} value={type.id}>
+                                {type.name}
                             </option>
-                        ))}    
-                    </select>                          
-                    </div>
-                    <div className="col-6 col-sm-3">
-                    <label htmlFor="type">Type</label>
-                    <select value={props.values.type} onChange={handleChange} id="type" className="form-control">
-                        <option value='null'>Select Type</option>
-                        {types.map(type => (
-                        <option key={type.id} value={type.id}>
-                            {type.name}
-                        </option>
-                        ))}  
-                    </select>
-                    </div>
-                </div>
-                </div>                   
+                            ))}  
+                        </Form.Select>
+                    </Col>
+                </Row>
+            </Form.Group>                   
 
-            <div className="form-group">
-                <label htmlFor="description">Description</label>
-                <input value={props.values.description} onChange={handleChange} type="text" maxLength="255" className="form-control" id="description" placeholder="Enter description"/>
-            </div>
+            <Form.Group className="mb-3">
+                <Form.Label htmlFor="description">Description</Form.Label>
+                <Form.Control value={props.values.description} onChange={handleChange} type="text" maxLength="255" className="form-control" id="description" placeholder="Enter description"/>
+            </Form.Group>
 
-            <div className="form-group">
-                <label htmlFor="supplier">Supplier</label>
-                <input value={props.values.supplier} onChange={handleChange} type="text" maxLength="255" className="form-control" id="supplier" placeholder="Enter supplier"/>
-            </div>              
+            <Form.Group className="mb-3">
+                <Form.Label htmlFor="supplier">Supplier</Form.Label>
+                <Form.Control value={props.values.supplier} onChange={handleChange} type="text" maxLength="255" className="form-control" id="supplier" placeholder="Enter supplier"/>
+            </Form.Group>              
 
-            <div className="row">
-                <div className="col-sm-6">
-                <div className="form-group">
-                    <label htmlFor="qty">Quantity</label>
-                    <input value={props.values.qty} onChange={handleChange} type="number" min="0" max="9999" className="form-control" id="qty" placeholder="Enter quantity"/>
-                </div>
-                </div>
-                <div className="col-sm-3">
-                <div className="form-group">
-                    <label htmlFor="qtyIn">Provisional In</label>
-                    <input value={props.values.qtyIn} onChange={handleChange} type="number" min="0" max="9999" className="form-control" id="qtyIn" placeholder="Enter quantity"/>
-                </div>
-                </div>
-                <div className="col-sm-3">
-                <div className="form-group">
-                <label htmlFor="qtyOut">Provisional Out</label>
-                <input value={props.values.qtyOut} onChange={handleChange} type="number" min="0" max="9999" className="form-control" id="qtyOut" placeholder="Enter quantity"/>
-                </div>
-                </div>
-            </div>
-                
-            <div className="form-group">
-                <label htmlFor="notes">Miscellaneous</label>
-                <input value={props.values.notes} onChange={handleChange} type="text" maxLength="255" className="form-control" id="notes" placeholder="Notes"/>
-            </div>            
+            <Row>
+                <Col sm={6}>
+                    <Form.Group className="mb-3">
+                        <Form.Label htmlFor="qty">Quantity</Form.Label>
+                        <Form.Control value={props.values.qty} onChange={handleChange} type="number" min="0" max="9999" className="form-control" id="qty" placeholder="Enter quantity"/>
+                    </Form.Group> 
+                </Col>
+                <Col sm={3}>
+                    <Form.Group className="mb-3">
+                        <Form.Label htmlFor="qtyIn">Provisional In</Form.Label>
+                        <Form.Control value={props.values.qtyIn} onChange={handleChange} type="number" min="0" max="9999" className="form-control" id="qtyIn" placeholder="Enter quantity"/>
+                    </Form.Group>
+                </Col>
+                <Col sm={3}>
+                    <Form.Group className="mb-3">
+                        <Form.Label htmlFor="qtyOut">Provisional Out</Form.Label>
+                        <Form.Control value={props.values.qtyOut} onChange={handleChange} type="number" min="0" max="9999" className="form-control" id="qtyOut" placeholder="Enter quantity"/>
+                    </Form.Group>
+                </Col>
+            </Row>    
+       
+            <Form.Group className="mb-3">
+                <Form.Label htmlFor="notes">Miscellaneous</Form.Label>
+                <Form.Control value={props.values.notes} onChange={handleChange} type="text" maxLength="255" className="form-control" id="notes" placeholder="Notes"/>
+            </Form.Group>            
         </>
    );
 
