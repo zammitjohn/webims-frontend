@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import ContentHeader from '../../ContentHeader';
+import ContentHeader from '../ContentHeader';
 import DataTable from 'react-data-table-component';
-import DataTableFilter from "../../DataTableFilter"
+import DataTableFilter from "../DataTableFilter"
 import { Link, useSearchParams } from "react-router-dom";
 import { Row, Col }  from 'react-bootstrap';
 

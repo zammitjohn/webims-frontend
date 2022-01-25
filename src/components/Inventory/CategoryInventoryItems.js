@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import ContentHeader from '../../ContentHeader';
+import ContentHeader from '../ContentHeader';
 import DataTable from 'react-data-table-component';
-import DataTableFilter from "../../DataTableFilter"
+import DataTableFilter from "../DataTableFilter"
 import { Link, useSearchParams, useParams } from "react-router-dom";
 import Error404 from '../Error404';
 import { Row, Col }  from 'react-bootstrap';
 
-function TypeInventoryItems() {
+function CategoryInventoryItems() {
     const { id } = useParams();
     const columns = [
         {
@@ -15,6 +15,13 @@ function TypeInventoryItems() {
             sortable: true,
             cell: (row)=><Link to={'../edit/' + row.id}>{row.SKU}</Link>,
             grow: 2,
+        },
+        {
+            name: 'Type',
+            selector: row => row.type_name,
+            sortable: true,
+            cell: (row)=><Link to={'../type/' + row.type_id}>{row.type_name + ' (' + row.type_altname + ')'}</Link>,
+            hide: 'sm',
         },
         {
             name: 'Description',
@@ -64,12 +71,11 @@ function TypeInventoryItems() {
     };
     
     const [data, setData] = useState([]); // data from api
-    const [typeName, setTypeName] = useState(' ');
-    const [categoryName, setCategoryName] = useState('');
+    const [categoryName, setCategoryName] = useState(' ');
     const [states, setStates] = useState({ // form values
         error: null,
         isDataLoaded: false,
-        isTypeNameLoaded: false,
+        isCategoryNameLoaded: false,
     });
 
     // table search
@@ -93,7 +99,7 @@ function TypeInventoryItems() {
         // useCallback: React creates a new function on every render
         // Here we useCallback to memoize (store) the function.
         // Therefore, this function only change if 'id' changes
-        fetch(`http://site.test/WebIMS/api/inventory/read?type=${id}`, {
+        fetch(`http://site.test/WebIMS/api/inventory/read?category=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -110,10 +116,10 @@ function TypeInventoryItems() {
                 },
                 (error) => {
                     setStates(prevState => ({
-                        ...prevState,
-                        isDataLoaded: true,
-                        error
-                    }));
+                            ...prevState,
+                            isDataLoaded: true,
+                            error
+                        }));
                 }
             )
     }, [id]);
@@ -121,7 +127,7 @@ function TypeInventoryItems() {
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
             fetchData();
-            fetch(`http://site.test/WebIMS/api/inventory/types/read?id=${id}`, {
+            fetch(`http://site.test/WebIMS/api/inventory/categories/read?id=${id}`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -130,17 +136,16 @@ function TypeInventoryItems() {
                 .then(res => res.json())
                 .then(
                     (response) => {
-                        setTypeName( (response[0]) ? response[0].name : null  );
-                        setCategoryName( (response[0]) ? response[0].category_name : null );
+                        setCategoryName( (response[0]) ? response[0].name : null );
                         setStates(prevState => ({
                             ...prevState,
-                            isTypeNameLoaded: true,
+                            isCategoryNameLoaded: true,
                         }));
                     },
                     (error) => {
                         setStates(prevState => ({
                             ...prevState,
-                            isTypeNameLoaded: true,
+                            isCategoryNameLoaded: true,
                             error
                         }));
                     }
@@ -151,29 +156,29 @@ function TypeInventoryItems() {
     if (states.error) {
         console.log(states.error.message);
         return null;
-    } else if (!typeName) {
+    } else if (!categoryName) {
         return <>{<Error404/>}</>;
-    } else if (!(states.isTypeNameLoaded)) {
+    } else if (!(states.isCategoryNameLoaded)) {
         console.log("Loading...");
         return null;
     } else {
         return (
             <>
-                <ContentHeader pageName={typeName}/>
+                <ContentHeader pageName={categoryName}/>
                 <section className="content">
                     <Row>
                         <Col>
 
                             <div className="card"> 
                                 <div className="card-header">
-                                    <h3 className="card-title">{typeName}</h3>
+                                    <h3 className="card-title">{categoryName}</h3>
                                         <div className="card-tools">
                                             <DataTableFilter
                                                 placeholderText={"SKU, Description or Supplier"}
                                                 setResetPaginationToggle={setResetPaginationToggle}
                                                 resetPaginationToggle={resetPaginationToggle}
                                                 setFilterText={setFilterText}
-                                                filterText={filterText}
+                                                filterText={filterText} 
                                             />
                                         </div>     
                                         <div className="card-tools">
@@ -201,4 +206,4 @@ function TypeInventoryItems() {
         );
     }
 }
-export default TypeInventoryItems;
+export default CategoryInventoryItems;

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import ContentHeader from '../../ContentHeader';
+import ContentHeader from '../ContentHeader';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate, useParams, Link } from "react-router-dom";
 import Error404 from '../Error404';
 import InventoryForm from './InventoryForm';
-import UpdateButton from '../../UpdateButton';
-import DeleteButton from '../../DeleteButton';
+import UpdateButton from '../UpdateButton';
+import DeleteButton from '../DeleteButton';
 import { Dropdown, ButtonGroup, ButtonToolbar } from 'react-bootstrap';
 import { Form, Row, Container, Col }  from 'react-bootstrap';
 

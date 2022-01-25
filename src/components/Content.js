@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import ContentHeader from '../ContentHeader';
+import ContentHeader from './ContentHeader';
 
 function Content() {
 	let location = useLocation();

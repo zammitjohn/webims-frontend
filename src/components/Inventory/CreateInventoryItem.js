@@ -1,33 +1,39 @@
 import React, { useState } from 'react';
-import ContentHeader from '../../ContentHeader';
+import ContentHeader from '../ContentHeader';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate, useParams } from "react-router-dom";
-import ProjectForm from './ProjectForm';
-import CreateButton from '../../CreateButton';
+import { useNavigate } from "react-router-dom";
+import InventoryForm from './InventoryForm';
+import CreateButton from '../CreateButton';
 import { Form, Row, Container, Col }  from 'react-bootstrap';
 
-function CreateProjectItem() {
-
+function CreateInventoryItem() {
   let navigate = useNavigate();
-  const { id } = useParams();
   const [values, setValues] = useState({ // form values
-    inventoryId: id,
+    SKU: '',
+    category: '',
     type: '',
     description: '',
+    supplier: '',
     qty: '',
+    qtyIn: '',
+    qtyOut: '',
     notes: '',
   });
 
   const handleSubmit = (event) => {
     event.preventDefault();
     let formData = new FormData();
-    formData.append('inventoryId', values.inventoryId);
+    formData.append('SKU', values.SKU);
+    formData.append('category', values.category);
     formData.append('type', values.type);
     formData.append('description', values.description);
+    formData.append('supplier', values.supplier);
     formData.append('qty', values.qty);
+    formData.append('qtyIn', values.qtyIn);
+    formData.append('qtyOut', values.qtyOut);
     formData.append('notes', values.notes);
-    fetch('http://site.test/WebIMS/api/projects/create', {
+    fetch('http://site.test/WebIMS/api/inventory/create', {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },
@@ -38,8 +44,8 @@ function CreateProjectItem() {
       .then(
           (response) => {
             if (response.status) {
-              toast.success(response.message);
-              navigate(`/projects/${values.type}`, { replace: false });
+              toast.success(response.SKU + ': ' + response.message);
+              navigate("/inventory", { replace: false });
             } else {
               toast.error(response.message);  
             }
@@ -51,7 +57,7 @@ function CreateProjectItem() {
   };
   return (
     <>
-      <ContentHeader pageName={'Add Project Item'}/>
+      <ContentHeader pageName={'Add Item'}/>
       <section className="content">
         <Container fluid>
           <Row>
@@ -62,7 +68,7 @@ function CreateProjectItem() {
                 {/* form start */}
                 <Form id="item_form" onSubmit={handleSubmit}>
                   <div className="card-body">
-                    <ProjectForm values={values} setValues={setValues}/>
+                    <InventoryForm values={values} setValues={setValues}/>
                   </div>
                   {/* /.card-body */}
                   <div className="card-footer">
@@ -80,4 +86,4 @@ function CreateProjectItem() {
   );
 }
 
-export default CreateProjectItem
+export default CreateInventoryItem

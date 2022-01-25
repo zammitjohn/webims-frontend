@@ -3,16 +3,16 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from "./components/Layout";
-import Error404 from "./components/pages/Error404";
-import Content from "./components/pages/Content";
-import CreateInventoryItem from './components/pages/Inventory/CreateInventoryItem';
-import EditInventoryItem from './components/pages/Inventory/EditInventoryItem';
-import AllInventoryItems from './components/pages/Inventory/AllInventoryItems';
-import CategoryInventoryItems from "./components/pages/Inventory/CategoryInventoryItems";
-import TypeInventoryItems from "./components/pages/Inventory/TypeInventoryItems";
-import ProjectItems from "./components/pages/Projects/ProjectItems";
-import CreateProjectItem from "./components/pages/Projects/CreateProjectItem";
-import EditProjectItem from "./components/pages/Projects/EditProjectItem";
+import Error404 from "./components/Error404";
+import Content from "./components/Content";
+import CreateInventoryItem from './components/Inventory/CreateInventoryItem';
+import EditInventoryItem from './components/Inventory/EditInventoryItem';
+import AllInventoryItems from './components/Inventory/AllInventoryItems';
+import CategoryInventoryItems from "./components/Inventory/CategoryInventoryItems";
+import TypeInventoryItems from "./components/Inventory/TypeInventoryItems";
+import ProjectItems from "./components/Projects/ProjectItems";
+import CreateProjectItem from "./components/Projects/CreateProjectItem";
+import EditProjectItem from "./components/Projects/EditProjectItem";
 
 function App() {
 	return (

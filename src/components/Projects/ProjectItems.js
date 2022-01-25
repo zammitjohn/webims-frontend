@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
-import { UserPrivilegesContext } from "../../ProtectedRoute";
-import ContentHeader from '../../ContentHeader';
+import { UserPrivilegesContext } from "../ProtectedRoute";
+import ContentHeader from '../ContentHeader';
 import DataTable from 'react-data-table-component';
-import DataTableFilter from "../../DataTableFilter"
+import DataTableFilter from "../DataTableFilter"
 import { Link, useSearchParams, useParams } from "react-router-dom";
 import Error404 from '../Error404';
 import ProjectsImportModal from './ProjectsImportModal';
