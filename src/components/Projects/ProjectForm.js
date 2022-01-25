@@ -83,17 +83,17 @@ function ProjectForm(props) {
             
             <Form.Group className="mb-3">
                 <Form.Label htmlFor="description">Description</Form.Label>
-                <Form.Control value={props.values.description} onChange={handleChange} type="text" maxLength="255" className="form-control" id="description" placeholder="Enter description"/>
+                <Form.Control value={props.values.description} onChange={handleChange} type="text" maxLength="255" id="description" placeholder="Enter description"/>
             </Form.Group>
             
             <Form.Group className="mb-3">
                 <Form.Label htmlFor="qty">Quantity</Form.Label>
-                <Form.Control value={props.values.qty} onChange={handleChange} type="number" min="0" max="9999" className="form-control" id="qty" placeholder="Enter quantity"/>
+                <Form.Control value={props.values.qty} onChange={handleChange} type="number" min="0" max="9999" id="qty" placeholder="Enter quantity"/>
             </Form.Group>
             
             <Form.Group className="mb-3">
                 <Form.Label htmlFor="notes">Miscellaneous</Form.Label>
-                <Form.Control value={props.values.notes} onChange={handleChange} type="text" maxLength="255" className="form-control" id="notes" placeholder="Notes"/>
+                <Form.Control value={props.values.notes} onChange={handleChange} type="text" maxLength="255" id="notes" placeholder="Notes"/>
             </Form.Group>           
         </>
    );

@@ -41,7 +41,7 @@ function DataTableFilter(props) {
 
     return (
         <InputGroup className="input-group-sm" style={{paddingLeft: "10px"}} >
-            <FormControl id="search" className="form-control" type="text" placeholder={props.placeholderText} aria-label="Search Input" value={props.filterText} onChange={handleChange} />
+            <FormControl id="search" type="text" placeholder={props.placeholderText} aria-label="Search Input" value={props.filterText} onChange={handleChange} />
             <span className="input-group-append">
                 <Button type="button" variant="warning" onClick={handleClear}>
                     {icon}

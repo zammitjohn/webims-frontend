@@ -139,7 +139,7 @@ function ProjectsImportModal(props) {
             </Modal.Header>
             <Modal.Body>
                 <p>Select CSV data file to import. Data file must use the following format: SKU,description,quantity,notes (header and blank lines are ignored).</p>
-                <div className="form-group">
+                <Form.Group>
                     <b>Allocate items from:</b>
                     <Row>
                         <Col md="8">
@@ -163,7 +163,7 @@ function ProjectsImportModal(props) {
                             </Form.Select>
                         </Col>
                     </Row>
-                </div>
+                </Form.Group>
             </Modal.Body>
             <Modal.Footer>
                 <Form method="post" encType="multipart/form-data"  onSubmit={handleFileUpload}>

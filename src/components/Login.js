@@ -96,7 +96,7 @@ function Login(props) {
                         <p className="login-box-msg">Log in with your corporate account</p>
                         
                         <div className="input-group mb-3">
-                            <Form.Control value={values.email} onChange={handleChange} type="email" id="email" className="form-control" placeholder="Email" />
+                            <Form.Control value={values.email} onChange={handleChange} type="email" id="email" placeholder="Email" />
                             <div className="input-group-append">
                                 <div className="input-group-text">
                                 <span className="fas fa-envelope" />
@@ -104,7 +104,7 @@ function Login(props) {
                             </div>
                         </div>
                         <div className="input-group mb-3">
-                            <Form.Control value={values.password} onChange={handleChange} type="password" id="password" className="form-control" placeholder="Password" />
+                            <Form.Control value={values.password} onChange={handleChange} type="password" id="password" placeholder="Password" />
                             <div className="input-group-append">
                                 <div className="input-group-text">
                                 <span className="fas fa-lock" />

@@ -88,7 +88,7 @@ function InventoryForm(props) {
         <>                  
             <Form.Group className="mb-3">
                 <Form.Label htmlFor="SKU">SKU</Form.Label>
-                <Form.Control value={props.values.SKU} onChange={handleChange} type="text" maxLength="255" className="form-control" id="SKU" placeholder="Enter SKU"/>
+                <Form.Control value={props.values.SKU} onChange={handleChange} type="text" maxLength="255" id="SKU" placeholder="Enter SKU"/>
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -120,38 +120,38 @@ function InventoryForm(props) {
 
             <Form.Group className="mb-3">
                 <Form.Label htmlFor="description">Description</Form.Label>
-                <Form.Control value={props.values.description} onChange={handleChange} type="text" maxLength="255" className="form-control" id="description" placeholder="Enter description"/>
+                <Form.Control value={props.values.description} onChange={handleChange} type="text" maxLength="255" id="description" placeholder="Enter description"/>
             </Form.Group>
 
             <Form.Group className="mb-3">
                 <Form.Label htmlFor="supplier">Supplier</Form.Label>
-                <Form.Control value={props.values.supplier} onChange={handleChange} type="text" maxLength="255" className="form-control" id="supplier" placeholder="Enter supplier"/>
+                <Form.Control value={props.values.supplier} onChange={handleChange} type="text" maxLength="255" id="supplier" placeholder="Enter supplier"/>
             </Form.Group>              
 
             <Row>
                 <Col sm={6}>
                     <Form.Group className="mb-3">
                         <Form.Label htmlFor="qty">Quantity</Form.Label>
-                        <Form.Control value={props.values.qty} onChange={handleChange} type="number" min="0" max="9999" className="form-control" id="qty" placeholder="Enter quantity"/>
+                        <Form.Control value={props.values.qty} onChange={handleChange} type="number" min="0" max="9999" id="qty" placeholder="Enter quantity"/>
                     </Form.Group> 
                 </Col>
                 <Col sm={3}>
                     <Form.Group className="mb-3">
                         <Form.Label htmlFor="qtyIn">Provisional In</Form.Label>
-                        <Form.Control value={props.values.qtyIn} onChange={handleChange} type="number" min="0" max="9999" className="form-control" id="qtyIn" placeholder="Enter quantity"/>
+                        <Form.Control value={props.values.qtyIn} onChange={handleChange} type="number" min="0" max="9999" id="qtyIn" placeholder="Enter quantity"/>
                     </Form.Group>
                 </Col>
                 <Col sm={3}>
                     <Form.Group className="mb-3">
                         <Form.Label htmlFor="qtyOut">Provisional Out</Form.Label>
-                        <Form.Control value={props.values.qtyOut} onChange={handleChange} type="number" min="0" max="9999" className="form-control" id="qtyOut" placeholder="Enter quantity"/>
+                        <Form.Control value={props.values.qtyOut} onChange={handleChange} type="number" min="0" max="9999" id="qtyOut" placeholder="Enter quantity"/>
                     </Form.Group>
                 </Col>
             </Row>    
        
             <Form.Group className="mb-3">
                 <Form.Label htmlFor="notes">Miscellaneous</Form.Label>
-                <Form.Control value={props.values.notes} onChange={handleChange} type="text" maxLength="255" className="form-control" id="notes" placeholder="Notes"/>
+                <Form.Control value={props.values.notes} onChange={handleChange} type="text" maxLength="255" id="notes" placeholder="Notes"/>
             </Form.Group>            
         </>
    );

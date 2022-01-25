@@ -9,8 +9,20 @@ import UpdateButton from '../UpdateButton';
 import DeleteButton from '../DeleteButton';
 import { Dropdown, ButtonGroup, ButtonToolbar } from 'react-bootstrap';
 import { Form, Row, Container, Col }  from 'react-bootstrap';
+import ProjectAllocations from '../Projects/ProjectAllocations';
+import RegisterItemModal from './RegisterItemModal';
+import RegisteredItems from './RegisteredItems';
 
 function EditInventoryItem() {
+  
+  // register modal props
+  const [modalShow, setModalShow] = useState(false);
+  const handleModalClose = () => setModalShow(false);
+  const handleModalShow = () => setModalShow(true);
+
+  // key to keep track of updates from modal -> componenet
+  const [registryComponentKey, setRegistryComponentKey] = useState(0);
+
   const { id } = useParams();
   let navigate = useNavigate();
   const [values, setValues] = useState({ // form values
@@ -169,6 +181,7 @@ function EditInventoryItem() {
                           </Dropdown.Toggle>
                           <Dropdown.Menu style={{ margin: 0 }}>
                             <Dropdown.Item as={Link} to={"../../projects/create/"+id}>Projects</Dropdown.Item>
+                            <Dropdown.Item onClick={() => setModalShow(true)} href="#">Registry</Dropdown.Item>
                             <Dropdown.Item as={Link} to={"../../reports/create/"+id}>Fault Report</Dropdown.Item>
                           </Dropdown.Menu>
                         </Dropdown> 
@@ -180,6 +193,21 @@ function EditInventoryItem() {
                 {/* /.card */}
               </Col>
             </Row>
+            <RegisterItemModal
+              inventoryId={id}
+              modalShow={modalShow}
+              setModalShow={setModalShow}
+              handleModalClose={handleModalClose}
+              handleModalShow={handleModalShow}
+              registryComponentKey={registryComponentKey}
+              setRegistryComponentKey={setRegistryComponentKey}
+            />
+            <hr/>
+            <RegisteredItems 
+              key={registryComponentKey}
+              inventoryId={id}
+            />
+            <ProjectAllocations inventoryId={id}/>
           </Container>
         </section>      
       </>
