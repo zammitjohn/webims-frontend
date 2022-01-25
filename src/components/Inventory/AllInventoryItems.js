@@ -63,8 +63,6 @@ function AllInventoryItems() {
         rows: {
             style: {
                 fontSize: '15px',
-                paddingLeft: '10px', // override the cell padding for data cells
-                paddingRight: '10px',
             },
         },
         headCells: {
@@ -144,33 +142,37 @@ function AllInventoryItems() {
 
                         <div className="card"> 
                             <div className="card-header">
-                                <h3 className="card-title">All items</h3>
+                                <h3 className="card-title">All items</h3>    
                                     <div className="card-tools">
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                        <a href="#" className="btn btn-tool btn-sm" onClick={fetchData}> <i className="fas fa-dolly-flatbed"></i> </a> 
+                                    </div>      
+                            </div>
+                            <div className="card-body">
+            
+                                <Row className='justify-content-md-left'>
+                                    <Col sm="12" md="9"/>
+                                    <Col sm="12" md="3">
                                         <DataTableFilter
-                                            placeholderText={"SKU, Description or Supplier"}
+                                            placeholderText={"Search SKU, Description or Supplier"}
                                             setResetPaginationToggle={setResetPaginationToggle}
                                             resetPaginationToggle={resetPaginationToggle}
                                             setFilterText={setFilterText}
                                             filterText={filterText}
                                         />
-                                    </div>     
-                                    <div className="card-tools">
-                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                        <a href="#" className="btn btn-tool btn-sm" data-toggle="modal" data-target="#modal-transaction" onClick={fetchData}> <i className="fas fa-dolly-flatbed"></i> </a> 
-                                    </div>      
-                            </div>                   
-                            <DataTable
-                                progressPending={!states.isLoaded}
-                                columns={columns}
-                                data={filteredItems}
-                                customStyles={customStyles}
-                                highlightOnHover
-                                striped
-                                pagination
-                                paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
-                                persistTableHead
-                            />
-                
+                                    </Col>
+                                </Row>                   
+                                <DataTable
+                                    progressPending={!states.isLoaded}
+                                    columns={columns}
+                                    data={filteredItems}
+                                    customStyles={customStyles}
+                                    highlightOnHover
+                                    striped
+                                    pagination
+                                    paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+                                />
+                            </div>
                         </div>
                     </Col>
                 </Row>

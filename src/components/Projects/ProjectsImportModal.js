@@ -13,7 +13,6 @@ function ProjectsImportModal(props) {
         file: []
       });
 
-    // CSV file type validation for imports
     const handleSelectedFile = event => {
         setSelectedFilename(event.target.files[0].name);
         const fieldValue = { 
@@ -60,6 +59,7 @@ function ProjectsImportModal(props) {
             },
             (error) => {
               toast.error('Error occured');
+              console.log(error);
             }
           )
 
@@ -138,7 +138,7 @@ function ProjectsImportModal(props) {
                 <Modal.Title>Import</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>Select CSV data file to import. Data file must use the following format: SKU,description,quantity,notes (header and blank lines are ignored).</p>
+                <p>Select CSV data file to import. Data file must use the following format: <i>SKU,description,quantity,notes</i> (header and blank lines are ignored).</p>
                 <Form.Group>
                     <b>Allocate items from:</b>
                     <Row>
@@ -184,9 +184,3 @@ function ProjectsImportModal(props) {
 }
 
 export default ProjectsImportModal
-
-
-
-
-
-

@@ -7,6 +7,7 @@ import { Link, useSearchParams, useParams } from "react-router-dom";
 import Error404 from '../Error404';
 import ProjectsImportModal from './ProjectsImportModal';
 import { Row, Col }  from 'react-bootstrap';
+import { toast } from 'react-toastify'
 
 function ProjectItems() {
     // to hide and show buttons
@@ -27,15 +28,15 @@ function ProjectItems() {
             grow: 2,
         },
         {
+            name: 'Quantity',
+            selector: row => (row.qty == null) ? "" : row.qty,
+            sortable: true,
+        },
+        {
             name: 'Description',
             selector: row => (row.description == null) ? "" : row.description,
             sortable: true,
             hide: 'md',
-        },
-        {
-            name: 'Quantity',
-            selector: row => (row.qty == null) ? "" : row.qty,
-            sortable: true,
         },
         {
             name: 'Notes',
@@ -55,8 +56,6 @@ function ProjectItems() {
         rows: {
             style: {
                 fontSize: '15px',
-                paddingLeft: '10px', // override the cell padding for data cells
-                paddingRight: '10px',
             },
         },
         headCells: {
@@ -99,6 +98,7 @@ function ProjectItems() {
         })
         .then(response => response.blob())
         .then(blob => {
+            toast.info("Downloading");
             var url = window.URL.createObjectURL(blob);
             var a = document.createElement('a');
             a.href = url;
@@ -106,6 +106,10 @@ function ProjectItems() {
             document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
             a.click();    
             a.remove();  //afterwards we remove the element again         
+        },
+        (error) => {
+            toast.error("Error occured");
+            console.log(error);
         });
     }, [id, typeName])
 
@@ -213,16 +217,7 @@ function ProjectItems() {
                         <Col>
                             <div className="card"> 
                                 <div className="card-header">
-                                    <h3 className="card-title">{typeName}</h3>
-                                        <div className="card-tools">
-                                            <DataTableFilter
-                                                placeholderText={"SKU or Description"}
-                                                setResetPaginationToggle={setResetPaginationToggle}
-                                                resetPaginationToggle={resetPaginationToggle}
-                                                setFilterText={setFilterText}
-                                                filterText={filterText}
-                                            />
-                                        </div>     
+                                    <h3 className="card-title">{typeName}</h3>   
                                         <div className="card-tools">
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a href="#" className="btn btn-tool btn-sm" onClick={csvDownload}> <i className="fas fa-download"></i> </a> 
@@ -231,28 +226,42 @@ function ProjectItems() {
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a href="#" hidden={!privileges.canDelete} className="btn btn-tool btn-sm" onClick={projectDelete}> <i className="fas fa-trash"></i> </a> 
                                         </div>      
-                                </div>                   
-                                <DataTable
-                                    progressPending={!states.isDataLoaded}
-                                    columns={columns}
-                                    data={filteredItems}
-                                    customStyles={customStyles}
-                                    highlightOnHover
-                                    pagination
-                                    paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
-                                    persistTableHead
-                                />
-
-                                <ProjectsImportModal 
+                                </div>
+                                <div className="card-body">
+            
+                                    <Row className='justify-content-md-left'>
+                                        <Col sm="12" md="9"/>
+                                        <Col sm="12" md="3">
+                                            <DataTableFilter
+                                                placeholderText={"Search SKU or Description"}
+                                                setResetPaginationToggle={setResetPaginationToggle}
+                                                resetPaginationToggle={resetPaginationToggle}
+                                                setFilterText={setFilterText}
+                                                filterText={filterText}
+                                            />
+                                        </Col>
+                                    </Row>
+                                                
+                                    <DataTable
+                                        progressPending={!states.isDataLoaded}
+                                        columns={columns}
+                                        data={filteredItems}
+                                        customStyles={customStyles}
+                                        highlightOnHover
+                                        dense
+                                        pagination
+                                        paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+                                    />
+                                </div>
+                            </div>
+                            <ProjectsImportModal 
                                     fetchData={fetchData}
                                     type={id}
                                     modalShow={modalShow}
                                     setModalShow={setModalShow}
                                     handleModalClose={handleModalClose}
                                     handleModalShow={handleModalShow}
-                                />
-
-                            </div>
+                            />
                         </Col>
                     </Row>
                 </section>            

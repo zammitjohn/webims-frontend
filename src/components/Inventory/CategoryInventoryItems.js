@@ -1,12 +1,22 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
+import { UserPrivilegesContext } from "../ProtectedRoute";
 import ContentHeader from '../ContentHeader';
 import DataTable from 'react-data-table-component';
 import DataTableFilter from "../DataTableFilter"
 import { Link, useSearchParams, useParams } from "react-router-dom";
 import Error404 from '../Error404';
 import { Row, Col }  from 'react-bootstrap';
+import InventoryImportModal from './InventoryImportModal';
 
 function CategoryInventoryItems() {
+    // to hide and show buttons
+    const privileges = useContext(UserPrivilegesContext);
+
+    // modal props
+    const [modalShow, setModalShow] = useState(false);
+    const handleModalClose = () => setModalShow(false);
+    const handleModalShow = () => setModalShow(true);
+    
     const { id } = useParams();
     const columns = [
         {
@@ -58,8 +68,6 @@ function CategoryInventoryItems() {
         rows: {
             style: {
                 fontSize: '15px',
-                paddingLeft: '10px', // override the cell padding for data cells
-                paddingRight: '10px',
             },
         },
         headCells: {
@@ -173,32 +181,43 @@ function CategoryInventoryItems() {
                                 <div className="card-header">
                                     <h3 className="card-title">{categoryName}</h3>
                                         <div className="card-tools">
+                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                            <a href="#" hidden={!privileges.canImport} className="btn btn-tool btn-sm" onClick={handleModalShow}> <i className="fas fa-upload"></i> </a> 
+                                        </div>      
+                                </div>
+                                <div className="card-body">
+                                    <Row className='justify-content-md-left'>
+                                        <Col sm="12" md="9"/>
+                                        <Col sm="12" md="3">
                                             <DataTableFilter
-                                                placeholderText={"SKU, Description or Supplier"}
+                                                placeholderText={"Search SKU, Description or Supplier"}
                                                 setResetPaginationToggle={setResetPaginationToggle}
                                                 resetPaginationToggle={resetPaginationToggle}
                                                 setFilterText={setFilterText}
-                                                filterText={filterText} 
+                                                filterText={filterText}
                                             />
-                                        </div>     
-                                        <div className="card-tools">
-                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                            <a href="#" className="btn btn-tool btn-sm" data-toggle="modal" data-target="#modal-transaction" onClick={fetchData}> <i className="fas fa-dolly-flatbed"></i> </a> 
-                                        </div>      
-                                </div>                   
-                                <DataTable
-                                    progressPending={!states.isDataLoaded}
-                                    columns={columns}
-                                    data={filteredItems}
-                                    customStyles={customStyles}
-                                    highlightOnHover
-                                    striped
-                                    pagination
-                                    paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
-                                    persistTableHead
-                                />
-                    
+                                        </Col>
+                                    </Row>                        
+                                    <DataTable
+                                        progressPending={!states.isDataLoaded}
+                                        columns={columns}
+                                        data={filteredItems}
+                                        customStyles={customStyles}
+                                        highlightOnHover
+                                        striped
+                                        pagination
+                                        paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+                                    />
+                                </div>
                             </div>
+                            <InventoryImportModal 
+                                    fetchData={fetchData}
+                                    category={id}
+                                    modalShow={modalShow}
+                                    setModalShow={setModalShow}
+                                    handleModalClose={handleModalClose}
+                                    handleModalShow={handleModalShow}
+                            />
                         </Col>
                     </Row>
                 </section>            
