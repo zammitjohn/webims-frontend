@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { Form, Row, Col, Button }  from 'react-bootstrap';
+import { Form, Row, Col, Button, Alert }  from 'react-bootstrap';
 
 function Login(props) {
     // page specific styling
@@ -8,8 +8,12 @@ function Login(props) {
     document.body.style.height = "";
     document.title = "Login";
 
+    // incorrect password alert
+    const [showError, setShowError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const [referrer, setReferrer] = useState(null);
+
     const [values, setValues] = useState({
         email: '',
         password: '',
@@ -17,6 +21,7 @@ function Login(props) {
       });
 
     const handleChange = (event) => {
+        setShowError(false);
         const target = event.target;
         const value = (target.type === 'checkbox') ? target.checked : target.value;
         const id = target.id;
@@ -60,7 +65,8 @@ function Login(props) {
                         }
 
                     } else {
-                        alert(response.message); 
+                        setShowError(true);
+                        setErrorMessage(response.message);
                     }
                 },
                 (error) => {
@@ -75,7 +81,7 @@ function Login(props) {
         if (props.self) {
             window.history.replaceState(null, '', '/login?referrer='+window.location.href);
         }
-    }, []);
+    }, [props.self]);
 
     return (
         <>
@@ -116,15 +122,17 @@ function Login(props) {
                     <div className="card-footer">
                         <Row style={{textAlign: 'center'}}>
                             <Col>
-                                <Button type="submit" variant="default">Log In</Button>
+                                <Button type="submit" className="btn-block" variant="default">Log In</Button>
                             </Col>
                         </Row>
                     </div>
                 </Form>
-
-
             </div>
             {/* /.card */}
+            &nbsp;
+            <Alert variant="danger" show={showError}>
+                {errorMessage}
+            </Alert>
         </div>
         {/* /.login-box */}
         </>

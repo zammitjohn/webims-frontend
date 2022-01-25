@@ -163,7 +163,7 @@ function EditInventoryItem() {
                       </ButtonGroup>
                       &nbsp;
                       <ButtonGroup>
-                        <Dropdown>
+                        <Dropdown drop="up">
                           <Dropdown.Toggle variant="default">
                             Add to...
                           </Dropdown.Toggle>
