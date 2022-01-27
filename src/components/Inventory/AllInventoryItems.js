@@ -4,8 +4,15 @@ import DataTable from 'react-data-table-component';
 import DataTableFilter from "../DataTableFilter"
 import { Link, useSearchParams } from "react-router-dom";
 import { Row, Col }  from 'react-bootstrap';
+import InventoryTransactionsModal from './InventoryTransactionsModal';
 
 function AllInventoryItems() {
+
+    // modal props
+    const [modalShow, setModalShow] = useState(false);
+    const handleModalClose = () => setModalShow(false);
+    const handleModalShow = () => setModalShow(true);
+
     const columns = [
         {
             name: 'SKU',
@@ -145,7 +152,7 @@ function AllInventoryItems() {
                                 <h3 className="card-title">All items</h3>    
                                     <div className="card-tools">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                        <a href="#" className="btn btn-tool btn-sm" onClick={fetchData}> <i className="fas fa-dolly-flatbed"></i> </a> 
+                                        <a href="#" className="btn btn-tool btn-sm" onClick={handleModalShow}> <i className="fas fa-dolly-flatbed"></i> </a> 
                                     </div>      
                             </div>
                             <div className="card-body">
@@ -174,6 +181,11 @@ function AllInventoryItems() {
                                 />
                             </div>
                         </div>
+                        <InventoryTransactionsModal
+                            fetchData={fetchData}
+                            modalShow={modalShow}
+                            handleModalClose={handleModalClose}
+                        />
                     </Col>
                 </Row>
             </section>            

@@ -255,12 +255,10 @@ function ProjectItems() {
                                 </div>
                             </div>
                             <ProjectsImportModal 
-                                    fetchData={fetchData}
-                                    type={id}
-                                    modalShow={modalShow}
-                                    setModalShow={setModalShow}
-                                    handleModalClose={handleModalClose}
-                                    handleModalShow={handleModalShow}
+                                fetchData={fetchData}
+                                type={id}
+                                modalShow={modalShow}
+                                handleModalClose={handleModalClose}
                             />
                         </Col>
                     </Row>

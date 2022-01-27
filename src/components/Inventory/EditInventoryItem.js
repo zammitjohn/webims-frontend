@@ -196,9 +196,7 @@ function EditInventoryItem() {
             <RegisterItemModal
               inventoryId={id}
               modalShow={modalShow}
-              setModalShow={setModalShow}
               handleModalClose={handleModalClose}
-              handleModalShow={handleModalShow}
               registryComponentKey={registryComponentKey}
               setRegistryComponentKey={setRegistryComponentKey}
             />

@@ -133,7 +133,7 @@ function ProjectsImportModal(props) {
 
 
     return(
-        <Modal show={props.modalShow} onHide={props.handleModalClose}>
+        <Modal show={props.modalShow} onHide={props.handleModalClose} centered>
             <Modal.Header>
                 <Modal.Title>Import</Modal.Title>
             </Modal.Header>

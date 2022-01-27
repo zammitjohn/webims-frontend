@@ -53,9 +53,8 @@ function RegisterItemModal(props){
         props.handleModalClose(); // close modal
     }
 
-
     return(
-        <Modal show={props.modalShow} onHide={props.handleModalClose}>
+        <Modal show={props.modalShow} onHide={props.handleModalClose} centered>
             <Modal.Header>
                 <Modal.Title>Register Item</Modal.Title>
             </Modal.Header>
@@ -78,8 +77,6 @@ function RegisterItemModal(props){
 
         </Modal>    
     );
-
-
 
 }
 
