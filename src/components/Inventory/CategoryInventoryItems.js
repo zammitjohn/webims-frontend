@@ -79,11 +79,14 @@ function CategoryInventoryItems() {
     };
     
     const [data, setData] = useState([]); // data from api
-    const [categoryName, setCategoryName] = useState(' ');
+    const [category, setCategory] = useState({
+        name : ' ',
+        supportImport : false
+    });
     const [states, setStates] = useState({ // form values
         error: null,
         isDataLoaded: false,
-        isCategoryNameLoaded: false,
+        isCategoryLoaded: false,
     });
 
     // table search
@@ -102,7 +105,15 @@ function CategoryInventoryItems() {
         }
     });
 
-
+    const ImportButton = () => {
+        if ((privileges.canImport === true) && (category.supportImport.toString() === '1')) {
+            /* eslint-disable-next-line jsx-a11y/anchor-is-valid */
+            return (<a href="#" className="btn btn-tool btn-sm" onClick={handleModalShow}> <i className="fas fa-upload"></i> </a>);
+        } else {
+            return (null);
+        }
+    }
+    
     const fetchData = useCallback(() => { // fetch inventory
         // useCallback: React creates a new function on every render
         // Here we useCallback to memoize (store) the function.
@@ -124,10 +135,10 @@ function CategoryInventoryItems() {
                 },
                 (error) => {
                     setStates(prevState => ({
-                            ...prevState,
-                            isDataLoaded: true,
-                            error
-                        }));
+                        ...prevState,
+                        isDataLoaded: true,
+                        error
+                    }));
                 }
             )
     }, [id]);
@@ -144,16 +155,21 @@ function CategoryInventoryItems() {
                 .then(res => res.json())
                 .then(
                     (response) => {
-                        setCategoryName( (response[0]) ? response[0].name : null );
+                        setCategory(prevState => ({
+                            ...prevState,
+                            name: ((response[0]) ? response[0].name : null),
+                            supportImport: ((response[0]) ? response[0].supportImport : null)
+                        }));
+
                         setStates(prevState => ({
                             ...prevState,
-                            isCategoryNameLoaded: true,
+                            isCategoryLoaded: true,
                         }));
                     },
                     (error) => {
                         setStates(prevState => ({
                             ...prevState,
-                            isCategoryNameLoaded: true,
+                            isCategoryLoaded: true,
                             error
                         }));
                     }
@@ -164,25 +180,24 @@ function CategoryInventoryItems() {
     if (states.error) {
         console.log(states.error.message);
         return null;
-    } else if (!categoryName) {
+    } else if (!category.name) {
         return <>{<Error404/>}</>;
-    } else if (!(states.isCategoryNameLoaded)) {
+    } else if (!(states.isCategoryLoaded)) {
         console.log("Loading...");
         return null;
     } else {
         return (
             <>
-                <ContentHeader pageName={categoryName}/>
+                <ContentHeader pageName={category.name}/>
                 <section className="content">
                     <Row>
                         <Col>
 
                             <div className="card"> 
                                 <div className="card-header">
-                                    <h3 className="card-title">{categoryName}</h3>
+                                    <h3 className="card-title">{category.name}</h3>
                                         <div className="card-tools">
-                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                            <a href="#" hidden={!privileges.canImport} className="btn btn-tool btn-sm" onClick={handleModalShow}> <i className="fas fa-upload"></i> </a> 
+                                            <ImportButton/> 
                                         </div>      
                                 </div>
                                 <div className="card-body">
@@ -211,12 +226,12 @@ function CategoryInventoryItems() {
                                 </div>
                             </div>
                             <InventoryImportModal 
-                                    fetchData={fetchData}
-                                    category={id}
-                                    modalShow={modalShow}
-                                    setModalShow={setModalShow}
-                                    handleModalClose={handleModalClose}
-                                    handleModalShow={handleModalShow}
+                                fetchData={fetchData}
+                                category={id}
+                                modalShow={modalShow}
+                                setModalShow={setModalShow}
+                                handleModalClose={handleModalClose}
+                                handleModalShow={handleModalShow}
                             />
                         </Col>
                     </Row>

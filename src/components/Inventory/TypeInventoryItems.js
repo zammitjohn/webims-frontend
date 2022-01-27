@@ -62,12 +62,15 @@ function TypeInventoryItems() {
     };
     
     const [data, setData] = useState([]); // data from api
-    const [typeName, setTypeName] = useState(' ');
-    const [categoryName, setCategoryName] = useState('');
+    const [type, setType] = useState({
+        name : ' ',
+        import_name : ' ',
+        category_name : ' '
+    });
     const [states, setStates] = useState({ // form values
         error: null,
         isDataLoaded: false,
-        isTypeNameLoaded: false,
+        isTypeLoaded: false,
     });
 
     // table search
@@ -128,17 +131,23 @@ function TypeInventoryItems() {
                 .then(res => res.json())
                 .then(
                     (response) => {
-                        setTypeName( (response[0]) ? response[0].name : null  );
-                        setCategoryName( (response[0]) ? response[0].category_name : null );
+
+                        setType(prevState => ({
+                            ...prevState,
+                            name: (response[0]) ? response[0].name : null,
+                            import_name : (response[0]) ? response[0].import_name : null,
+                            category_name : (response[0]) ? response[0].category_name : null
+                        }));
+
                         setStates(prevState => ({
                             ...prevState,
-                            isTypeNameLoaded: true,
+                            isTypeLoaded: true,
                         }));
                     },
                     (error) => {
                         setStates(prevState => ({
                             ...prevState,
-                            isTypeNameLoaded: true,
+                            isTypeLoaded: true,
                             error
                         }));
                     }
@@ -149,22 +158,22 @@ function TypeInventoryItems() {
     if (states.error) {
         console.log(states.error.message);
         return null;
-    } else if (!typeName) {
+    } else if (!type.name) {
         return <>{<Error404/>}</>;
-    } else if (!(states.isTypeNameLoaded)) {
+    } else if (!(states.isTypeLoaded)) {
         console.log("Loading...");
         return null;
     } else {
         return (
             <>
-                <ContentHeader pageName={typeName}/>
+                <ContentHeader pageName={type.name}/>
                 <section className="content">
                     <Row>
                         <Col>
 
                             <div className="card"> 
                                 <div className="card-header">
-                                    <h3 className="card-title">{typeName}</h3>       
+                                    <h3 className="card-title">{type.name + ' ' + ((type.import_name) ? (' (' + type.import_name + ') ') : '') }</h3>       
                                 </div>
                                 <div className="card-body">
                                     <Row className='justify-content-md-left'>
