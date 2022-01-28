@@ -181,7 +181,7 @@ function EditInventoryItem() {
                           </Dropdown.Toggle>
                           <Dropdown.Menu style={{ margin: 0 }}>
                             <Dropdown.Item as={Link} to={"../../projects/create/"+id}>Projects</Dropdown.Item>
-                            <Dropdown.Item onClick={() => setModalShow(true)} href="#">Registry</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleModalShow()} href="#">Registry</Dropdown.Item>
                             <Dropdown.Item as={Link} to={"../../reports/create/"+id}>Fault Report</Dropdown.Item>
                           </Dropdown.Menu>
                         </Dropdown> 

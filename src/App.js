@@ -13,6 +13,7 @@ import TypeInventoryItems from "./components/Inventory/TypeInventoryItems";
 import ProjectItems from "./components/Projects/ProjectItems";
 import CreateProjectItem from "./components/Projects/CreateProjectItem";
 import EditProjectItem from "./components/Projects/EditProjectItem";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 function App() {
 	return (
@@ -23,10 +24,8 @@ function App() {
 				<Route element={<ProtectedRoute/>}>
 
 					<Route path="/" element={<Layout/>}>
-						<Route index element={<Content/>} />
 
-						<Route path="dashboard" element={<Content/>} />
-						<Route path="webims" element={<Content/>} />
+						<Route index element={<Dashboard/>} />
 						
 						<Route path="inventory">
 							<Route path='' element={<AllInventoryItems/>} />
@@ -39,12 +38,14 @@ function App() {
 						<Route path="reports">
 							<Route path='' element={<Content/>} />
 							<Route path='create' element={<Content/>} />
+							<Route path='create/:id' element={<Content/>} />
 							<Route path='edit/:id' element={<Content/>} />
 						</Route>
 
 						<Route path="projects">
 							<Route path='' element={<Error404/>} />
 							<Route path='edit/:id' element={<EditProjectItem/>} />
+							<Route path='create' element={<CreateProjectItem/>} />
 							<Route path='create/:id' element={<CreateProjectItem/>} />
 							<Route path=':id' element={<ProjectItems/>} />
 						</Route>
