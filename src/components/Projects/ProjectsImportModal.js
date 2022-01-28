@@ -62,7 +62,6 @@ function ProjectsImportModal(props) {
               console.log(error);
             }
           )
-
         props.handleModalClose(); // close modal
     }
 

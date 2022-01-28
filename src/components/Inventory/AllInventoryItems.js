@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { UserPrivilegesContext } from "../ProtectedRoute";
 import ContentHeader from '../ContentHeader';
 import DataTable from 'react-data-table-component';
 import DataTableFilter from "../DataTableFilter"
@@ -7,6 +8,8 @@ import { Row, Col }  from 'react-bootstrap';
 import InventoryTransactionsModal from './InventoryTransactionsModal';
 
 function AllInventoryItems() {
+    // to hide and show buttons
+    const privileges = useContext(UserPrivilegesContext);
 
     // modal props
     const [modalShow, setModalShow] = useState(false);
@@ -152,7 +155,7 @@ function AllInventoryItems() {
                                 <h3 className="card-title">All items</h3>    
                                     <div className="card-tools">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                        <a href="#" className="btn btn-tool btn-sm" onClick={handleModalShow}> <i className="fas fa-dolly-flatbed"></i> </a> 
+                                        <a href="#" hidden={!privileges.canUpdate} className="btn btn-tool btn-sm" onClick={handleModalShow}> <i className="fas fa-dolly-flatbed"></i> </a> 
                                     </div>      
                             </div>
                             <div className="card-body">
