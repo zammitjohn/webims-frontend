@@ -81,6 +81,7 @@ function EditProjectItem() {
             },
             (error) => {
               toast.error('Error occured');
+              console.log(error);
             }
           )
       }
@@ -91,7 +92,7 @@ function EditProjectItem() {
   const handleSubmit = (event) => {
     event.preventDefault();
     let formData = new FormData();
-    formData.append('id',id);
+    formData.append('id', id);
     formData.append('inventoryId', values.inventoryId);
     formData.append('type', values.type);
     formData.append('description', values.description);
@@ -116,6 +117,7 @@ function EditProjectItem() {
           },
           (error) => {
             toast.error('Error occured');
+            console.log(error);
           }
       )
   };

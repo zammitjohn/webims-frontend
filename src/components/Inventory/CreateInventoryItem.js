@@ -52,6 +52,7 @@ function CreateInventoryItem() {
           },
           (error) => {
             toast.error('Error occured');
+            console.log(error);
           }
       )
   };

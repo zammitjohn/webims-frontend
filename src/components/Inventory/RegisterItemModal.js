@@ -47,6 +47,7 @@ function RegisterItemModal(props){
             },
             (error) => {
               toast.error('Error occured');
+              console.log(error);
             }
           )
 

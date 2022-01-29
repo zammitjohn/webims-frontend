@@ -36,7 +36,6 @@ function CategoryInventoryItems() {
         {
             name: 'Description',
             selector: row => (row.description == null) ? "" : row.description,
-            sortable: true,
             hide: 'md',
         },
         {

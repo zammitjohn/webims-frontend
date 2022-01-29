@@ -4,7 +4,6 @@ import Login from "./components/Login";
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from "./components/Layout";
 import Error404 from "./components/Error404";
-import Content from "./components/Content";
 import CreateInventoryItem from './components/Inventory/CreateInventoryItem';
 import EditInventoryItem from './components/Inventory/EditInventoryItem';
 import AllInventoryItems from './components/Inventory/AllInventoryItems';
@@ -14,6 +13,9 @@ import ProjectItems from "./components/Projects/ProjectItems";
 import CreateProjectItem from "./components/Projects/CreateProjectItem";
 import EditProjectItem from "./components/Projects/EditProjectItem";
 import Dashboard from "./components/Dashboard/Dashboard";
+import CreateReport from "./components/Reports/CreateReport";
+import EditReport from "./components/Reports/EditReport";
+import AllReports from "./components/Reports/AllReports";
 
 function App() {
 	return (
@@ -36,10 +38,10 @@ function App() {
 						</Route>
 
 						<Route path="reports">
-							<Route path='' element={<Content/>} />
-							<Route path='create' element={<Content/>} />
-							<Route path='create/:id' element={<Content/>} />
-							<Route path='edit/:id' element={<Content/>} />
+							<Route path='' element={<AllReports/>} />
+							<Route path='create' element={<CreateReport/>} />
+							<Route path='create/:id' element={<CreateReport/>} />
+							<Route path='edit/:id' element={<EditReport/>} />
 						</Route>
 
 						<Route path="projects">
@@ -48,12 +50,6 @@ function App() {
 							<Route path='create' element={<CreateProjectItem/>} />
 							<Route path='create/:id' element={<CreateProjectItem/>} />
 							<Route path=':id' element={<ProjectItems/>} />
-						</Route>
-
-						<Route path="registry">
-							<Route path='' element={<Error404/>} />
-							<Route path='create' element={<Content/>} />
-							<Route path=':id' element={<Content/>} />
 						</Route>
 
 						<Route path="*" element={<Error404 />} />

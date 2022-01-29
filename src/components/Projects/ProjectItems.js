@@ -2,8 +2,7 @@ import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { UserPrivilegesContext } from "../ProtectedRoute";
 import ContentHeader from '../ContentHeader';
 import DataTable from 'react-data-table-component';
-import DataTableFilter from "../DataTableFilter"
-import { Link, useSearchParams, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Error404 from '../Error404';
 import ProjectsImportModal from './ProjectsImportModal';
 import { Row, Col }  from 'react-bootstrap';
@@ -19,12 +18,12 @@ function ProjectItems() {
     const handleModalShow = () => setModalShow(true);
 
     const { id } = useParams();
+    let navigate = useNavigate();
     const columns = [
         {
             name: 'SKU',
-            selector: row => row.inventory_SKU,
+            selector: row => (row.inventory_SKU == null) ? "" : row.inventory_SKU,
             sortable: true,
-            cell: (row)=><Link to={'../edit/' + row.id}>{row.inventory_SKU}</Link>,
             grow: 2,
         },
         {
@@ -35,13 +34,11 @@ function ProjectItems() {
         {
             name: 'Description',
             selector: row => (row.description == null) ? "" : row.description,
-            sortable: true,
             hide: 'md',
         },
         {
             name: 'Notes',
             selector: row => (row.notes == null) ? "" : row.notes,
-            sortable: true,
             hide: 'md',
         },
         {
@@ -73,21 +70,6 @@ function ProjectItems() {
         isDataLoaded: false,
         isTypeNameLoaded: false,
       });
-
-    // table search
-    const [searchParams] = useSearchParams(); // search params
-    const [filterText, setFilterText] = useState((searchParams.get('search')) ?  searchParams.get('search') : '');
-    const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
-    const filteredItems = data.filter(function(item) {
-        let itemSKU = (item.inventory_SKU == null) ? "" : item.inventory_SKU;
-        let itemDescription = (item.description == null) ? "" : item.description;
-    
-        if ((itemSKU.toLowerCase().includes(filterText.toLowerCase())) || (itemDescription.toLowerCase().includes(filterText.toLowerCase()) )) {
-            return true;
-        } else {
-            return false;
-        }
-    });
 
     const csvDownload = useCallback(() => {
         fetch(`http://site.test/WebIMS/api/projects/types/download?id=${id}`, {
@@ -227,30 +209,19 @@ function ProjectItems() {
                                             <a href="#" hidden={!privileges.canDelete} className="btn btn-tool btn-sm" onClick={projectDelete}> <i className="fas fa-trash"></i> </a> 
                                         </div>      
                                 </div>
-                                <div className="card-body">
-            
-                                    <Row className='justify-content-md-left'>
-                                        <Col sm="12" md="9"/>
-                                        <Col sm="12" md="3">
-                                            <DataTableFilter
-                                                placeholderText={"Search SKU or Description"}
-                                                setResetPaginationToggle={setResetPaginationToggle}
-                                                resetPaginationToggle={resetPaginationToggle}
-                                                setFilterText={setFilterText}
-                                                filterText={filterText}
-                                            />
-                                        </Col>
-                                    </Row>
-                                                
+                                <div className="card-body">                                     
                                     <DataTable
                                         progressPending={!states.isDataLoaded}
                                         columns={columns}
-                                        data={filteredItems}
+                                        data={data}
                                         customStyles={customStyles}
                                         highlightOnHover
                                         dense
                                         pagination
-                                        paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+                                        paginationPerPage={15}
+                                        paginationRowsPerPageOptions={[15, 30, 45, 60, 75]}
+                                        pointerOnHover
+                                        onRowClicked={(row) => navigate(`../edit/${row.id}`)}
                                     />
                                 </div>
                             </div>

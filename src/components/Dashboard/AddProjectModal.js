@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Modal, Button, Form }  from 'react-bootstrap';
+import { Modal, Form }  from 'react-bootstrap';
 import { toast } from 'react-toastify'
+import CreateButton from '../CreateButton';
 
 function AddProjectModal(props){
 
@@ -29,6 +30,7 @@ function AddProjectModal(props){
             },
             (error) => {
                 toast.error('Error occured');
+                console.log(error);
             }
         )
         props.handleModalClose();  // close modal
@@ -44,7 +46,7 @@ function AddProjectModal(props){
                     <Form.Control value={projectName} onChange={(e) => setProjectName(e.target.value)} type="text"  maxLength="20" placeholder="Enter project name"/>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type="submit" variant="secondary">Submit</Button>
+                    <CreateButton/>
                 </Modal.Footer>
             </Form>
         </Modal>

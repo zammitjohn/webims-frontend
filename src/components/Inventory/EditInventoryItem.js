@@ -100,6 +100,7 @@ function EditInventoryItem() {
             },
             (error) => {
               toast.error('Error occured');
+              console.log(error);
             }
           )
       }
@@ -137,6 +138,7 @@ function EditInventoryItem() {
         },
         (error) => {
           toast.error('Error occured');
+          console.log(error);
         }
       )
   };

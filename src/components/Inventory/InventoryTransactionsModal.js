@@ -108,6 +108,7 @@ function InventoryTransactionsModal(props){
             },
             (error) => {
                 toast.error('Error occured');
+                console.log(error);
             }
         )
         props.handleModalClose();  // close modal
