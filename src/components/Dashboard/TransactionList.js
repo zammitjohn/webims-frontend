@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Table }  from 'react-bootstrap';
 import { toast } from 'react-toastify'
+import packageJson from '../../../package.json';
 
 function TransactionList(){
 
     const [data, setData] = useState([]); // data from api
 
     const download = (id) => {
-        fetch(`/api/transactions/download.php?id=${id}`, {
+        fetch(`${packageJson.apihost}/api/transactions/download.php?id=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -31,7 +32,7 @@ function TransactionList(){
     }
 
     const fetchData = () => {
-        fetch('/api/transactions/read.php', {
+        fetch(`${packageJson.apihost}/api/transactions/read.php`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },

@@ -9,6 +9,7 @@ import UpdateButton from '../UpdateButton';
 import DeleteButton from '../DeleteButton';
 import { ButtonGroup, ButtonToolbar } from 'react-bootstrap';
 import { Form, Row, Container, Col }  from 'react-bootstrap';
+import packageJson from '../../../package.json';
 
 function EditProjectItem() {
   const { id } = useParams();
@@ -28,7 +29,7 @@ function EditProjectItem() {
 
   useEffect(() => { 
     if (localStorage.getItem('UserSession')) {
-      fetch(`/api/projects/read_single.php?id=${id}`, { // fetch form data
+      fetch(`${packageJson.apihost}/api/projects/read_single.php?id=${id}`, { // fetch form data
         headers: {
           'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },
@@ -62,7 +63,7 @@ function EditProjectItem() {
     if (window.confirm("Are you sure you want to delete the item?")) {
       let formData = new FormData();
       formData.append('id', id);
-      fetch('/api/projects/delete.php', {
+      fetch(`${packageJson.apihost}/api/projects/delete.php`, {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },
@@ -98,7 +99,7 @@ function EditProjectItem() {
     formData.append('description', values.description);
     formData.append('qty', values.qty);
     formData.append('notes', values.notes);
-    fetch('/api/projects/update.php', {
+    fetch(`${packageJson.apihost}/api/projects/update.php`, {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },

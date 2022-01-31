@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import InventoryForm from './InventoryForm';
 import CreateButton from '../CreateButton';
 import { Form, Row, Container, Col }  from 'react-bootstrap';
+import packageJson from '../../../package.json';
 
 function CreateInventoryItem() {
   let navigate = useNavigate();
@@ -33,7 +34,7 @@ function CreateInventoryItem() {
     formData.append('qtyIn', values.qtyIn);
     formData.append('qtyOut', values.qtyOut);
     formData.append('notes', values.notes);
-    fetch('/api/inventory/create.php', {
+    fetch(`${packageJson.apihost}/api/inventory/create.php`, {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },

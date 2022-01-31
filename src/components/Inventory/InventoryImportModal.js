@@ -1,6 +1,7 @@
 import { Form, Button, Modal, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify'
+import packageJson from '../../../package.json';
 
 function InventoryImportModal(props) {
     const [selectedFile, setSelectedFile] = useState([{ // form values
@@ -28,7 +29,7 @@ function InventoryImportModal(props) {
         formData.append('category', props.category);
         formData.append('file', selectedFile.file);
 
-        fetch('/api/inventory/import.php', {
+        fetch(`${packageJson.apihost}/api/inventory/import.php`, {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },  

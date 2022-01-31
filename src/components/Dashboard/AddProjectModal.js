@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Form }  from 'react-bootstrap';
 import { toast } from 'react-toastify'
 import CreateButton from '../CreateButton';
+import packageJson from '../../../package.json';
 
 function AddProjectModal(props){
 
@@ -11,7 +12,7 @@ function AddProjectModal(props){
         event.preventDefault();
         let formData = new FormData();
         formData.append('name', projectName);
-        fetch('/api/projects/types/create.php', {
+        fetch(`${packageJson.apihost}/api/projects/types/create.php`, {
         headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },

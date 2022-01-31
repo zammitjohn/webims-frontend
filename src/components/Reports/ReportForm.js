@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Row, Col, Button }  from 'react-bootstrap';
 import Select from 'react-select'
+import packageJson from '../../../package.json';
 
 function ReportForm(props) {
     const [inventoryItems, setInventoryItems] = useState([]);
@@ -9,7 +10,7 @@ function ReportForm(props) {
     const [users, setUsers] = useState([]);
 
     const fetchSerialNumbers = (inventoryId) => {
-        fetch(`/api/registry/read.php?inventoryId=${inventoryId}`, {
+        fetch(`${packageJson.apihost}/api/registry/read.php?inventoryId=${inventoryId}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -53,7 +54,7 @@ function ReportForm(props) {
             fetchSerialNumbers(props.values.inventoryId);
 
             // populate inventory dropdown
-            fetch(`/api/inventory/read.php`, {
+            fetch(`${packageJson.apihost}/api/inventory/read.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -70,7 +71,7 @@ function ReportForm(props) {
                 )
 
             // populate users dropdown
-            fetch('/api/users/read.php', {
+            fetch(`${packageJson.apihost}/api/users/read.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

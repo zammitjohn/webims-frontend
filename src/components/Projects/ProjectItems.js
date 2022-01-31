@@ -7,6 +7,7 @@ import Error404 from '../Error404';
 import ProjectsImportModal from './ProjectsImportModal';
 import { Row, Col }  from 'react-bootstrap';
 import { toast } from 'react-toastify'
+import packageJson from '../../../package.json';
 
 function ProjectItems() {
     // to hide and show buttons
@@ -72,7 +73,7 @@ function ProjectItems() {
       });
 
     const csvDownload = useCallback(() => {
-        fetch(`/api/projects/types/download.php?id=${id}`, {
+        fetch(`${packageJson.apihost}/api/projects/types/download.php?id=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -99,7 +100,7 @@ function ProjectItems() {
         if (window.confirm("Are you sure you want to delete the project?")) {
             let formData = new FormData();
             formData.append('id', id);
-            fetch('/api/projects/types/delete.php', {
+            fetch(`${packageJson.apihost}/api/projects/types/delete.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -129,7 +130,7 @@ function ProjectItems() {
         // Here we useCallback to memoize (store) the function.
         // Therefore, this function only change if 'id' changes
 
-        fetch(`/api/projects/read.php?type=${id}`, {
+        fetch(`${packageJson.apihost}/api/projects/read.php?type=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -157,7 +158,7 @@ function ProjectItems() {
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
             fetchData();
-            fetch(`/api/projects/types/read.php?id=${id}`, {
+            fetch(`${packageJson.apihost}/api/projects/types/read.php?id=${id}`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

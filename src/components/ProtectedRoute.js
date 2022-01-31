@@ -1,6 +1,8 @@
 import React, { useEffect, useState, createContext  } from 'react';
 import { useNavigate, Outlet } from "react-router-dom";
 import Login from './Login';
+import packageJson from '../../package.json';
+
 export const UserPrivilegesContext = createContext(null);
 
 function ProtectedRoute() {
@@ -25,7 +27,7 @@ function ProtectedRoute() {
 
 			} else {
 				//validate session using API
-				fetch('/api/users/validate_session.php', {
+				fetch(`${packageJson.apihost}/api/users/validate_session.php`, {
 					headers: {
 						'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId,
 					},

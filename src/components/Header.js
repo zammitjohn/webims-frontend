@@ -1,7 +1,9 @@
+import packageJson from '../../package.json';
+
 function Header() {
 
 	const handleLogOut = () => {
-		fetch('/api/users/logout.php', {
+		fetch(`${packageJson.apihost}/api/users/logout.php`, {
 			headers: {
 				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
 			},

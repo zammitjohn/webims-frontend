@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ProjectForm from './ProjectForm';
 import CreateButton from '../CreateButton';
 import { Form, Row, Container, Col }  from 'react-bootstrap';
+import packageJson from '../../../package.json';
 
 function CreateProjectItem() {
 
@@ -27,7 +28,7 @@ function CreateProjectItem() {
     formData.append('description', values.description);
     formData.append('qty', values.qty);
     formData.append('notes', values.notes);
-    fetch('/api/projects/create.php', {
+    fetch(`${packageJson.apihost}/api/projects/create.php`, {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },

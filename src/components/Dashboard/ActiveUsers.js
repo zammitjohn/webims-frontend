@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
+import packageJson from '../../../package.json';
 
 function ActiveUsers(){
 
@@ -10,7 +11,7 @@ function ActiveUsers(){
     });
 
     const fetchData = () => {
-        fetch('/api/users/read.php', {
+        fetch(`${packageJson.apihost}/api/users/read.php`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },

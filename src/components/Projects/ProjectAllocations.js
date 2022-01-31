@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { Table }  from 'react-bootstrap';
+import packageJson from '../../../package.json';
 
 function ProjectAllocations(props){
     const [data, setData] = useState([]); // data
@@ -11,7 +12,7 @@ function ProjectAllocations(props){
 
     useEffect(() => { 
         if (localStorage.getItem('UserSession')) {
-            fetch(`/api/projects/read_allocations.php?inventoryId=${props.inventoryId}`, { // fetch form data
+            fetch(`${packageJson.apihost}/api/projects/read_allocations.php?inventoryId=${props.inventoryId}`, { // fetch form data
               headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
               },

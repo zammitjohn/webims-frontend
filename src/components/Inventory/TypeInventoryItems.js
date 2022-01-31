@@ -5,6 +5,7 @@ import DataTableFilter from "../DataTableFilter"
 import { Link, useSearchParams, useParams } from "react-router-dom";
 import Error404 from '../Error404';
 import { Row, Col }  from 'react-bootstrap';
+import packageJson from '../../../package.json';
 
 function TypeInventoryItems() {
     const { id } = useParams();
@@ -99,7 +100,7 @@ function TypeInventoryItems() {
         // useCallback: React creates a new function on every render
         // Here we useCallback to memoize (store) the function.
         // Therefore, this function only change if 'id' changes
-        fetch(`/api/inventory/read.php?type=${id}`, {
+        fetch(`${packageJson.apihost}/api/inventory/read.php?type=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -127,7 +128,7 @@ function TypeInventoryItems() {
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
             fetchData();
-            fetch(`/api/inventory/types/read.php?id=${id}`, {
+            fetch(`${packageJson.apihost}/api/inventory/types/read.php?id=${id}`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

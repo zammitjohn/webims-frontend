@@ -7,6 +7,7 @@ import CreateButton from '../CreateButton';
 import { Form, Row, Container, Col }  from 'react-bootstrap';
 import ReportForm from './ReportForm';
 import RegisterItemModal from '../Inventory/RegisterItemModal';
+import packageJson from '../../../package.json';
 
 function CreateReport() {
   // register modal props
@@ -57,7 +58,7 @@ function CreateReport() {
     formData.append('AWBreturn', values.AWBreturn);
     formData.append('RMA', values.RMA);
     formData.append('notes', values.notes);
-    fetch('/api/reports/create.php', {
+    fetch(`${packageJson.apihost}/api/reports/create.php`, {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },

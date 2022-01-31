@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Table }  from 'react-bootstrap';
+import packageJson from '../../../package.json';
 
 function MyPendingReports(){
 
@@ -14,7 +15,7 @@ function MyPendingReports(){
 
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
-            fetch('/api/reports/read_myreports.php', {
+            fetch(`${packageJson.apihost}/api/reports/read_myreports.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

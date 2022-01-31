@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Col, Row }  from 'react-bootstrap';
+import packageJson from '../../../package.json';
 
 function InventoryForm(props) {    
     const [categories, setCategories] = useState([]);
@@ -8,7 +9,7 @@ function InventoryForm(props) {
     const populateTypes = (category) => { // fetch types dropdown data
 
         if (category) {
-            let url = `/api/inventory/types/read.php?category=${category}`;
+            let url = `${packageJson.apihost}/api/inventory/types/read.php?category=${category}`;
 
             fetch(url, {
                 headers: {
@@ -35,7 +36,7 @@ function InventoryForm(props) {
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
             //populate categories
-            fetch('/api/inventory/categories/read.php', {
+            fetch(`${packageJson.apihost}/api/inventory/categories/read.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

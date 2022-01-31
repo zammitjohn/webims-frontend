@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
+import packageJson from '../../package.json';
 
 function SidebarProjects() {
 // Local variables will get reset every render upon mutation whereas state will update
@@ -18,7 +19,7 @@ useEffect(() => {
 
 	// fetch projects
 	if (localStorage.getItem('UserSession')) {
-		fetch('/api/projects/types/read.php', {
+		fetch(`${packageJson.apihost}/api/projects/types/read.php`, {
 			headers: {
 				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
 			},

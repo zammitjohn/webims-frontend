@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { Table, Badge, Button }  from 'react-bootstrap';
 import { toast } from 'react-toastify'
 import { UserPrivilegesContext } from "../ProtectedRoute";
+import packageJson from '../../../package.json';
 
 function RegisteredItems(props){
     const privileges = useContext(UserPrivilegesContext); // for delete buttons
@@ -13,7 +14,7 @@ function RegisteredItems(props){
 
     const fetchData  = useCallback(() => {// fetch data
         if (localStorage.getItem('UserSession')) {
-            fetch(`/api/registry/read.php?inventoryId=${props.inventoryId}`, { // fetch form data
+            fetch(`${packageJson.apihost}/api/registry/read.php?inventoryId=${props.inventoryId}`, { // fetch form data
               headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
               },
@@ -46,7 +47,7 @@ function RegisteredItems(props){
         if (window.confirm("Are you sure you want to delete the item?")){
             let formData = new FormData();
             formData.append('id', event.target.id);
-            fetch('/api/registry/delete.php', {
+            fetch(`${packageJson.apihost}/api/registry/delete.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

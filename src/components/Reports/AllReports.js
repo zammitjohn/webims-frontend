@@ -3,6 +3,7 @@ import ContentHeader from '../ContentHeader';
 import DataTable from 'react-data-table-component';
 import { useNavigate } from "react-router-dom";
 import { Row, Col, Badge }  from 'react-bootstrap';
+import packageJson from '../../../package.json';
 
 function AllReports() {
     let navigate = useNavigate();
@@ -22,8 +23,6 @@ function AllReports() {
             name: 'Report',
             selector: row => row.id,
             cell: row => (row.id == null) ? "" : `#${row.id} ${(row.name) ? (row.name) : ""}`,
-            sortable: true,
-            grow: 2,
         },
         {
             name: 'Description',
@@ -33,7 +32,6 @@ function AllReports() {
         {
             name: 'Status',
             cell: (row)=><RenderReportState row={row}/>,
-            hide: 'md',
         }
     ];
 
@@ -58,7 +56,7 @@ function AllReports() {
     });
 
     const fetchData = () => { // fetch reports
-        fetch('/api/reports/read.php', {
+        fetch(`${packageJson.apihost}/api/reports/read.php`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },

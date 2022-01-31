@@ -2,6 +2,7 @@
   "name": "webims-frontend",
   "version": "1.0.0",
   "private": true,
+  "apihost": "",
   "dependencies": {
     "bootstrap": "^5.1.3",
     "moment": "^2.29.1",

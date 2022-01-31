@@ -10,6 +10,7 @@ import RegisterItemModal from '../Inventory/RegisterItemModal';
 import { UserPrivilegesContext } from "../ProtectedRoute";
 import Error404 from '../Error404';
 import ReportComments from './ReportComments';
+import packageJson from '../../../package.json';
 
 function EditReport() {
   // to hide and show buttons
@@ -52,7 +53,7 @@ function EditReport() {
 
   useEffect(() => { 
     if (localStorage.getItem('UserSession')) {
-      fetch(`/api/reports/read_single.php?id=${id}`, { // fetch form data
+      fetch(`${packageJson.apihost}/api/reports/read_single.php?id=${id}`, { // fetch form data
         headers: {
           'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },
@@ -97,7 +98,7 @@ function EditReport() {
   const toggleRepairable = () => {
     let formData = new FormData();
     formData.append('id', id);
-		fetch('/api/reports/toggle_repairable.php', {
+		fetch(`${packageJson.apihost}/api/reports/toggle_repairable.php`, {
 			headers: {
 				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
 			},
@@ -150,7 +151,7 @@ function EditReport() {
     formData.append('AWBreturn', values.AWBreturn);
     formData.append('RMA', values.RMA);
     formData.append('notes', values.notes);
-    fetch('/api/reports/update.php', {
+    fetch(`${packageJson.apihost}/api/reports/update.php`, {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },

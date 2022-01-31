@@ -1,12 +1,13 @@
 
 import React, { useEffect, useState } from 'react';
 import { Form, Row, Col, Button, Alert }  from 'react-bootstrap';
+import packageJson from '../../package.json';
 
 function Login(props) {
-    // page specific styling
-    document.body.classList.add("login-page");
-    document.body.style.height = "";
     document.title = "Login";
+
+    //DO NOT UNCOMMENT THE FOLLOWING IN PRODUCTION
+    //localStorage.setItem('UserSession', JSON.stringify({fullName:"Test User", sessionId:"test", "expiry":null}));
 
     // incorrect password alert
     const [showError, setShowError] = useState(false);
@@ -38,7 +39,7 @@ function Login(props) {
         formData.append('username', values.email);
         formData.append('password', values.password);
         formData.append('remember', values.remember);
-        fetch('/api/users/login.php', {
+        fetch(`${packageJson.apihost}/api/users/login.php`, {
             method: 'POST',
             body: formData,
             })
@@ -84,58 +85,58 @@ function Login(props) {
     }, [props.self]);
 
     return (
-        <>
-        <div className="login-box">
-            {/* /.login-logo */}
-            <div className="card card-outline card-warning">
-                <div className="card-header text-center">
-                <a href="../" className="h1"><b>Web</b>IMS</a>
-                </div>
-                <Form id="login_form" onSubmit={handleLogin}>
-                    <div className="card-body">
-                        <p className="login-box-msg">Log in with your corporate account</p>
-                        
-                        <div className="input-group mb-3">
-                            <Form.Control value={values.email} onChange={handleChange} type="email" id="email" placeholder="Email" />
-                            <div className="input-group-append">
-                                <div className="input-group-text">
-                                <span className="fas fa-envelope" />
+        <div className="login-page">
+            <div className="login-box">
+                {/* /.login-logo */}
+                <div className="card card-outline card-warning">
+                    <div className="card-header text-center">
+                    <a href="../" className="h1"><b>Web</b>IMS</a>
+                    </div>
+                    <Form id="login_form" onSubmit={handleLogin}>
+                        <div className="card-body">
+                            <p className="login-box-msg">Log in with your corporate account</p>
+                            
+                            <div className="input-group mb-3">
+                                <Form.Control value={values.email} onChange={handleChange} type="email" id="email" placeholder="Email" />
+                                <div className="input-group-append">
+                                    <div className="input-group-text">
+                                    <span className="fas fa-envelope" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="input-group mb-3">
-                            <Form.Control value={values.password} onChange={handleChange} type="password" id="password" placeholder="Password" />
-                            <div className="input-group-append">
-                                <div className="input-group-text">
-                                <span className="fas fa-lock" />
+                            <div className="input-group mb-3">
+                                <Form.Control value={values.password} onChange={handleChange} type="password" id="password" placeholder="Password" />
+                                <div className="input-group-append">
+                                    <div className="input-group-text">
+                                    <span className="fas fa-lock" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                            <Row>
+                                <Row>
+                                    <Col>
+                                        <Form.Group className="mb-3">
+                                            <Form.Check checked={values.remember} onChange={handleChange} type="checkbox" id="remember" label="Remember Me" />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                            </div>
+                        <div className="card-footer">
+                            <Row style={{textAlign: 'center'}}>
                                 <Col>
-                                    <Form.Group className="mb-3">
-                                        <Form.Check checked={values.remember} onChange={handleChange} type="checkbox" id="remember" label="Remember Me" />
-                                    </Form.Group>
+                                    <Button type="submit" className="btn-block" variant="default">Log In</Button>
                                 </Col>
                             </Row>
                         </div>
-                    <div className="card-footer">
-                        <Row style={{textAlign: 'center'}}>
-                            <Col>
-                                <Button type="submit" className="btn-block" variant="default">Log In</Button>
-                            </Col>
-                        </Row>
-                    </div>
-                </Form>
+                    </Form>
+                </div>
+                {/* /.card */}
+                &nbsp;
+                <Alert variant="danger" show={showError}>
+                    {errorMessage}
+                </Alert>
             </div>
-            {/* /.card */}
-            &nbsp;
-            <Alert variant="danger" show={showError}>
-                {errorMessage}
-            </Alert>
+            {/* /.login-box */}
         </div>
-        {/* /.login-box */}
-        </>
     );
 }
 

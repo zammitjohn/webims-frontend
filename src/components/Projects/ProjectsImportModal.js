@@ -1,6 +1,7 @@
 import { Form, Button, Modal, ButtonToolbar, ButtonGroup, Row, Col } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify'
+import packageJson from '../../../package.json';
 
 function ProjectsImportModal(props) {
 
@@ -35,7 +36,7 @@ function ProjectsImportModal(props) {
         formData.append('inventory_type', selectedValues.type);
         formData.append('file', selectedValues.file);
 
-        fetch('/api/projects/import.php', {
+        fetch(`${packageJson.apihost}/api/projects/import.php`, {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },  
@@ -66,7 +67,7 @@ function ProjectsImportModal(props) {
     }
 
     const populateTypes = (category) => { // fetch types dropdown data
-        fetch(`/api/inventory/types/read.php?category=${category}`, {
+        fetch(`${packageJson.apihost}/api/inventory/types/read.php?category=${category}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -111,7 +112,7 @@ function ProjectsImportModal(props) {
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
             //populate categories
-            fetch('/api/inventory/categories/read.php', {
+            fetch(`${packageJson.apihost}/api/inventory/categories/read.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

@@ -12,6 +12,7 @@ import { Form, Row, Container, Col }  from 'react-bootstrap';
 import ProjectAllocations from '../Projects/ProjectAllocations';
 import RegisterItemModal from './RegisterItemModal';
 import RegisteredItems from './RegisteredItems';
+import packageJson from '../../../package.json';
 
 function EditInventoryItem() {
   
@@ -43,7 +44,7 @@ function EditInventoryItem() {
 
   useEffect(() => { 
     if (localStorage.getItem('UserSession')) {
-      fetch(`/api/inventory/read_single.php?id=${id}`, { // fetch form data
+      fetch(`${packageJson.apihost}/api/inventory/read_single.php?id=${id}`, { // fetch form data
         headers: {
           'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },
@@ -81,7 +82,7 @@ function EditInventoryItem() {
     if (window.confirm("Are you sure you want to delete the item? You cannot delete Inventory items associated to any Fault Reports, Projects or Registry items!")) {
       let formData = new FormData();
       formData.append('id', id);
-      fetch('/api/inventory/delete.php', {
+      fetch(`${packageJson.apihost}/api/inventory/delete.php`, {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },
@@ -119,7 +120,7 @@ function EditInventoryItem() {
     formData.append('qtyIn', values.qtyIn);
     formData.append('qtyOut', values.qtyOut);
     formData.append('notes', values.notes);
-    fetch('/api/inventory/update.php', {
+    fetch(`${packageJson.apihost}/api/inventory/update.php`, {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },  

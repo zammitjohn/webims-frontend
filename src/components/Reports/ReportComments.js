@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Form, Button }  from 'react-bootstrap';
 import moment from 'moment';
 import { UserPrivilegesContext } from "../ProtectedRoute";
+import packageJson from '../../../package.json';
 
 function ReportComments(props){
     // to hide and show buttons
@@ -19,7 +20,7 @@ function ReportComments(props){
         let formData = new FormData();
         formData.append('text', comment);
         formData.append('reportId', props.reportId);
-        fetch('/api/reports/comments/create.php', {
+        fetch(`${packageJson.apihost}/api/reports/comments/create.php`, {
         headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },
@@ -41,7 +42,7 @@ function ReportComments(props){
     }
 
     const fetchData = () => {
-        fetch(`/api/reports/comments/read.php?reportId=${props.reportId}`, {
+        fetch(`${packageJson.apihost}/api/reports/comments/read.php?reportId=${props.reportId}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Table }  from 'react-bootstrap';
 import AddProjectModal from './AddProjectModal';
+import packageJson from '../../../package.json';
 
 function MyProjects(){
 
@@ -19,7 +20,7 @@ function MyProjects(){
     let navigate = useNavigate();
 
     const fetchData = () => {
-        fetch('/api/projects/types/read_myprojects.php', {
+        fetch(`${packageJson.apihost}/api/projects/types/read_myprojects.php`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },

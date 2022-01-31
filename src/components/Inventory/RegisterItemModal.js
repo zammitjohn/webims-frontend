@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Form }  from 'react-bootstrap';
 import CreateButton from '../CreateButton';
 import { toast } from 'react-toastify'
+import packageJson from '../../../package.json';
 
 function RegisterItemModal(props){
 
@@ -28,7 +29,7 @@ function RegisterItemModal(props){
         formData.append('serialNumber', values.serialNumber);
         formData.append('datePurchased', values.datePurchased);
 
-        fetch('/api/registry/create.php', {
+        fetch(`${packageJson.apihost}/api/registry/create.php`, {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },  

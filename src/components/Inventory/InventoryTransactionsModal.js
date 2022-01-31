@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal, Tabs, Tab, Form, Container, Table }  from 'react-bootstrap';
 import AsyncSelect from 'react-select/async';
 import { toast } from 'react-toastify'
+import packageJson from '../../../package.json';
 
 function InventoryTransactionsModal(props){
 
@@ -12,7 +13,7 @@ function InventoryTransactionsModal(props){
     const [tabActiveKey, setTabActiveKey] = useState('page1');
     
     const loadOptions = async (inputValue, callback) => {
-        const response = await fetch(`/api/inventory/search.php?term=${inputValue}`, {
+        const response = await fetch(`${packageJson.apihost}/api/inventory/search.php?term=${inputValue}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -38,7 +39,7 @@ function InventoryTransactionsModal(props){
 
 
     const transactionDownload = (id) => {
-        fetch(`/api/transactions/download.php?id=${id}`, {
+        fetch(`${packageJson.apihost}/api/transactions/download.php?id=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -71,7 +72,7 @@ function InventoryTransactionsModal(props){
         });
         let data = ({return: isReturn, items: transactionItems});
     
-        fetch('/api/transactions/create.php', {
+        fetch(`${packageJson.apihost}/api/transactions/create.php`, {
         headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },

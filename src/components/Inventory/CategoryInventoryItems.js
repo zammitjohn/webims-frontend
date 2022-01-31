@@ -7,6 +7,7 @@ import { Link, useSearchParams, useParams } from "react-router-dom";
 import Error404 from '../Error404';
 import { Row, Col }  from 'react-bootstrap';
 import InventoryImportModal from './InventoryImportModal';
+import packageJson from '../../../package.json';
 
 function CategoryInventoryItems() {
     // to hide and show buttons
@@ -123,7 +124,7 @@ function CategoryInventoryItems() {
         // useCallback: React creates a new function on every render
         // Here we useCallback to memoize (store) the function.
         // Therefore, this function only change if 'id' changes
-        fetch(`/api/inventory/read.php?category=${id}`, {
+        fetch(`${packageJson.apihost}/api/inventory/read.php?category=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -151,7 +152,7 @@ function CategoryInventoryItems() {
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
             fetchData();
-            fetch(`/api/inventory/categories/read.php?id=${id}`, {
+            fetch(`${packageJson.apihost}/api/inventory/categories/read.php?id=${id}`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

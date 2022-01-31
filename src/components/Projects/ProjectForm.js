@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form }  from 'react-bootstrap';
+import packageJson from '../../../package.json';
 
 function ProjectForm(props) {    
     const [inventoryItems, setInventoryItems] = useState([]);
@@ -8,7 +9,7 @@ function ProjectForm(props) {
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
             // populate inventory dropdown
-            fetch(`/api/inventory/read.php`, {
+            fetch(`${packageJson.apihost}/api/inventory/read.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -25,7 +26,7 @@ function ProjectForm(props) {
                 )
 
             //populate types
-            fetch('/api/projects/types/read.php', {
+            fetch(`${packageJson.apihost}/api/projects/types/read.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

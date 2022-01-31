@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
+import packageJson from '../../package.json';
 
 function SidebarInventory() {
 // Local variables will get reset every render upon mutation whereas state will update
@@ -20,7 +21,7 @@ useEffect(() => {
 
 	// fetch categories
 	if (localStorage.getItem('UserSession')) {
-		fetch('/api/inventory/categories/read.php', {
+		fetch(`${packageJson.apihost}/api/inventory/categories/read.php`, {
 			headers: {
 				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
 			},
@@ -45,7 +46,7 @@ useEffect(() => {
 			)	
 	
 		// fetch types
-		fetch('/api/inventory/types/read.php', {
+		fetch(`${packageJson.apihost}/api/inventory/types/read.php`, {
 			headers: {
 				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
 			},

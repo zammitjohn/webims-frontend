@@ -6,6 +6,7 @@ import DataTableFilter from "../DataTableFilter"
 import { Link, useSearchParams } from "react-router-dom";
 import { Row, Col }  from 'react-bootstrap';
 import InventoryTransactionsModal from './InventoryTransactionsModal';
+import packageJson from '../../../package.json';
 
 function AllInventoryItems() {
     // to hide and show buttons
@@ -112,7 +113,7 @@ function AllInventoryItems() {
     });
 
     const fetchData = () => { // fetch inventory
-        fetch('/api/inventory/read.php', {
+        fetch(`${packageJson.apihost}/api/inventory/read.php`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
