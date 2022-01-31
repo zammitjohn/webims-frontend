@@ -58,7 +58,7 @@ function AllReports() {
     });
 
     const fetchData = () => { // fetch reports
-        fetch('http://site.test/WebIMS/api/reports/read', {
+        fetch('http://site.test/api/reports/read.php', {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },

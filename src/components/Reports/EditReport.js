@@ -52,7 +52,7 @@ function EditReport() {
 
   useEffect(() => { 
     if (localStorage.getItem('UserSession')) {
-      fetch(`http://site.test/WebIMS/api/reports/read_single?id=${id}`, { // fetch form data
+      fetch(`http://site.test/api/reports/read_single.php?id=${id}`, { // fetch form data
         headers: {
           'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },
@@ -97,7 +97,7 @@ function EditReport() {
   const toggleRepairable = () => {
     let formData = new FormData();
     formData.append('id', id);
-		fetch('http://site.test/WebIMS/api/reports/toggle_repairable', {
+		fetch('http://site.test/api/reports/toggle_repairable.php', {
 			headers: {
 				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
 			},
@@ -150,7 +150,7 @@ function EditReport() {
     formData.append('AWBreturn', values.AWBreturn);
     formData.append('RMA', values.RMA);
     formData.append('notes', values.notes);
-    fetch('http://site.test/WebIMS/api/reports/update', {
+    fetch('http://site.test/api/reports/update.php', {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },
@@ -182,7 +182,7 @@ function EditReport() {
   } else {
     return (
         <>
-            <ContentHeader pageName={'New Report'}/>
+            <ContentHeader pageName={'Edit Report ' + values.name}/>
             <section className="content">
                 <Container fluid>
                 <Row>

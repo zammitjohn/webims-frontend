@@ -43,7 +43,7 @@ function EditInventoryItem() {
 
   useEffect(() => { 
     if (localStorage.getItem('UserSession')) {
-      fetch(`http://site.test/WebIMS/api/inventory/read_single?id=${id}`, { // fetch form data
+      fetch(`http://site.test/api/inventory/read_single.php?id=${id}`, { // fetch form data
         headers: {
           'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },
@@ -81,7 +81,7 @@ function EditInventoryItem() {
     if (window.confirm("Are you sure you want to delete the item? You cannot delete Inventory items associated to any Fault Reports, Projects or Registry items!")) {
       let formData = new FormData();
       formData.append('id', id);
-      fetch('http://site.test/WebIMS/api/inventory/delete', {
+      fetch('http://site.test/api/inventory/delete.php', {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },
@@ -119,7 +119,7 @@ function EditInventoryItem() {
     formData.append('qtyIn', values.qtyIn);
     formData.append('qtyOut', values.qtyOut);
     formData.append('notes', values.notes);
-    fetch('http://site.test/WebIMS/api/inventory/update', {
+    fetch('http://site.test/api/inventory/update.php', {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },  

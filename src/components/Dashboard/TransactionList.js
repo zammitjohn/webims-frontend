@@ -7,7 +7,7 @@ function TransactionList(){
     const [data, setData] = useState([]); // data from api
 
     const download = (id) => {
-        fetch(`http://site.test/WebIMS/api/transactions/download?id=${id}`, {
+        fetch(`http://site.test/api/transactions/download.php?id=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -31,7 +31,7 @@ function TransactionList(){
     }
 
     const fetchData = () => {
-        fetch('http://site.test/WebIMS/api/transactions/read', {
+        fetch('http://site.test/api/transactions/read.php', {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },

@@ -33,7 +33,7 @@ function CreateInventoryItem() {
     formData.append('qtyIn', values.qtyIn);
     formData.append('qtyOut', values.qtyOut);
     formData.append('notes', values.notes);
-    fetch('http://site.test/WebIMS/api/inventory/create', {
+    fetch('http://site.test/api/inventory/create.php', {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },

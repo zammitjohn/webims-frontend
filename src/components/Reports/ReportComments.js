@@ -19,7 +19,7 @@ function ReportComments(props){
         let formData = new FormData();
         formData.append('text', comment);
         formData.append('reportId', props.reportId);
-        fetch('http://site.test/WebIMS/api/reports/comments/create', {
+        fetch('http://site.test/api/reports/comments/create.php', {
         headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },
@@ -41,7 +41,7 @@ function ReportComments(props){
     }
 
     const fetchData = () => {
-        fetch(`http://site.test/WebIMS/api/reports/comments/read?reportId=${props.reportId}`, {
+        fetch(`http://site.test/api/reports/comments/read.php?reportId=${props.reportId}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },

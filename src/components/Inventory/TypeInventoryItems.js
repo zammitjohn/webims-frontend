@@ -93,7 +93,7 @@ function TypeInventoryItems() {
         // useCallback: React creates a new function on every render
         // Here we useCallback to memoize (store) the function.
         // Therefore, this function only change if 'id' changes
-        fetch(`http://site.test/WebIMS/api/inventory/read?type=${id}`, {
+        fetch(`http://site.test/api/inventory/read.php?type=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -121,7 +121,7 @@ function TypeInventoryItems() {
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
             fetchData();
-            fetch(`http://site.test/WebIMS/api/inventory/types/read?id=${id}`, {
+            fetch(`http://site.test/api/inventory/types/read.php?id=${id}`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

@@ -11,7 +11,7 @@ function AddProjectModal(props){
         event.preventDefault();
         let formData = new FormData();
         formData.append('name', projectName);
-        fetch('http://site.test/WebIMS/api/projects/types/create', {
+        fetch('http://site.test/api/projects/types/create.php', {
         headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },
@@ -22,7 +22,8 @@ function AddProjectModal(props){
         .then(
             (response) => {
                 if (response.status) {
-                    toast.success(response.message);
+                    /* eslint-disable-next-line jsx-a11y/anchor-is-valid */
+                    toast.success(<div>{response.message} <a href="">Please reload</a></div>);
                 } else {
                     toast.error(response.message);
                 }

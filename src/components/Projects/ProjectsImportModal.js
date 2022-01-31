@@ -35,7 +35,7 @@ function ProjectsImportModal(props) {
         formData.append('inventory_type', selectedValues.type);
         formData.append('file', selectedValues.file);
 
-        fetch('http://site.test/WebIMS/api/projects/import', {
+        fetch('http://site.test/api/projects/import.php', {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },  
@@ -66,7 +66,7 @@ function ProjectsImportModal(props) {
     }
 
     const populateTypes = (category) => { // fetch types dropdown data
-        fetch(`http://site.test/WebIMS/api/inventory/types/read?category=${category}`, {
+        fetch(`http://site.test/api/inventory/types/read.php?category=${category}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -111,7 +111,7 @@ function ProjectsImportModal(props) {
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
             //populate categories
-            fetch('http://site.test/WebIMS/api/inventory/categories/read', {
+            fetch('http://site.test/api/inventory/categories/read.php', {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

@@ -11,7 +11,7 @@ function ProjectAllocations(props){
 
     useEffect(() => { 
         if (localStorage.getItem('UserSession')) {
-            fetch(`http://site.test/WebIMS/api/projects/read_allocations?inventoryId=${props.inventoryId}`, { // fetch form data
+            fetch(`http://site.test/api/projects/read_allocations.php?inventoryId=${props.inventoryId}`, { // fetch form data
               headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
               },

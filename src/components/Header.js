@@ -1,7 +1,7 @@
 function Header() {
 
 	const handleLogOut = () => {
-		fetch('http://site.test/WebIMS/api/users/logout', {
+		fetch('http://site.test/api/users/logout.php', {
 			headers: {
 				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
 			},
@@ -33,7 +33,7 @@ function Header() {
 				 <a className="nav-link" data-widget="pushmenu" href="#" role="button"><i className="fas fa-bars"></i></a>
 			  </li>
 			  <li className="nav-item d-none d-sm-inline-block">
-				 <a href="https://github.com/zammitjohn/WebIMS" className="nav-link" target="_blank" rel="noreferrer"><i className="fab fa-github"></i></a>
+				 <a href="https://github.com/zammitjohn/webims-frontend" className="nav-link" target="_blank" rel="noreferrer"><i className="fab fa-github"></i></a>
 			  </li>
 		   </ul>
 		   {/* Right navbar links */}

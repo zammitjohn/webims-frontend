@@ -72,7 +72,7 @@ function ProjectItems() {
       });
 
     const csvDownload = useCallback(() => {
-        fetch(`http://site.test/WebIMS/api/projects/types/download?id=${id}`, {
+        fetch(`http://site.test/api/projects/types/download.php?id=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -99,7 +99,7 @@ function ProjectItems() {
         if (window.confirm("Are you sure you want to delete the project?")) {
             let formData = new FormData();
             formData.append('id', id);
-            fetch('http://site.test/WebIMS/api/projects/types/delete', {
+            fetch('http://site.test/api/projects/types/delete.php', {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -110,9 +110,11 @@ function ProjectItems() {
                 .then(
                     (response) => {
                         if (response.status) {
-                            window.location.href = '/';
+                            navigate('/', { replace: true })
+                            /* eslint-disable-next-line jsx-a11y/anchor-is-valid */
+                            toast.success(<div>{response.message} <a href="">Please reload</a></div>);
                         } else {
-                            alert(response.message); 
+                            toast.error(response.message);
                         }
                     },
                     (error) => {
@@ -120,14 +122,14 @@ function ProjectItems() {
                     }
                 )
         }
-    }, [id])
+    }, [id, navigate])
 
     const fetchData = useCallback(() => { // fetch inventory
         // useCallback: React creates a new function on every render
         // Here we useCallback to memoize (store) the function.
         // Therefore, this function only change if 'id' changes
 
-        fetch(`http://site.test/WebIMS/api/projects/read?type=${id}`, {
+        fetch(`http://site.test/api/projects/read.php?type=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -155,7 +157,7 @@ function ProjectItems() {
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
             fetchData();
-            fetch(`http://site.test/WebIMS/api/projects/types/read?id=${id}`, {
+            fetch(`http://site.test/api/projects/types/read.php?id=${id}`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

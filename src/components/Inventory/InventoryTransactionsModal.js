@@ -23,7 +23,7 @@ function InventoryTransactionsModal(props){
       };
 
     const loadOptions = async (inputValue, callback) => {
-        const response = await fetch(`http://site.test/WebIMS/api/inventory/search?term=${inputValue}`, {
+        const response = await fetch(`http://site.test/api/inventory/search.php?term=${inputValue}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -49,7 +49,7 @@ function InventoryTransactionsModal(props){
 
 
     const transactionDownload = (id) => {
-        fetch(`http://site.test/WebIMS/api/transactions/download?id=${id}`, {
+        fetch(`http://site.test/api/transactions/download.php?id=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -82,7 +82,7 @@ function InventoryTransactionsModal(props){
         });
         let data = ({return: isReturn, items: transactionItems});
     
-        fetch('http://site.test/WebIMS/api/transactions/create', {
+        fetch('http://site.test/api/transactions/create.php', {
         headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },

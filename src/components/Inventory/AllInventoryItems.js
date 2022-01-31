@@ -106,7 +106,7 @@ function AllInventoryItems() {
     });
 
     const fetchData = () => { // fetch inventory
-        fetch('http://site.test/WebIMS/api/inventory/read', {
+        fetch('http://site.test/api/inventory/read.php', {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },

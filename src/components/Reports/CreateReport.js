@@ -57,7 +57,7 @@ function CreateReport() {
     formData.append('AWBreturn', values.AWBreturn);
     formData.append('RMA', values.RMA);
     formData.append('notes', values.notes);
-    fetch('http://site.test/WebIMS/api/reports/create', {
+    fetch('http://site.test/api/reports/create.php', {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },

@@ -4,11 +4,12 @@ import Select from 'react-select'
 
 function ReportForm(props) {
     const [inventoryItems, setInventoryItems] = useState([]);
-    const [serialNumbers, setSerialNumbers] = useState([]);
+    const [serialNumbersFaulty, setSerialNumbersFaulty] = useState([]);
+    const [serialNumbersReplacement, setSerialNumbersReplacement] = useState([]);
     const [users, setUsers] = useState([]);
 
     const fetchSerialNumbers = (inventoryId) => {
-        fetch(`http://site.test/WebIMS/api/registry/read?inventoryId=${inventoryId}`, {
+        fetch(`http://site.test/api/registry/read.php?inventoryId=${inventoryId}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -17,15 +18,28 @@ function ReportForm(props) {
             .then(res => res.json())
             .then(
                 (data) => {
-                    let serialNumbers_arr = [{label: 'None', value: '', isDisabled: false }];
+                    let serialNumbers_arr_faulty = [{label: 'None', value: '', isDisabled: false }];
+                    let serialNumbers_arr_replacement = [{label: 'None', value: '', isDisabled: false }];
+                    // populate faulty dropdown
                     data.forEach(function (item) {
                         if (item.state === 'Faulty') {
-                            serialNumbers_arr.push({label: `#${item.id}: ${item.serialNumber}`, value: item.id, isDisabled: true }); 
+                            serialNumbers_arr_faulty.push({label: `#${item.id}: ${item.serialNumber}`, value: item.id, isDisabled: true }); 
                         } else {
-                            serialNumbers_arr.push({label: `#${item.id}: ${item.serialNumber}`, value: item.id, isDisabled: false }); 
+                            serialNumbers_arr_faulty.push({label: `#${item.id}: ${item.serialNumber}`, value: item.id, isDisabled: false }); 
                         }
                     });
-                    setSerialNumbers(serialNumbers_arr);
+                    setSerialNumbersFaulty(serialNumbers_arr_faulty);
+
+                    // populate replacement dropdown
+                    data.forEach(function (item) {
+                        if (item.state === 'Faulty' || item.state === 'Replacement') {
+                            serialNumbers_arr_replacement.push({label: `#${item.id}: ${item.serialNumber}`, value: item.id, isDisabled: true }); 
+                        } else {
+                            serialNumbers_arr_replacement.push({label: `#${item.id}: ${item.serialNumber}`, value: item.id, isDisabled: false }); 
+                        }
+                    });
+                    setSerialNumbersReplacement(serialNumbers_arr_replacement);
+
                 },
                 (error) => {            
                     console.log(error);
@@ -39,7 +53,7 @@ function ReportForm(props) {
             fetchSerialNumbers(props.values.inventoryId);
 
             // populate inventory dropdown
-            fetch(`http://site.test/webims/api/inventory/read`, {
+            fetch(`http://site.test/api/inventory/read.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -56,7 +70,7 @@ function ReportForm(props) {
                 )
 
             // populate users dropdown
-            fetch('http://site.test/WebIMS/api/users/read', {
+            fetch('http://site.test/api/users/read.php', {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -194,7 +208,7 @@ function ReportForm(props) {
                                         value={{value: props.values.faultySN, label: (props.values.faultySN) ? `#${props.values.faultySN}` : 'Select...'  }}
                                         onChange={(e) => handleFaultySNChange(e)}
                                         isSearchable={true}
-                                        options={serialNumbers}
+                                        options={serialNumbersFaulty}
                                         id="faultySN"
                                         menuPlacement="top"
                                     />
@@ -207,7 +221,7 @@ function ReportForm(props) {
                                         value={{value: props.values.replacementSN, label: (props.values.replacementSN) ? `#${props.values.replacementSN}` : 'Select...'  }}
                                         onChange={(e) => handleReplacementSNChange(e)}
                                         isSearchable={true}
-                                        options={serialNumbers}
+                                        options={serialNumbersReplacement}
                                         id="replacementSN"
                                         menuPlacement="top"
                                     />

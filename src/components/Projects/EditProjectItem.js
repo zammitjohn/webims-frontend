@@ -28,7 +28,7 @@ function EditProjectItem() {
 
   useEffect(() => { 
     if (localStorage.getItem('UserSession')) {
-      fetch(`http://site.test/WebIMS/api/projects/read_single?id=${id}`, { // fetch form data
+      fetch(`http://site.test/api/projects/read_single.php?id=${id}`, { // fetch form data
         headers: {
           'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },
@@ -62,7 +62,7 @@ function EditProjectItem() {
     if (window.confirm("Are you sure you want to delete the item?")) {
       let formData = new FormData();
       formData.append('id', id);
-      fetch('http://site.test/WebIMS/api/projects/delete', {
+      fetch('http://site.test/api/projects/delete.php', {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },
@@ -98,7 +98,7 @@ function EditProjectItem() {
     formData.append('description', values.description);
     formData.append('qty', values.qty);
     formData.append('notes', values.notes);
-    fetch('http://site.test/WebIMS/api/projects/update', {
+    fetch('http://site.test/api/projects/update.php', {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },

@@ -25,7 +25,7 @@ function ProtectedRoute() {
 
 			} else {
 				//validate session using API
-				fetch('http://site.test/WebIMS/api/users/validate_session', {
+				fetch('http://site.test/api/users/validate_session.php', {
 					headers: {
 						'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId,
 					},

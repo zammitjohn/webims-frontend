@@ -28,7 +28,7 @@ function RegisterItemModal(props){
         formData.append('serialNumber', values.serialNumber);
         formData.append('datePurchased', values.datePurchased);
 
-        fetch('http://site.test/WebIMS/api/registry/create', {
+        fetch('http://site.test/api/registry/create.php', {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },  
