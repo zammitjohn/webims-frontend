@@ -8,7 +8,7 @@ function ProjectForm(props) {
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
             // populate inventory dropdown
-            fetch(`http://site.test/api/inventory/read.php`, {
+            fetch(`/api/inventory/read.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -25,7 +25,7 @@ function ProjectForm(props) {
                 )
 
             //populate types
-            fetch('http://site.test/api/projects/types/read.php', {
+            fetch('/api/projects/types/read.php', {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

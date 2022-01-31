@@ -27,7 +27,7 @@ function CreateProjectItem() {
     formData.append('description', values.description);
     formData.append('qty', values.qty);
     formData.append('notes', values.notes);
-    fetch('http://site.test/api/projects/create.php', {
+    fetch('/api/projects/create.php', {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },

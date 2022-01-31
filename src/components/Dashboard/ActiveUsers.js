@@ -10,7 +10,7 @@ function ActiveUsers(){
     });
 
     const fetchData = () => {
-        fetch('http://site.test/api/users/read.php', {
+        fetch('/api/users/read.php', {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },

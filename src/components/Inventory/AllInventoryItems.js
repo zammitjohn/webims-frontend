@@ -47,6 +47,12 @@ function AllInventoryItems() {
             name: 'Quantity',
             selector: row => (row.qty == null) ? "" : row.qty,
             sortable: true,
+            conditionalCellStyles: [
+                {
+                  when: row => row.qty < row.qty_projects_allocated,
+                  style: ({ backgroundColor: 'pink' }),
+                },
+            ]
         },
         {
             name: 'Allocated',
@@ -106,7 +112,7 @@ function AllInventoryItems() {
     });
 
     const fetchData = () => { // fetch inventory
-        fetch('http://site.test/api/inventory/read.php', {
+        fetch('/api/inventory/read.php', {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -176,6 +182,7 @@ function AllInventoryItems() {
                                     columns={columns}
                                     data={filteredItems}
                                     customStyles={customStyles}
+
                                     highlightOnHover
                                     striped
                                     pagination

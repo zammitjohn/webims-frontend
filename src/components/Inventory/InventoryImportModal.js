@@ -28,7 +28,7 @@ function InventoryImportModal(props) {
         formData.append('category', props.category);
         formData.append('file', selectedFile.file);
 
-        fetch('http://site.test/api/inventory/import.php', {
+        fetch('/api/inventory/import.php', {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },  

@@ -38,7 +38,7 @@ function Login(props) {
         formData.append('username', values.email);
         formData.append('password', values.password);
         formData.append('remember', values.remember);
-        fetch('http://site.test/api/users/login.php', {
+        fetch('/api/users/login.php', {
             method: 'POST',
             body: formData,
             })

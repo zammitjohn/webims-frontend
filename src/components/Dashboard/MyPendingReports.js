@@ -14,7 +14,7 @@ function MyPendingReports(){
 
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
-            fetch('http://site.test/api/reports/read_myreports.php', {
+            fetch('/api/reports/read_myreports.php', {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

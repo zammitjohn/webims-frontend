@@ -8,7 +8,7 @@ function InventoryForm(props) {
     const populateTypes = (category) => { // fetch types dropdown data
 
         if (category) {
-            let url = `http://site.test/api/inventory/types/read.php?category=${category}`;
+            let url = `/api/inventory/types/read.php?category=${category}`;
 
             fetch(url, {
                 headers: {
@@ -35,7 +35,7 @@ function InventoryForm(props) {
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
             //populate categories
-            fetch('http://site.test/api/inventory/categories/read.php', {
+            fetch('/api/inventory/categories/read.php', {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

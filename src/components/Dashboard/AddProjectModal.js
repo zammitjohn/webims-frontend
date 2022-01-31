@@ -11,7 +11,7 @@ function AddProjectModal(props){
         event.preventDefault();
         let formData = new FormData();
         formData.append('name', projectName);
-        fetch('http://site.test/api/projects/types/create.php', {
+        fetch('/api/projects/types/create.php', {
         headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },

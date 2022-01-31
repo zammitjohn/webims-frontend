@@ -9,7 +9,7 @@ function ReportForm(props) {
     const [users, setUsers] = useState([]);
 
     const fetchSerialNumbers = (inventoryId) => {
-        fetch(`http://site.test/api/registry/read.php?inventoryId=${inventoryId}`, {
+        fetch(`/api/registry/read.php?inventoryId=${inventoryId}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -53,7 +53,7 @@ function ReportForm(props) {
             fetchSerialNumbers(props.values.inventoryId);
 
             // populate inventory dropdown
-            fetch(`http://site.test/api/inventory/read.php`, {
+            fetch(`/api/inventory/read.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -70,7 +70,7 @@ function ReportForm(props) {
                 )
 
             // populate users dropdown
-            fetch('http://site.test/api/users/read.php', {
+            fetch('/api/users/read.php', {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

@@ -20,7 +20,7 @@ useEffect(() => {
 
 	// fetch categories
 	if (localStorage.getItem('UserSession')) {
-		fetch('http://site.test/api/inventory/categories/read.php', {
+		fetch('/api/inventory/categories/read.php', {
 			headers: {
 				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
 			},
@@ -45,7 +45,7 @@ useEffect(() => {
 			)	
 	
 		// fetch types
-		fetch('http://site.test/api/inventory/types/read.php', {
+		fetch('/api/inventory/types/read.php', {
 			headers: {
 				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
 			},

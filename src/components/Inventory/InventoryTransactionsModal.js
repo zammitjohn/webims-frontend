@@ -9,21 +9,10 @@ function InventoryTransactionsModal(props){
     const [inputValue, setValue] = useState('');
     const [selectedItems, setSelectedItems] = useState([]);
     const [isReturn, setIsReturn] = useState(false);
-    const [tabActiveKey, setTabActiveKey] = useState('page1');    
-
-    const customStyles = {
-        control: (base) => ({
-            ...base,
-            border: '1px solid black',
-            boxShadow: 'none',
-            '&:hover': {
-                border: '1px solid black',
-            }
-        })
-      };
-
+    const [tabActiveKey, setTabActiveKey] = useState('page1');
+    
     const loadOptions = async (inputValue, callback) => {
-        const response = await fetch(`http://site.test/api/inventory/search.php?term=${inputValue}`, {
+        const response = await fetch(`/api/inventory/search.php?term=${inputValue}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -32,14 +21,14 @@ function InventoryTransactionsModal(props){
 
         const json = await response.json();
         const object = json.results;
-        callback(object.map(i => ({ label: `${i.title} (${i.category}): ${i.text}` , value: i.id , quantity: '1' })))
+        callback(object.map(i => ({ label: i.label , value: i.value , selected_qty: '1' })))
     };
 
     const handleQuantityChange = (itemId, e) => {
         let updatedQtys = [];
-        selectedItems.forEach(function (item) { // loop selectedItems, update quantity field if respective input is changed
+        selectedItems.forEach(function (item) { // loop selectedItems, update selected_qty field if respective input is changed
             if (item.value === itemId) {
-                updatedQtys.push({label: item.label, quantity: e.target.value, value: item.value}); 
+                updatedQtys.push({label: item.label, selected_qty: e.target.value, value: item.value}); 
             } else {
                 updatedQtys.push(item); 
             }
@@ -49,7 +38,7 @@ function InventoryTransactionsModal(props){
 
 
     const transactionDownload = (id) => {
-        fetch(`http://site.test/api/transactions/download.php?id=${id}`, {
+        fetch(`/api/transactions/download.php?id=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -78,11 +67,11 @@ function InventoryTransactionsModal(props){
         // prepare data for API
         let transactionItems = [];
         selectedItems.forEach(function (item) {
-            transactionItems.push({item_id: item.value, item_qty: item.quantity});
+            transactionItems.push({item_id: item.value, item_qty: item.selected_qty});
         });
         let data = ({return: isReturn, items: transactionItems});
     
-        fetch('http://site.test/api/transactions/create.php', {
+        fetch('/api/transactions/create.php', {
         headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },
@@ -126,7 +115,6 @@ function InventoryTransactionsModal(props){
                             <Form.Label htmlFor="category">Select one or more items</Form.Label>
                             <AsyncSelect
                                 isClearable
-                                styles={customStyles}
                                 defaultValue={selectedItems}
                                 isMulti
                                 cacheOptions
@@ -152,8 +140,8 @@ function InventoryTransactionsModal(props){
                                     <tbody>
                                         {selectedItems.map((item) => (
                                             <tr key={item.value}>
-                                                <td><Form.Control type="number" value={item.quantity} onChange={(e) => handleQuantityChange(item.value, e)} min="1" max="9999"/></td>
-                                                <td>&nbsp;{item.label}</td>
+                                                <td><Form.Control type="number" value={item.selected_qty} onChange={(e) => handleQuantityChange(item.value, e)} min="1" max="9999"/></td>
+                                                <td>{item.label}</td>
                                             </tr>
                                         ))}
                                     </tbody>

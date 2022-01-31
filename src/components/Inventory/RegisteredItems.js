@@ -13,7 +13,7 @@ function RegisteredItems(props){
 
     const fetchData  = useCallback(() => {// fetch data
         if (localStorage.getItem('UserSession')) {
-            fetch(`http://site.test/api/registry/read.php?inventoryId=${props.inventoryId}`, { // fetch form data
+            fetch(`/api/registry/read.php?inventoryId=${props.inventoryId}`, { // fetch form data
               headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
               },
@@ -46,7 +46,7 @@ function RegisteredItems(props){
         if (window.confirm("Are you sure you want to delete the item?")){
             let formData = new FormData();
             formData.append('id', event.target.id);
-            fetch('http://site.test/api/registry/delete.php', {
+            fetch('/api/registry/delete.php', {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

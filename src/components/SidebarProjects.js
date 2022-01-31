@@ -18,7 +18,7 @@ useEffect(() => {
 
 	// fetch projects
 	if (localStorage.getItem('UserSession')) {
-		fetch('http://site.test/api/projects/types/read.php', {
+		fetch('/api/projects/types/read.php', {
 			headers: {
 				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
 			},

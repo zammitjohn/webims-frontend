@@ -25,7 +25,7 @@ function ProtectedRoute() {
 
 			} else {
 				//validate session using API
-				fetch('http://site.test/api/users/validate_session.php', {
+				fetch('/api/users/validate_session.php', {
 					headers: {
 						'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId,
 					},

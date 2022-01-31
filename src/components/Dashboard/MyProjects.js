@@ -19,7 +19,7 @@ function MyProjects(){
     let navigate = useNavigate();
 
     const fetchData = () => {
-        fetch('http://site.test/api/projects/types/read_myprojects.php', {
+        fetch('/api/projects/types/read_myprojects.php', {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },

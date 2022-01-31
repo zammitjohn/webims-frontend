@@ -42,6 +42,12 @@ function CategoryInventoryItems() {
             name: 'Quantity',
             selector: row => (row.qty == null) ? "" : row.qty,
             sortable: true,
+            conditionalCellStyles: [
+                {
+                  when: row => row.qty < row.qty_projects_allocated,
+                  style: ({ backgroundColor: 'pink' }),
+                },
+            ]
         },
         {
             name: 'Allocated',
@@ -117,7 +123,7 @@ function CategoryInventoryItems() {
         // useCallback: React creates a new function on every render
         // Here we useCallback to memoize (store) the function.
         // Therefore, this function only change if 'id' changes
-        fetch(`http://site.test/api/inventory/read.php?category=${id}`, {
+        fetch(`/api/inventory/read.php?category=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -145,7 +151,7 @@ function CategoryInventoryItems() {
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
             fetchData();
-            fetch(`http://site.test/api/inventory/categories/read.php?id=${id}`, {
+            fetch(`/api/inventory/categories/read.php?id=${id}`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },

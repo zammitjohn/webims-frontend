@@ -1,7 +1,7 @@
 function Header() {
 
 	const handleLogOut = () => {
-		fetch('http://site.test/api/users/logout.php', {
+		fetch('/api/users/logout.php', {
 			headers: {
 				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
 			},
