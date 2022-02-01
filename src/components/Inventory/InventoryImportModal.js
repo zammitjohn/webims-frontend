@@ -14,10 +14,7 @@ function InventoryImportModal(props) {
             name : event.target.files[0].name,
             file : event.target.files[0]
         };    
-        setSelectedFile({
-            ...selectedFile,
-            ...newFile,
-        });
+        setSelectedFile(newFile);
     }
 
     // file upload

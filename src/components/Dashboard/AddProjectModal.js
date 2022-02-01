@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { Modal, Form }  from 'react-bootstrap';
 import { toast } from 'react-toastify'
 import CreateButton from '../CreateButton';
@@ -6,12 +6,12 @@ import packageJson from '../../../package.json';
 
 function AddProjectModal(props){
 
-    const [projectName, setProjectName] = useState('');
+    const projectNameRef = useRef(); // Reference projectName from DOM
 
     const handleSubmit = (event) => {
         event.preventDefault();
         let formData = new FormData();
-        formData.append('name', projectName);
+        formData.append('name', projectNameRef.current.value);
         fetch(`${packageJson.apihost}/api/projects/types/create.php`, {
         headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
@@ -45,7 +45,7 @@ function AddProjectModal(props){
                     <Modal.Title>Add Project</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form.Control value={projectName} onChange={(e) => setProjectName(e.target.value)} type="text"  maxLength="20" placeholder="Enter project name"/>
+                    <Form.Control ref={projectNameRef} type="text"  maxLength="20" placeholder="Enter project name"/>
                 </Modal.Body>
                 <Modal.Footer>
                     <CreateButton/>

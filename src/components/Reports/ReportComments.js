@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Form, Button }  from 'react-bootstrap';
 import moment from 'moment';
 import { UserPrivilegesContext } from "../ProtectedRoute";
@@ -8,8 +8,9 @@ function ReportComments(props){
     // to hide and show buttons
     const privileges = useContext(UserPrivilegesContext);
 
+    const commentRef = useRef(); // Reference comment text from DOM
+
     const [data, setData] = useState([]); // data from api
-    const [comment, setComment] = useState(''); // data from api
     const [states, setStates] = useState({
         error: null,
         isLoaded: false,
@@ -18,7 +19,7 @@ function ReportComments(props){
     const handlePost = (event) => {
         event.preventDefault();
         let formData = new FormData();
-        formData.append('text', comment);
+        formData.append('text', commentRef.current.value);
         formData.append('reportId', props.reportId);
         fetch(`${packageJson.apihost}/api/reports/comments/create.php`, {
         headers: {
@@ -31,7 +32,7 @@ function ReportComments(props){
         .then(
             (response) => {
                 if (response.status) {
-                    setComment('');
+                    commentRef.current.value = null;
                     fetchData();
                 }
             },
@@ -108,7 +109,7 @@ function ReportComments(props){
                 <div className="card-footer">
                     <Form onSubmit={handlePost}>
                         <div className="input-group">
-                            <Form.Control value={comment} onChange={(e) => setComment(e.target.value)} type="text" name="message" placeholder="Write a comment..." />
+                            <Form.Control ref={commentRef} type="text" name="message" placeholder="Write a comment..." />
                             <span className="input-group-append">
                                 <Button disabled={!privileges.canUpdate} type="submit">Post</Button>
                             </span>
