@@ -1,18 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Link } from "react-router-dom";
 import SidebarInventory from './SidebarInventory';
 import SidebarProjects from './SidebarProjects';
+import { UserPrivilegesContext } from "./ProtectedRoute";
 
 function Sidebar() {
-	const [userFullName, setUserFullName] = useState(null)
-
-	useEffect(()=> {
-		if ((localStorage.getItem('UserSession'))) {
-			setUserFullName(JSON.parse(localStorage.getItem('UserSession')).fullName);
-		} else {
-			setUserFullName(null);
-		}
-	},[])
+	const user = useContext(UserPrivilegesContext);
 
     return (
 		<aside className="main-sidebar sidebar-dark-primary elevation-4">
@@ -31,7 +24,7 @@ function Sidebar() {
 				<img src="/images/generic-user.png" className="img-circle elevation-2" alt=""/>
 				</div>
 				<div className="info">
-				<Link to="#" className="d-block">{userFullName}</Link>
+				<Link to="#" className="d-block">{`${user.firstName} ${user.lastName}`}</Link>
 				</div>
 			</div>
 

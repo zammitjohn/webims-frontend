@@ -55,7 +55,6 @@ function ProjectForm(props) {
         });
     };
 
-
 	return (
         <>                  
             <Form.Group className="mb-3">

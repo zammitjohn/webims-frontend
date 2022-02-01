@@ -6,12 +6,10 @@ function InventoryForm(props) {
     const [categories, setCategories] = useState([]);
     const [types, setTypes] = useState([]);
 
-    const populateTypes = (category) => { // fetch types dropdown data
-
-        if (category) {
-            let url = `${packageJson.apihost}/api/inventory/types/read.php?category=${category}`;
-
-            fetch(url, {
+    useEffect(() => { // trigger the following on category change
+        if (localStorage.getItem('UserSession')) {
+            let categoryId = (props.values.category) ? props.values.category : null;
+            fetch(`${packageJson.apihost}/api/inventory/types/read.php?category=${categoryId}`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -26,12 +24,8 @@ function InventoryForm(props) {
                     console.log(error);
                 }
             )
-
-        } else {
-            setTypes([])
         }
-
-    }
+    }, [props.values.category])
 
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
@@ -51,14 +45,8 @@ function InventoryForm(props) {
                         console.log(error);
                     }
                 )
-
-            if (props.values.category){ // if edit
-                populateTypes(props.values.category);
-            }
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
 
     const handleChange = (event) => {
         const { id, value } = event.target;
@@ -77,12 +65,10 @@ function InventoryForm(props) {
             type : '',
         };
         
-        populateTypes(value);
-
-            props.setValues({
-                ...props.values,
-                ...fieldValue,
-            });
+        props.setValues({
+            ...props.values,
+            ...fieldValue,
+        });
     };
 
 	return (

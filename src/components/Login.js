@@ -7,7 +7,7 @@ function Login(props) {
     document.title = "Login";
 
     //DO NOT UNCOMMENT THE FOLLOWING IN PRODUCTION
-    //localStorage.setItem('UserSession', JSON.stringify({fullName:"Test User", sessionId:"test", "expiry":null}));
+    //localStorage.setItem('UserSession', JSON.stringify({userId:"1", sessionId:"test", "expiry":null}));
 
     // incorrect password alert
     const [showError, setShowError] = useState(false);
@@ -52,7 +52,7 @@ function Login(props) {
                         tomorrow.setDate(tomorrow.getDate() + 1)
 
                         let userSessionData = {
-                            fullName: response.firstname + ' ' + response.lastname ,
+                            userId: response.id,
                             sessionId: response.sessionId,
                             expiry: (values.remember) ? null : tomorrow.toISOString()
                         }
@@ -75,7 +75,6 @@ function Login(props) {
                 }
             )
     };
-
 
     useEffect(() => {
         setReferrer(window.location.href);

@@ -66,31 +66,12 @@ function ProjectsImportModal(props) {
         props.handleModalClose(); // close modal
     }
 
-    const populateTypes = (category) => { // fetch types dropdown data
-        fetch(`${packageJson.apihost}/api/inventory/types/read.php?category=${category}`, {
-            headers: {
-                'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
-            },
-            method: 'GET'
-            })
-            .then(res => res.json()) 
-            .then(
-            (response) => {
-                setTypes(response);
-            },
-            (error) => {
-                console.log(error);
-            }
-        )
-    }
-
     const handleCategoryChange = (event) => {
         const { value } = event.target;
         const fieldValue = { 
             category : value,
             type : '',
-        };    
-        populateTypes(value);
+        };
         setSelectedValues({
             ...selectedValues,
             ...fieldValue,
@@ -108,6 +89,26 @@ function ProjectsImportModal(props) {
         });
     };
 
+    useEffect(() => {
+        if (localStorage.getItem('UserSession')) {
+            let categoryId = (selectedValues.category) ? selectedValues.category : null; 
+            fetch(`${packageJson.apihost}/api/inventory/types/read.php?category=${categoryId}`, {
+                headers: {
+                    'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
+                },
+                method: 'GET'
+                })
+                .then(res => res.json()) 
+                .then(
+                (response) => {
+                    setTypes(response);
+                },
+                (error) => {
+                    console.log(error);
+                }
+            )
+        }
+    }, [selectedValues.category])
 
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {

@@ -10,6 +10,8 @@ function ProtectedRoute() {
 	let navigate = useNavigate();
 	const [loginstate, setLoginState] = useState(true);	
 	const [privileges, setPrivileges] = useState({ // user privileges state for context provider
+		firstName: '',
+		lastName: '',
 		canCreate: false,
 		canImport: false,
 		canUpdate: false,
@@ -39,6 +41,8 @@ function ProtectedRoute() {
 							if (response.status) {
 
 								setPrivileges({
+									firstName: (response.firstname),
+									lastName: (response.lastname),
 									canCreate: (response.canCreate.toString() === '1') ? true : false,
 									canImport: (response.canImport.toString() === '1') ? true : false,
 									canUpdate: (response.canUpdate.toString() === '1') ? true : false,
@@ -61,7 +65,6 @@ function ProtectedRoute() {
 
 		} else {
 			localStorage.removeItem('UserSession');
-			localStorage.removeItem('Privileges');
 			setLoginState(false);
 		}
 	}, [navigate]); // perform check whenever the current location changes

@@ -9,50 +9,50 @@ function ReportForm(props) {
     const [serialNumbersReplacement, setSerialNumbersReplacement] = useState([]);
     const [users, setUsers] = useState([]);
 
-    const fetchSerialNumbers = (inventoryId) => {
-        fetch(`${packageJson.apihost}/api/registry/read.php?inventoryId=${inventoryId}`, {
-            headers: {
-                'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
-            },
-            method: 'GET'
-            })
-            .then(res => res.json())
-            .then(
-                (data) => {
-                    let serialNumbers_arr_faulty = [{label: 'None', value: '', isDisabled: false }];
-                    let serialNumbers_arr_replacement = [{label: 'None', value: '', isDisabled: false }];
-                    // populate faulty dropdown
-                    data.forEach(function (item) {
-                        if (item.state === 'Faulty') {
-                            serialNumbers_arr_faulty.push({label: `#${item.id}: ${item.serialNumber}`, value: item.id, isDisabled: true }); 
-                        } else {
-                            serialNumbers_arr_faulty.push({label: `#${item.id}: ${item.serialNumber}`, value: item.id, isDisabled: false }); 
-                        }
-                    });
-                    setSerialNumbersFaulty(serialNumbers_arr_faulty);
-
-                    // populate replacement dropdown
-                    data.forEach(function (item) {
-                        if (item.state === 'Faulty' || item.state === 'Replacement') {
-                            serialNumbers_arr_replacement.push({label: `#${item.id}: ${item.serialNumber}`, value: item.id, isDisabled: true }); 
-                        } else {
-                            serialNumbers_arr_replacement.push({label: `#${item.id}: ${item.serialNumber}`, value: item.id, isDisabled: false }); 
-                        }
-                    });
-                    setSerialNumbersReplacement(serialNumbers_arr_replacement);
-
+    useEffect(() => { // trigger and populate serial numbers dropdown on inventoryId change
+        if (localStorage.getItem('UserSession')) {
+            let inventoryId = (props.values.inventoryId) ? props.values.inventoryId : null;
+            fetch(`${packageJson.apihost}/api/registry/read.php?inventoryId=${inventoryId}`, {
+                headers: {
+                    'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
-                (error) => {            
-                    console.log(error);
-                }
-            )
-    }
+                method: 'GET'
+                })
+                .then(res => res.json())
+                .then(
+                    (data) => {
+                        let serialNumbers_arr_faulty = [{label: 'None', value: '', isDisabled: false }];
+                        let serialNumbers_arr_replacement = [{label: 'None', value: '', isDisabled: false }];
+                        // populate faulty dropdown
+                        data.forEach(function (item) {
+                            if (item.state === 'Faulty') {
+                                serialNumbers_arr_faulty.push({label: `#${item.id}: ${item.serialNumber}`, value: item.id, isDisabled: true }); 
+                            } else {
+                                serialNumbers_arr_faulty.push({label: `#${item.id}: ${item.serialNumber}`, value: item.id, isDisabled: false }); 
+                            }
+                        });
+                        setSerialNumbersFaulty(serialNumbers_arr_faulty);
+
+                        // populate replacement dropdown
+                        data.forEach(function (item) {
+                            if (item.state === 'Faulty' || item.state === 'Replacement') {
+                                serialNumbers_arr_replacement.push({label: `#${item.id}: ${item.serialNumber}`, value: item.id, isDisabled: true }); 
+                            } else {
+                                serialNumbers_arr_replacement.push({label: `#${item.id}: ${item.serialNumber}`, value: item.id, isDisabled: false }); 
+                            }
+                        });
+                        setSerialNumbersReplacement(serialNumbers_arr_replacement);
+
+                    },
+                    (error) => {            
+                        console.log(error);
+                    }
+                )
+        }
+    }, [props.values.inventoryId])
 
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
-            // populate serial numbers dropdown
-            fetchSerialNumbers(props.values.inventoryId);
-
             // populate inventory dropdown
             fetch(`${packageJson.apihost}/api/inventory/read.php`, {
                 headers: {
@@ -115,14 +115,11 @@ function ReportForm(props) {
             replacementSN: ''
         };
         
-        fetchSerialNumbers(value);
-
         props.setValues({
             ...props.values,
             ...fieldValue,
         });
     };
-
 
     const handleFaultySNChange = (event) => {
         const fieldValue = { faultySN: event.value };

@@ -61,7 +61,7 @@ function MyPendingReports(){
                             <tbody>
                                 {data.map((report) => (
                                     <tr key={report.id} style={{cursor:'pointer'}} onClick={() => navigate(`../../reports/edit/${report.id}`)}>
-                                        <td><i className="far fa-file-alt"></i>&nbsp;{report.name}</td>
+                                        <td><i className="far fa-file-alt"></i>&nbsp;{`#${report.id} ${(report.name) ? report.name : ''}`}</td>
                                     </tr>
                                 ))}
                             </tbody>

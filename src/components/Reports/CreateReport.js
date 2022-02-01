@@ -26,7 +26,7 @@ function CreateReport() {
     name: '',
     description: '',
     reportNo: '',
-    assigneeUserId: '',
+    assigneeUserId: (localStorage.getItem('UserSession')) ? JSON.parse(localStorage.getItem('UserSession')).userId : '',
     faultySN: '',
     replacementSN: '',
     dateRequested: '',

@@ -73,35 +73,37 @@ function InventoryTransactionsModal(props){
         let data = ({return: isReturn, items: transactionItems});
     
         fetch(`${packageJson.apihost}/api/transactions/create.php`, {
-        headers: {
-            'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
-        },
-        method: 'POST',
-        body: JSON.stringify(data)
-        })
-        .then(res => res.json())
-        .then(
-            (response) => {
-                if (response.status) {
-                    transactionDownload(response.id);
-                    toast.success("Transaction #" + response.id + " created.");
-                    if (response.returned_count){
-                      toast.success(response.returned_count + " items returned.");
-                    }
-                    if (response.requested_count){
-                      toast.success(response.requested_count + " items requested.");
-                    }
-                } else {
-                toast.warning(response.message);  
-                }
-                props.fetchData();
+            headers: {
+                'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
-            (error) => {
-                toast.error('Error occured');
-                console.log(error);
-            }
-        )
-        props.handleModalClose();  // close modal
+            method: 'POST',
+            body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(
+                (response) => {
+                    if (response.status) {
+                        transactionDownload(response.id);
+                        toast.success("Transaction #" + response.id + " created.");
+
+                        if (response.returned_count){
+                            toast.success(response.returned_count + " items returned.");
+                        }
+                        if (response.requested_count){
+                            toast.success(response.requested_count + " items requested.");
+                        }
+                        props.fetchData();
+                        
+                    } else {
+                    toast.warning(response.message);  
+                    }
+                },
+                (error) => {
+                    toast.error('Error occured');
+                    console.log(error);
+                }
+            )
+            props.handleModalClose();  // close modal
     }
 
     return(
