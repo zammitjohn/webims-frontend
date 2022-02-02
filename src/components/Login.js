@@ -83,6 +83,11 @@ function Login(props) {
         }
     }, [props.self]);
 
+    // if already signed in 
+    if (localStorage.getItem('UserSession')) {
+        window.location.href = '/';
+    }
+
     return (
         <div className="login-page">
             <div className="login-box">

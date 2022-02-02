@@ -167,8 +167,8 @@ function AllInventoryItems() {
                             <div className="card-body">
             
                                 <Row className='justify-content-md-left'>
-                                    <Col sm="12" md="9"/>
-                                    <Col sm="12" md="3">
+                                    <Col sm="12" md="8"/>
+                                    <Col sm="12" md="4">
                                         <DataTableFilter
                                             placeholderText={"Search SKU, Description or Supplier"}
                                             setResetPaginationToggle={setResetPaginationToggle}

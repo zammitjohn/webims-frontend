@@ -109,8 +109,8 @@ function AllReports() {
                                     highlightOnHover
                                     dense
                                     pagination
-                                    paginationPerPage={15}
-                                    paginationRowsPerPageOptions={[15, 30, 45, 60, 75]}
+                                    paginationPerPage={20}
+                                    paginationRowsPerPageOptions={[20, 35, 50, 65, 80]}
                                     pointerOnHover
                                     onRowClicked={(row) => navigate(`edit/${row.id}`)}
                                 />
