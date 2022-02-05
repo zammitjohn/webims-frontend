@@ -7,8 +7,8 @@ import Error404 from "./components/Error404";
 import CreateInventoryItem from './components/Inventory/CreateInventoryItem';
 import EditInventoryItem from './components/Inventory/EditInventoryItem';
 import AllInventoryItems from './components/Inventory/AllInventoryItems';
+import WarehouseInventoryItems from "./components/Inventory/WarehouseInventoryItems";
 import CategoryInventoryItems from "./components/Inventory/CategoryInventoryItems";
-import TypeInventoryItems from "./components/Inventory/TypeInventoryItems";
 import ProjectItems from "./components/Projects/ProjectItems";
 import CreateProjectItem from "./components/Projects/CreateProjectItem";
 import EditProjectItem from "./components/Projects/EditProjectItem";
@@ -31,8 +31,8 @@ function App() {
 						
 						<Route path="inventory">
 							<Route path='' element={<AllInventoryItems/>} />
+							<Route path='warehouse/:id' element={<WarehouseInventoryItems/>} />
 							<Route path='category/:id' element={<CategoryInventoryItems/>} />
-							<Route path='type/:id' element={<TypeInventoryItems/>} />
 							<Route path='create' element={<CreateInventoryItem/>} />
 							<Route path='edit/:id' element={<EditInventoryItem/>} />
 						</Route>
@@ -44,7 +44,7 @@ function App() {
 							<Route path='edit/:id' element={<EditReport/>} />
 						</Route>
 
-						<Route path="projects">
+						<Route path="project">
 							<Route path='' element={<Error404/>} />
 							<Route path='edit/:id' element={<EditProjectItem/>} />
 							<Route path='create' element={<CreateProjectItem/>} />

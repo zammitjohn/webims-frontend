@@ -6,12 +6,12 @@ function SidebarInventory() {
 // Local variables will get reset every render upon mutation whereas state will update
 let elements = [];
 let key = 0;
-const [types, setTypes] = useState([]);
 const [categories, setCategories] = useState([]);
+const [warehouses, setWarehouses] = useState([]);
 const [states, setStates] = useState({ // fetch states
 	error: null,
+	isWarehousesLoaded: false,
 	isCategoriesLoaded: false,
-	isTypesLoaded: false,
 });
 
 useEffect(() => {
@@ -19,9 +19,34 @@ useEffect(() => {
 	// instead of a catch() block so that we don't swallow
 	// exceptions from actual bugs in components.	
 
-	// fetch categories
+	// fetch warehouses
 	if (localStorage.getItem('UserSession')) {
-		fetch(`${packageJson.apihost}/api/inventory/categories/read.php`, {
+		fetch(`${packageJson.apihost}/api/warehouse/read.php`, {
+			headers: {
+				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
+			},
+			method: 'GET'
+			})
+			.then(res => res.json()) 
+			.then(
+				(warehouses) => {
+					setWarehouses(warehouses);
+					setStates(prevState => ({
+						...prevState,
+						isWarehousesLoaded: true,
+					}));
+				},
+				(error) => {
+					setStates(prevState => ({
+						...prevState,
+						isWarehousesLoaded: true,
+						error
+					}));
+				}
+			)	
+	
+		// fetch categories
+		fetch(`${packageJson.apihost}/api/warehouse/category/read.php`, {
 			headers: {
 				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
 			},
@@ -35,36 +60,11 @@ useEffect(() => {
 						...prevState,
 						isCategoriesLoaded: true,
 					}));
-				},
-				(error) => {
-					setStates(prevState => ({
-						...prevState,
-						isCategoriesLoaded: true,
-						error
-					}));
-				}
-			)	
-	
-		// fetch types
-		fetch(`${packageJson.apihost}/api/inventory/types/read.php`, {
-			headers: {
-				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
-			},
-			method: 'GET'
-			})
-			.then(res => res.json()) 
-			.then(
-				(types) => {
-					setTypes(types);
-					setStates(prevState => ({
-						...prevState,
-						isTypesLoaded: true,
-					}));
 				},			
 				(error) => {
 					setStates(prevState => ({
 						...prevState,
-						isTypesLoaded: true,
+						isCategoriesLoaded: true,
 						error
 					}));
 				}
@@ -75,24 +75,24 @@ useEffect(() => {
 if (states.error) {
 	console.log(states.error.message);
 	return null;
-} else if (!(states.isCategoriesLoaded && states.isTypesLoaded)) {
+} else if (!(states.isWarehousesLoaded && states.isCategoriesLoaded)) {
 	console.log("Loading...");
 	return null;
 } else {
 	// build elements
-	categories.forEach((category) => {
+	warehouses.forEach((warehouse) => {
 		let els = [];
 
 		els.push(
 			<Link to="#" className="nav-link" key={key++}>
 				<i className="far fa-dot-circle nav-icon"></i>
-				<p>{category.name}<i className="right fas fa-angle-left"></i></p>
+				<p>{warehouse.name}<i className="right fas fa-angle-left"></i></p>
 			</Link>
 		);
 		els.push(
 			<ul className="nav nav-treeview" key={key++}>
 				<li className="nav-item">
-				<Link to={`inventory/category/${category.id}`} className="nav-link">
+				<Link to={`inventory/warehouse/${warehouse.id}`} className="nav-link">
 					<i className="fas fa-circle nav-icon"></i>
 					<p>All items</p>
 				</Link>
@@ -101,16 +101,16 @@ if (states.error) {
 		);
 
 		
-		// loop types
-		types.forEach((type) => {
-			if (category.id === type.type_category) {
+		// loop categories
+		categories.forEach((category) => {
+			if (warehouse.id === category.warehouseId) {
 				
 				els.push(
 					<ul className="nav nav-treeview" key={key++}>
 						<li className="nav-item">
-						<Link to={`inventory/type/${type.id}`} className="nav-link">
+						<Link to={`inventory/category/${category.id}`} className="nav-link">
 							<i className="far fa-circle nav-icon"></i>
-							<p>{type.name}</p>
+							<p>{category.name}</p>
 						</Link>
 						</li>
 					</ul>

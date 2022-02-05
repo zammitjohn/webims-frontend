@@ -3,13 +3,13 @@ import { Form, Col, Row }  from 'react-bootstrap';
 import packageJson from '../../../package.json';
 
 function InventoryForm(props) {    
+    const [warehouses, setWarehouses] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [types, setTypes] = useState([]);
 
-    useEffect(() => { // trigger the following on category change
+    useEffect(() => { // trigger the following on warehouse change
         if (localStorage.getItem('UserSession')) {
-            let categoryId = (props.values.category) ? props.values.category : null;
-            fetch(`${packageJson.apihost}/api/inventory/types/read.php?category=${categoryId}`, {
+            let warehouseId = (props.values.warehouseId) ? props.values.warehouseId : null;
+            fetch(`${packageJson.apihost}/api/warehouse/category/read.php?warehouseId=${warehouseId}`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -18,19 +18,19 @@ function InventoryForm(props) {
                 .then(res => res.json()) 
                 .then(
                 (response) => {
-                    setTypes(response);
+                    setCategories(response);
                 },
                 (error) => {
                     console.log(error);
                 }
             )
         }
-    }, [props.values.category])
+    }, [props.values.warehouseId])
 
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
-            //populate categories
-            fetch(`${packageJson.apihost}/api/inventory/categories/read.php`, {
+            //populate warehouses
+            fetch(`${packageJson.apihost}/api/warehouse/read.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -39,7 +39,7 @@ function InventoryForm(props) {
                 .then(res => res.json())
                 .then(
                     (response) => {
-                        setCategories(response);
+                        setWarehouses(response);
                     },
                     (error) => {
                         console.log(error);
@@ -58,11 +58,11 @@ function InventoryForm(props) {
             });
     };
 
-    const handleCategoryChange = (event) => {
+    const handleWarehouseChange = (event) => {
         const { value } = event.target;
         const fieldValue = { 
-            category : value,
-            type : '',
+            warehouseId : value,
+            warehouse_categoryId : '',
         };
         
         props.setValues({
@@ -81,23 +81,23 @@ function InventoryForm(props) {
             <Form.Group className="mb-3">
                 <Row>
                     <Col sm={3}>
-                    <Form.Label htmlFor="category">Category</Form.Label>
-                        <Form.Select value={props.values.category} onChange={handleCategoryChange} id="category" className="form-control">
-                            <option value='null'>Select Category</option>
-                            {categories.map(category => (
-                                <option key={category.id} value={category.id}>
-                                {category.name}
-                                </option>
-                            ))}    
-                        </Form.Select>                          
+                    <Form.Label htmlFor="warehouseId">Warehouse</Form.Label>
+                    <Form.Select value={props.values.warehouseId} onChange={handleWarehouseChange} id="warehouseId" className="form-control">
+                        <option value='null'>Select Warehouse</option>
+                        {warehouses.map(warehouse => (
+                            <option key={warehouse.id} value={warehouse.id}>
+                            {warehouse.name}
+                            </option>
+                        ))}    
+                    </Form.Select>                          
                     </Col>
                     <Col sm={3}>
-                        <Form.Label htmlFor="type">Type</Form.Label>
-                        <Form.Select value={props.values.type} onChange={handleChange} id="type" className="form-control">
-                            <option value='null'>Select Type</option>
-                            {types.map(type => (
-                            <option key={type.id} value={type.id}>
-                                {type.name}
+                        <Form.Label htmlFor="warehouse_categoryId">Category</Form.Label>
+                        <Form.Select value={props.values.warehouse_categoryId} onChange={handleChange} id="warehouse_categoryId" className="form-control">
+                            <option value='null'>Select Category</option>
+                            {categories.map(category => (
+                            <option key={category.id} value={category.id}>
+                                {category.name}
                             </option>
                             ))}  
                         </Form.Select>

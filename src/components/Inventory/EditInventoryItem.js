@@ -28,8 +28,8 @@ function EditInventoryItem() {
   let navigate = useNavigate();
   const [values, setValues] = useState({ // form values
     SKU: '',
-    category: '',
-    type: '',
+    warehouseId: '',
+    warehouse_categoryId: '',
     description: '',
     supplier: '',
     qty: '',
@@ -55,8 +55,8 @@ function EditInventoryItem() {
           (response) => {
             setValues(values => ({ 
               SKU: (response.SKU) ? response.SKU : '',
-              category: (response.category) ? response.category : '',
-              type: (response.type) ? response.type : '',
+              warehouseId: (response.warehouseId) ? response.warehouseId : '',
+              warehouse_categoryId: (response.warehouse_categoryId) ? response.warehouse_categoryId : '',
               description: (response.description) ? response.description : '',
               supplier: (response.supplier) ? response.supplier : '',
               qty: (response.qty) ? response.qty : '',
@@ -112,8 +112,7 @@ function EditInventoryItem() {
     let formData = new FormData();
     formData.append('id', id);
     formData.append('SKU', values.SKU);
-    formData.append('category', values.category);
-    formData.append('type', values.type);
+    formData.append('warehouse_categoryId', values.warehouse_categoryId);
     formData.append('description', values.description);
     formData.append('supplier', values.supplier);
     formData.append('qty', values.qty);
@@ -183,7 +182,7 @@ function EditInventoryItem() {
                             Add to...
                           </Dropdown.Toggle>
                           <Dropdown.Menu style={{ margin: 0 }}>
-                            <Dropdown.Item as={Link} to={"../../projects/create/"+id}>Projects</Dropdown.Item>
+                            <Dropdown.Item as={Link} to={"../../project/create/"+id}>Projects</Dropdown.Item>
                             <Dropdown.Item onClick={() => handleModalShow()} href="#">Registry</Dropdown.Item>
                             <Dropdown.Divider />
                             <Dropdown.Item as={Link} to={"../../reports/create/"+id}>New Fault Report</Dropdown.Item>

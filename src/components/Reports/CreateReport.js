@@ -22,13 +22,13 @@ function CreateReport() {
   const { id } = useParams();
   const [values, setValues] = useState({ // form values
     inventoryId: id,
-    ticketNo: '',
+    ticketNumber: '',
     name: '',
     description: '',
-    reportNo: '',
-    assigneeUserId: (localStorage.getItem('UserSession')) ? JSON.parse(localStorage.getItem('UserSession')).userId : '',
-    faultySN: '',
-    replacementSN: '',
+    reportNumber: '',
+    assignee_userId: (localStorage.getItem('UserSession')) ? JSON.parse(localStorage.getItem('UserSession')).userId : '',
+    faulty_registryId: '',
+    replacement_registryId: '',
     dateRequested: '',
     dateLeaving: '',
     dateDispatched: '',
@@ -43,13 +43,13 @@ function CreateReport() {
     event.preventDefault();
     let formData = new FormData();
     formData.append('inventoryId', values.inventoryId);
-    formData.append('ticketNo', values.ticketNo);
+    formData.append('ticketNumber', values.ticketNumber);
     formData.append('name', values.name);
     formData.append('description', values.description);
-    formData.append('reportNo', values.reportNo);
-    formData.append('assigneeUserId', values.assigneeUserId);
-    formData.append('faultySN', values.faultySN);
-    formData.append('replacementSN', values.replacementSN);
+    formData.append('reportNumber', values.reportNumber);
+    formData.append('assignee_userId', values.assignee_userId);
+    formData.append('faulty_registryId', values.faulty_registryId);
+    formData.append('replacement_registryId', values.replacement_registryId);
     formData.append('dateRequested', values.dateRequested);
     formData.append('dateLeaving', values.dateLeaving);
     formData.append('dateDispatched', values.dateDispatched);
@@ -58,7 +58,7 @@ function CreateReport() {
     formData.append('AWBreturn', values.AWBreturn);
     formData.append('RMA', values.RMA);
     formData.append('notes', values.notes);
-    fetch(`${packageJson.apihost}/api/reports/create.php`, {
+    fetch(`${packageJson.apihost}/api/report/create.php`, {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },

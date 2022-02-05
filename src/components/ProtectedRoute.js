@@ -29,7 +29,7 @@ function ProtectedRoute() {
 
 			} else {
 				//validate session using API
-				fetch(`${packageJson.apihost}/api/users/validate_session.php`, {
+				fetch(`${packageJson.apihost}/api/user/validate_session.php`, {
 					headers: {
 						'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId,
 					},
@@ -41,8 +41,8 @@ function ProtectedRoute() {
 							if (response.status) {
 
 								setPrivileges({
-									firstName: (response.firstname),
-									lastName: (response.lastname),
+									firstName: (response.firstName),
+									lastName: (response.lastName),
 									canCreate: (response.canCreate.toString() === '1') ? true : false,
 									canImport: (response.canImport.toString() === '1') ? true : false,
 									canUpdate: (response.canUpdate.toString() === '1') ? true : false,

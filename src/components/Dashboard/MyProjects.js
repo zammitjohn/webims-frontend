@@ -20,7 +20,7 @@ function MyProjects(){
     let navigate = useNavigate();
 
     const fetchData = () => {
-        fetch(`${packageJson.apihost}/api/projects/types/read_myprojects.php`, {
+        fetch(`${packageJson.apihost}/api/project/read_myprojects.php`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -67,7 +67,7 @@ function MyProjects(){
                             <Table hover>
                                 <tbody>
                                     {data.map((project) => (
-                                        <tr key={project.id} style={{cursor:'pointer'}} onClick={() => navigate(`../../projects/${project.id}`)}>
+                                        <tr key={project.id} style={{cursor:'pointer'}} onClick={() => navigate(`../../project/${project.id}`)}>
                                             <td>{project.name}</td>
                                         </tr>
                                     ))}
@@ -78,7 +78,7 @@ function MyProjects(){
                     <div className="card-footer clearfix">
                         <Button size="sm" onClick={() => handleModalShow()} variant="secondary">New Project</Button>
                             &nbsp;
-                        <Button as={Link} to={"../../projects/create/"} size="sm" variant="secondary">Add Item</Button>
+                        <Button as={Link} to={"../../project/create/"} size="sm" variant="secondary">Add Item</Button>
                     </div>
                 </div>
                 <AddProjectModal

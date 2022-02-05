@@ -12,7 +12,7 @@ function ProjectAllocations(props){
 
     useEffect(() => { 
         if (localStorage.getItem('UserSession')) {
-            fetch(`${packageJson.apihost}/api/projects/read_allocations.php?inventoryId=${props.inventoryId}`, { // fetch form data
+            fetch(`${packageJson.apihost}/api/project/item/read_allocations.php?inventoryId=${props.inventoryId}`, { // fetch form data
               headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
               },
@@ -57,8 +57,8 @@ function ProjectAllocations(props){
                         </thead>
                         <tbody>
                             {data.map(row => (
-                                <tr key={row.type_id}>
-                                    <td><Link to={'../../projects/' + row.type_id}>{row.type_name}</Link></td>
+                                <tr key={row.projectId}>
+                                    <td><Link to={'../../project/' + row.projectId}>{row.project_name}</Link></td>
                                     <td>{row.total_qty}</td>
                                 </tr>
                             ))}

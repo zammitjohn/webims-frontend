@@ -11,7 +11,7 @@ function ActiveUsers(){
     });
 
     const fetchData = () => {
-        fetch(`${packageJson.apihost}/api/users/read.php`, {
+        fetch(`${packageJson.apihost}/api/user/read.php`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -67,7 +67,7 @@ function ActiveUsers(){
                             {data.map((user) => (
                                 <li key={user.id}>
                                     <img src="images/generic-user.png" alt="User"/>
-                                    <div className="users-list-name">{user.firstname + ' ' + user.lastname}</div>
+                                    <div className="users-list-name">{user.firstName + ' ' + user.lastName}</div>
                                     <span className="users-list-date">{moment(user.lastAvailable, "YYYY-MM-DD, h:mm:ss").fromNow()}</span>
                                 </li>
                             ))}

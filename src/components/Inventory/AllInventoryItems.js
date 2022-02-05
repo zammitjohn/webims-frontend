@@ -26,17 +26,17 @@ function AllInventoryItems() {
             grow: 2,
         },
         {
-            name: 'Category',
+            name: 'Warehouse',
             selector: row => row.category_name,
             sortable: true,
-            cell: (row)=><Link to={'category/' + row.category_id}>{row.category_name}</Link>,
+            cell: (row)=><Link to={'warehouse/' + row.warehouseId}>{row.warehouse_name}</Link>,
             hide: 'sm',
         },
         {
-            name: 'Type',
+            name: 'Category',
             selector: row => row.type_name,
             sortable: true,
-            cell: (row)=><Link to={'type/' + row.type_id}>{row.type_name}</Link>,
+            cell: (row)=><Link to={'category/' + row.warehouse_categoryId}>{row.warehouse_category_name}</Link>,
             hide: 'sm',
         },
         {
@@ -50,14 +50,14 @@ function AllInventoryItems() {
             sortable: true,
             conditionalCellStyles: [
                 {
-                  when: row => row.qty < row.qty_projects_allocated,
+                  when: row => parseInt(row.qty) < parseInt(row.qty_project_item_allocated),
                   style: ({ backgroundColor: 'pink' }),
                 },
             ]
         },
         {
             name: 'Allocated',
-            selector: row => (row.qty_projects_allocated == null) ? "" : row.qty_projects_allocated,
+            selector: row => (row.qty_project_item_allocated == null) ? "" : row.qty_project_item_allocated,
             sortable: true,
             hide: 'md',
         },

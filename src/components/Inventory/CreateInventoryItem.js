@@ -12,8 +12,8 @@ function CreateInventoryItem() {
   let navigate = useNavigate();
   const [values, setValues] = useState({ // form values
     SKU: '',
-    category: '',
-    type: '',
+    warehouseId: '',
+    warehouse_categoryId: '',
     description: '',
     supplier: '',
     qty: '',
@@ -26,8 +26,7 @@ function CreateInventoryItem() {
     event.preventDefault();
     let formData = new FormData();
     formData.append('SKU', values.SKU);
-    formData.append('category', values.category);
-    formData.append('type', values.type);
+    formData.append('warehouse_categoryId', values.warehouse_categoryId);
     formData.append('description', values.description);
     formData.append('supplier', values.supplier);
     formData.append('qty', values.qty);

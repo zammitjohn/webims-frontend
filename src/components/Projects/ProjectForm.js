@@ -4,7 +4,7 @@ import packageJson from '../../../package.json';
 
 function ProjectForm(props) {    
     const [inventoryItems, setInventoryItems] = useState([]);
-    const [types, setTypes] = useState([]);
+    const [projects, setProjects] = useState([]);
 
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
@@ -25,8 +25,8 @@ function ProjectForm(props) {
                     }
                 )
 
-            //populate types
-            fetch(`${packageJson.apihost}/api/projects/types/read.php`, {
+            //populate projects
+            fetch(`${packageJson.apihost}/api/project/read.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -35,7 +35,7 @@ function ProjectForm(props) {
                 .then(res => res.json())
                 .then(
                     (response) => {
-                        setTypes(response);
+                        setProjects(response);
                     },
                     (error) => {
                         console.log(error);
@@ -63,19 +63,19 @@ function ProjectForm(props) {
                     <option value='null'>Select Inventory Item</option>
                     {inventoryItems.map(item => (
                     <option key={item.id} value={item.id}>
-                    {item.SKU + " (" + item.category_name + ") "}
+                    {item.SKU + " (" + item.warehouse_name + " " + item.warehouse_category_name + ") "}
                     </option>
                     ))}
                 </Form.Select>
             </Form.Group>        
 
             <Form.Group className="mb-3">
-                <Form.Label htmlFor="type">Project</Form.Label>
-                <Form.Select value={props.values.type} onChange={handleChange} id="type" className="form-control">
+                <Form.Label htmlFor="projectId">Project</Form.Label>
+                <Form.Select value={props.values.projectId} onChange={handleChange} id="projectId" className="form-control">
                     <option value='null'>Select Project</option>
-                    {types.map(type => (
-                    <option key={type.id} value={type.id}>
-                    {type.name}
+                    {projects.map(project => (
+                    <option key={project.id} value={project.id}>
+                    {project.name}
                     </option>
                     ))}
                 </Form.Select>

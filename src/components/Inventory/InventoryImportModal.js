@@ -23,7 +23,7 @@ function InventoryImportModal(props) {
 
         toast.info('Importing data');
         let formData = new FormData();
-        formData.append('category', props.category);
+        formData.append('warehouseId', props.warehouseId);
         formData.append('file', selectedFile.file);
 
         fetch(`${packageJson.apihost}/api/inventory/import.php`, {

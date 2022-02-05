@@ -65,15 +65,15 @@ function ProjectItems() {
     };
     
     const [data, setData] = useState([]); // data from api
-    const [typeName, setTypeName] = useState(' ');
+    const [projectName, setProjectName] = useState(' ');
     const [states, setStates] = useState({ // form values
         error: null,
         isDataLoaded: false,
-        isTypeNameLoaded: false,
+        isProjectNameLoaded: false,
       });
 
     const csvDownload = useCallback(() => {
-        fetch(`${packageJson.apihost}/api/projects/types/download.php?id=${id}`, {
+        fetch(`${packageJson.apihost}/api/project/download.php?id=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -85,7 +85,7 @@ function ProjectItems() {
             var url = window.URL.createObjectURL(blob);
             var a = document.createElement('a');
             a.href = url;
-            a.download = `project_${typeName}.csv`;
+            a.download = `project_${projectName}.csv`;
             document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
             a.click();    
             a.remove();  //afterwards we remove the element again         
@@ -94,13 +94,13 @@ function ProjectItems() {
             toast.error("Error occured");
             console.log(error);
         });
-    }, [id, typeName])
+    }, [id, projectName])
 
     const projectDelete = useCallback(() => {
         if (window.confirm("Are you sure you want to delete the project?")) {
             let formData = new FormData();
             formData.append('id', id);
-            fetch(`${packageJson.apihost}/api/projects/types/delete.php`, {
+            fetch(`${packageJson.apihost}/api/project/delete.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -130,7 +130,7 @@ function ProjectItems() {
         // Here we useCallback to memoize (store) the function.
         // Therefore, this function only change if 'id' changes
 
-        fetch(`${packageJson.apihost}/api/projects/read.php?type=${id}`, {
+        fetch(`${packageJson.apihost}/api/project/item/read.php?projectId=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -158,7 +158,7 @@ function ProjectItems() {
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
             fetchData();
-            fetch(`${packageJson.apihost}/api/projects/types/read.php?id=${id}`, {
+            fetch(`${packageJson.apihost}/api/project/read.php?id=${id}`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -167,17 +167,17 @@ function ProjectItems() {
                 .then(res => res.json())
                 .then(
                     (response) => {
-                        setTypeName( (response[0]) ? response[0].name : null );
+                        setProjectName( (response[0]) ? response[0].name : null );
                         setStates(prevState => ({
                             ...prevState,
-                            isTypeNameLoaded: true,
+                            isProjectNameLoaded: true,
                         }));
                         
                     },
                     (error) => {
                         setStates(prevState => ({
                             ...prevState,
-                            isTypeNameLoaded: true,
+                            isProjectNameLoaded: true,
                             error
                         }));
                     }
@@ -188,21 +188,21 @@ function ProjectItems() {
     if (states.error) {
         console.log(states.error.message);
         return null;
-    } else if (!typeName) {
+    } else if (!projectName) {
         return <>{<Error404/>}</>;
-    } else if (!(states.isTypeNameLoaded)) {
+    } else if (!(states.isProjectNameLoaded)) {
         console.log("Loading...");
         return null;
     } else {
         return (
             <>
-                <ContentHeader pageName={typeName}/>
+                <ContentHeader pageName={projectName}/>
                 <section className="content">
                     <Row>
                         <Col>
                             <div className="card"> 
                                 <div className="card-header">
-                                    <h3 className="card-title">{typeName}</h3>   
+                                    <h3 className="card-title">{projectName}</h3>   
                                         <div className="card-tools">
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a href="#" className="btn btn-tool btn-sm" onClick={csvDownload}> <i className="fas fa-download"></i> </a> 
@@ -230,7 +230,7 @@ function ProjectItems() {
                             </div>
                             <ProjectsImportModal 
                                 fetchData={fetchData}
-                                type={id}
+                                id={id}
                                 modalShow={modalShow}
                                 handleModalClose={handleModalClose}
                             />

@@ -1,23 +1,13 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
-import { UserPrivilegesContext } from "../ProtectedRoute";
+import React, { useState, useEffect, useCallback } from 'react';
 import ContentHeader from '../ContentHeader';
 import DataTable from 'react-data-table-component';
 import DataTableFilter from "../DataTableFilter"
 import { Link, useSearchParams, useParams } from "react-router-dom";
 import Error404 from '../Error404';
 import { Row, Col }  from 'react-bootstrap';
-import InventoryImportModal from './InventoryImportModal';
 import packageJson from '../../../package.json';
 
 function CategoryInventoryItems() {
-    // to hide and show buttons
-    const privileges = useContext(UserPrivilegesContext);
-
-    // modal props
-    const [modalShow, setModalShow] = useState(false);
-    const handleModalClose = () => setModalShow(false);
-    const handleModalShow = () => setModalShow(true);
-    
     const { id } = useParams();
     const columns = [
         {
@@ -26,13 +16,6 @@ function CategoryInventoryItems() {
             sortable: true,
             cell: (row)=><Link to={'../edit/' + row.id}>{row.SKU}</Link>,
             grow: 2,
-        },
-        {
-            name: 'Type',
-            selector: row => row.type_name,
-            sortable: true,
-            cell: (row)=><Link to={'../type/' + row.type_id}>{row.type_name + ' (' + row.type_altname + ')'}</Link>,
-            hide: 'sm',
         },
         {
             name: 'Description',
@@ -45,14 +28,14 @@ function CategoryInventoryItems() {
             sortable: true,
             conditionalCellStyles: [
                 {
-                  when: row => row.qty < row.qty_projects_allocated,
+                  when: row => parseInt(row.qty) < parseInt(row.qty_project_item_allocated),
                   style: ({ backgroundColor: 'pink' }),
                 },
             ]
         },
         {
             name: 'Allocated',
-            selector: row => (row.qty_projects_allocated == null) ? "" : row.qty_projects_allocated,
+            selector: row => (row.qty_project_item_allocated == null) ? "" : row.qty_project_item_allocated,
             sortable: true,
             hide: 'md',
         },
@@ -85,14 +68,15 @@ function CategoryInventoryItems() {
     };
     
     const [data, setData] = useState([]); // data from api
-    const [category, setCategory] = useState({
+    const [type, setType] = useState({
         name : ' ',
-        supportImport : false
+        importName : ' ',
+        warehouse_name : ' '
     });
     const [states, setStates] = useState({ // form values
         error: null,
         isDataLoaded: false,
-        isCategoryLoaded: false,
+        isTypeLoaded: false,
     });
 
     // table search
@@ -111,20 +95,12 @@ function CategoryInventoryItems() {
         }
     });
 
-    const ImportButton = () => {
-        if ((privileges.canImport === true) && (category.supportImport.toString() === '1')) {
-            /* eslint-disable-next-line jsx-a11y/anchor-is-valid */
-            return (<a href="#" className="btn btn-tool btn-sm" onClick={handleModalShow}> <i className="fas fa-upload"></i> </a>);
-        } else {
-            return (null);
-        }
-    }
-    
+
     const fetchData = useCallback(() => { // fetch inventory
         // useCallback: React creates a new function on every render
         // Here we useCallback to memoize (store) the function.
         // Therefore, this function only change if 'id' changes
-        fetch(`${packageJson.apihost}/api/inventory/read.php?category=${id}`, {
+        fetch(`${packageJson.apihost}/api/inventory/read.php?warehouse_categoryId=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -152,7 +128,7 @@ function CategoryInventoryItems() {
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
             fetchData();
-            fetch(`${packageJson.apihost}/api/inventory/categories/read.php?id=${id}`, {
+            fetch(`${packageJson.apihost}/api/warehouse/category/read.php?id=${id}`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -161,21 +137,23 @@ function CategoryInventoryItems() {
                 .then(res => res.json())
                 .then(
                     (response) => {
-                        setCategory(prevState => ({
+
+                        setType(prevState => ({
                             ...prevState,
-                            name: ((response[0]) ? response[0].name : null),
-                            supportImport: ((response[0]) ? response[0].supportImport : null)
+                            name: (response[0]) ? response[0].name : null,
+                            importName : (response[0]) ? response[0].importName : null,
+                            warehouse_name : (response[0]) ? response[0].warehouse_name : null
                         }));
 
                         setStates(prevState => ({
                             ...prevState,
-                            isCategoryLoaded: true,
+                            isTypeLoaded: true,
                         }));
                     },
                     (error) => {
                         setStates(prevState => ({
                             ...prevState,
-                            isCategoryLoaded: true,
+                            isTypeLoaded: true,
                             error
                         }));
                     }
@@ -186,25 +164,22 @@ function CategoryInventoryItems() {
     if (states.error) {
         console.log(states.error.message);
         return null;
-    } else if (!category.name) {
+    } else if (!type.name) {
         return <>{<Error404/>}</>;
-    } else if (!(states.isCategoryLoaded)) {
+    } else if (!(states.isTypeLoaded)) {
         console.log("Loading...");
         return null;
     } else {
         return (
             <>
-                <ContentHeader pageName={category.name}/>
+                <ContentHeader pageName={type.name}/>
                 <section className="content">
                     <Row>
                         <Col>
 
                             <div className="card"> 
                                 <div className="card-header">
-                                    <h3 className="card-title">{category.name}</h3>
-                                        <div className="card-tools">
-                                            <ImportButton/> 
-                                        </div>      
+                                    <h3 className="card-title">{type.name + ' ' + ((type.importName) ? (' (' + type.importName + ') ') : '') }</h3>       
                                 </div>
                                 <div className="card-body">
                                     <Row className='justify-content-md-left'>
@@ -218,7 +193,7 @@ function CategoryInventoryItems() {
                                                 filterText={filterText}
                                             />
                                         </Col>
-                                    </Row>                        
+                                    </Row>                     
                                     <DataTable
                                         progressPending={!states.isDataLoaded}
                                         columns={columns}
@@ -231,14 +206,6 @@ function CategoryInventoryItems() {
                                     />
                                 </div>
                             </div>
-                            <InventoryImportModal 
-                                fetchData={fetchData}
-                                category={id}
-                                modalShow={modalShow}
-                                setModalShow={setModalShow}
-                                handleModalClose={handleModalClose}
-                                handleModalShow={handleModalShow}
-                            />
                         </Col>
                     </Row>
                 </section>            

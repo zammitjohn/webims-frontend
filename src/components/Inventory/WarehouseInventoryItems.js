@@ -1,13 +1,23 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
+import { UserPrivilegesContext } from "../ProtectedRoute";
 import ContentHeader from '../ContentHeader';
 import DataTable from 'react-data-table-component';
 import DataTableFilter from "../DataTableFilter"
 import { Link, useSearchParams, useParams } from "react-router-dom";
 import Error404 from '../Error404';
 import { Row, Col }  from 'react-bootstrap';
+import InventoryImportModal from './InventoryImportModal';
 import packageJson from '../../../package.json';
 
-function TypeInventoryItems() {
+function WarehouseInventoryItems() {
+    // to hide and show buttons
+    const privileges = useContext(UserPrivilegesContext);
+
+    // modal props
+    const [modalShow, setModalShow] = useState(false);
+    const handleModalClose = () => setModalShow(false);
+    const handleModalShow = () => setModalShow(true);
+    
     const { id } = useParams();
     const columns = [
         {
@@ -16,6 +26,13 @@ function TypeInventoryItems() {
             sortable: true,
             cell: (row)=><Link to={'../edit/' + row.id}>{row.SKU}</Link>,
             grow: 2,
+        },
+        {
+            name: 'Category',
+            selector: row => row.type_name,
+            sortable: true,
+            cell: (row)=><Link to={'../category/' + row.warehouse_categoryId}>{row.warehouse_category_name + ' (' + row.warehouse_category_importName + ')'}</Link>,
+            hide: 'sm',
         },
         {
             name: 'Description',
@@ -28,14 +45,14 @@ function TypeInventoryItems() {
             sortable: true,
             conditionalCellStyles: [
                 {
-                  when: row => row.qty < row.qty_projects_allocated,
+                  when: row => parseInt(row.qty) < parseInt(row.qty_project_item_allocated),
                   style: ({ backgroundColor: 'pink' }),
                 },
             ]
         },
         {
             name: 'Allocated',
-            selector: row => (row.qty_projects_allocated == null) ? "" : row.qty_projects_allocated,
+            selector: row => (row.qty_project_item_allocated == null) ? "" : row.qty_project_item_allocated,
             sortable: true,
             hide: 'md',
         },
@@ -68,15 +85,14 @@ function TypeInventoryItems() {
     };
     
     const [data, setData] = useState([]); // data from api
-    const [type, setType] = useState({
+    const [warehouse, setWarehouse] = useState({
         name : ' ',
-        import_name : ' ',
-        category_name : ' '
+        supportImport : false
     });
     const [states, setStates] = useState({ // form values
         error: null,
         isDataLoaded: false,
-        isTypeLoaded: false,
+        isWarehouseLoaded: false,
     });
 
     // table search
@@ -95,12 +111,20 @@ function TypeInventoryItems() {
         }
     });
 
-
+    const ImportButton = () => {
+        if ((privileges.canImport === true) && (warehouse.supportImport.toString() === '1')) {
+            /* eslint-disable-next-line jsx-a11y/anchor-is-valid */
+            return (<a href="#" className="btn btn-tool btn-sm" onClick={handleModalShow}> <i className="fas fa-upload"></i> </a>);
+        } else {
+            return (null);
+        }
+    }
+    
     const fetchData = useCallback(() => { // fetch inventory
         // useCallback: React creates a new function on every render
         // Here we useCallback to memoize (store) the function.
         // Therefore, this function only change if 'id' changes
-        fetch(`${packageJson.apihost}/api/inventory/read.php?type=${id}`, {
+        fetch(`${packageJson.apihost}/api/inventory/read.php?warehouseId=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -128,7 +152,7 @@ function TypeInventoryItems() {
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
             fetchData();
-            fetch(`${packageJson.apihost}/api/inventory/types/read.php?id=${id}`, {
+            fetch(`${packageJson.apihost}/api/warehouse/read.php?id=${id}`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -137,23 +161,21 @@ function TypeInventoryItems() {
                 .then(res => res.json())
                 .then(
                     (response) => {
-
-                        setType(prevState => ({
+                        setWarehouse(prevState => ({
                             ...prevState,
-                            name: (response[0]) ? response[0].name : null,
-                            import_name : (response[0]) ? response[0].import_name : null,
-                            category_name : (response[0]) ? response[0].category_name : null
+                            name: ((response[0]) ? response[0].name : null),
+                            supportImport: ((response[0]) ? response[0].supportImport : null)
                         }));
 
                         setStates(prevState => ({
                             ...prevState,
-                            isTypeLoaded: true,
+                            isWarehouseLoaded: true,
                         }));
                     },
                     (error) => {
                         setStates(prevState => ({
                             ...prevState,
-                            isTypeLoaded: true,
+                            isWarehouseLoaded: true,
                             error
                         }));
                     }
@@ -164,22 +186,25 @@ function TypeInventoryItems() {
     if (states.error) {
         console.log(states.error.message);
         return null;
-    } else if (!type.name) {
+    } else if (!warehouse.name) {
         return <>{<Error404/>}</>;
-    } else if (!(states.isTypeLoaded)) {
+    } else if (!(states.isWarehouseLoaded)) {
         console.log("Loading...");
         return null;
     } else {
         return (
             <>
-                <ContentHeader pageName={type.name}/>
+                <ContentHeader pageName={warehouse.name}/>
                 <section className="content">
                     <Row>
                         <Col>
 
                             <div className="card"> 
                                 <div className="card-header">
-                                    <h3 className="card-title">{type.name + ' ' + ((type.import_name) ? (' (' + type.import_name + ') ') : '') }</h3>       
+                                    <h3 className="card-title">{warehouse.name}</h3>
+                                        <div className="card-tools">
+                                            <ImportButton/> 
+                                        </div>      
                                 </div>
                                 <div className="card-body">
                                     <Row className='justify-content-md-left'>
@@ -193,7 +218,7 @@ function TypeInventoryItems() {
                                                 filterText={filterText}
                                             />
                                         </Col>
-                                    </Row>                     
+                                    </Row>                        
                                     <DataTable
                                         progressPending={!states.isDataLoaded}
                                         columns={columns}
@@ -206,6 +231,14 @@ function TypeInventoryItems() {
                                     />
                                 </div>
                             </div>
+                            <InventoryImportModal 
+                                fetchData={fetchData}
+                                warehouseId={id}
+                                modalShow={modalShow}
+                                setModalShow={setModalShow}
+                                handleModalClose={handleModalClose}
+                                handleModalShow={handleModalShow}
+                            />
                         </Col>
                     </Row>
                 </section>            
@@ -213,4 +246,4 @@ function TypeInventoryItems() {
         );
     }
 }
-export default TypeInventoryItems;
+export default WarehouseInventoryItems;

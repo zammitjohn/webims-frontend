@@ -8,7 +8,7 @@ function TransactionList(){
     const [data, setData] = useState([]); // data from api
 
     const download = (id) => {
-        fetch(`${packageJson.apihost}/api/transactions/download.php?id=${id}`, {
+        fetch(`${packageJson.apihost}/api/inventory/transaction/download.php?id=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -32,7 +32,7 @@ function TransactionList(){
     }
 
     const fetchData = () => {
-        fetch(`${packageJson.apihost}/api/transactions/read.php`, {
+        fetch(`${packageJson.apihost}/api/inventory/transaction/read.php`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -52,7 +52,7 @@ function TransactionList(){
     return (
         <div className="card collapsed-card">
             <div className="card-header border-transparent">
-                <h3 className="card-title">Transactions</h3>
+                <h3 className="card-title">Inventory Transactions</h3>
                 <div className="card-tools">      
                     <button type="button" className="btn btn-tool" data-card-widget="collapse" onClick={fetchData}>
                     <i className="fas fa-plus"></i>

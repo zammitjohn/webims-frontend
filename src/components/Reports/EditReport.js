@@ -29,13 +29,13 @@ function EditReport() {
 
   const [values, setValues] = useState({ // form values
     inventoryId: id,
-    ticketNo: '',
+    ticketNumber: '',
     name: '',
     description: '',
-    reportNo: '',
-    assigneeUserId: '',
-    faultySN: '',
-    replacementSN: '',
+    reportNumber: '',
+    assignee_userId: '',
+    faulty_registryId: '',
+    replacement_registryId: '',
     dateRequested: '',
     dateLeaving: '',
     dateDispatched: '',
@@ -53,7 +53,7 @@ function EditReport() {
 
   useEffect(() => { 
     if (localStorage.getItem('UserSession')) {
-      fetch(`${packageJson.apihost}/api/reports/read_single.php?id=${id}`, { // fetch form data
+      fetch(`${packageJson.apihost}/api/report/read_single.php?id=${id}`, { // fetch form data
         headers: {
           'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },
@@ -64,13 +64,13 @@ function EditReport() {
           (response) => {
             setValues(values => ({
               inventoryId: (response.inventoryId) ? response.inventoryId : '',
-              ticketNo: (response.ticketNo) ? response.ticketNo : '',
+              ticketNumber: (response.ticketNumber) ? response.ticketNumber : '',
               name: (response.name) ? response.name : '',
               description: (response.description) ? response.description : '',
-              reportNo: (response.reportNo) ? response.reportNo : '',
-              assigneeUserId: (response.assigneeUserId) ? response.assigneeUserId : '',
-              faultySN: (response.faultySN) ? response.faultySN : '',
-              replacementSN: (response.replacementSN) ? response.replacementSN : '',
+              reportNumber: (response.reportNumber) ? response.reportNumber : '',
+              assignee_userId: (response.assignee_userId) ? response.assignee_userId : '',
+              faulty_registryId: (response.faulty_registryId) ? response.faulty_registryId : '',
+              replacement_registryId: (response.replacement_registryId) ? response.replacement_registryId : '',
               dateRequested: (response.dateRequested) ? response.dateRequested : '',
               dateLeaving: (response.dateLeaving) ? response.dateLeaving : '',
               dateDispatched: (response.dateDispatched) ? response.dateDispatched : '',
@@ -98,7 +98,7 @@ function EditReport() {
   const toggleRepairable = () => {
     let formData = new FormData();
     formData.append('id', id);
-		fetch(`${packageJson.apihost}/api/reports/toggle_repairable.php`, {
+		fetch(`${packageJson.apihost}/api/report/toggle_repairable.php`, {
 			headers: {
 				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
 			},
@@ -136,13 +136,13 @@ function EditReport() {
     let formData = new FormData();
     formData.append('id', id);
     formData.append('inventoryId', values.inventoryId);
-    formData.append('ticketNo', values.ticketNo);
+    formData.append('ticketNumber', values.ticketNumber);
     formData.append('name', values.name);
     formData.append('description', values.description);
-    formData.append('reportNo', values.reportNo);
-    formData.append('assigneeUserId', values.assigneeUserId);
-    formData.append('faultySN', values.faultySN);
-    formData.append('replacementSN', values.replacementSN);
+    formData.append('reportNumber', values.reportNumber);
+    formData.append('assignee_userId', values.assignee_userId);
+    formData.append('faulty_registryId', values.faulty_registryId);
+    formData.append('replacement_registryId', values.replacement_registryId);
     formData.append('dateRequested', values.dateRequested);
     formData.append('dateLeaving', values.dateLeaving);
     formData.append('dateDispatched', values.dateDispatched);
@@ -151,7 +151,7 @@ function EditReport() {
     formData.append('AWBreturn', values.AWBreturn);
     formData.append('RMA', values.RMA);
     formData.append('notes', values.notes);
-    fetch(`${packageJson.apihost}/api/reports/update.php`, {
+    fetch(`${packageJson.apihost}/api/report/update.php`, {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },

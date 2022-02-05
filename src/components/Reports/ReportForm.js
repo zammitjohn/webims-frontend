@@ -71,7 +71,7 @@ function ReportForm(props) {
                 )
 
             // populate users dropdown
-            fetch(`${packageJson.apihost}/api/users/read.php`, {
+            fetch(`${packageJson.apihost}/api/user/read.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -111,8 +111,8 @@ function ReportForm(props) {
         const { id, value } = event.target;
         const fieldValue = { 
             [id]: value,
-            faultySN: '',
-            replacementSN: ''
+            faulty_registryId: '',
+            replacement_registryId: ''
         };
         
         props.setValues({
@@ -122,7 +122,7 @@ function ReportForm(props) {
     };
 
     const handleFaultySNChange = (event) => {
-        const fieldValue = { faultySN: event.value };
+        const fieldValue = { faulty_registryId: event.value };
         
         props.setValues({
             ...props.values,
@@ -131,7 +131,7 @@ function ReportForm(props) {
     }
 
     const handleReplacementSNChange = (event) => {
-        const fieldValue = { replacementSN: event.value };
+        const fieldValue = { replacement_registryId: event.value };
         
         props.setValues({
             ...props.values,
@@ -147,7 +147,7 @@ function ReportForm(props) {
                     <option value=''>Select Inventory Item</option>
                     {inventoryItems.map(item => (
                     <option key={item.id} value={item.id}>
-                    {item.SKU + " (" + item.category_name + ") "}
+                    {item.SKU + " (" + item.warehouse_category_name + ") "}
                     </option>
                     ))}
                 </Form.Select>
@@ -165,8 +165,8 @@ function ReportForm(props) {
                     </Form.Group>                     
 
                     <Form.Group className="mb-3">
-                        <Form.Label htmlFor="ticketNo">Ticket Number</Form.Label>
-                        <Form.Control value={props.values.ticketNo} onChange={handleChange} type="text" maxLength="255" id="ticketNo" placeholder="Enter ticket#"/>
+                        <Form.Label htmlFor="ticketNumber">Ticket Number</Form.Label>
+                        <Form.Control value={props.values.ticketNumber} onChange={handleChange} type="text" maxLength="255" id="ticketNumber" placeholder="Enter ticket#"/>
                     </Form.Group>
 
                     <Form.Group className="mb-3">
@@ -175,17 +175,17 @@ function ReportForm(props) {
                     </Form.Group>   
 
                     <Form.Group className="mb-3">
-                        <Form.Label htmlFor="reportNo">Report Number</Form.Label>
-                        <Form.Control value={props.values.reportNo} onChange={handleChange} type="text" maxLength="255" id="reportNo" placeholder="Enter fault report#"/>
+                        <Form.Label htmlFor="reportNumber">Report Number</Form.Label>
+                        <Form.Control value={props.values.reportNumber} onChange={handleChange} type="text" maxLength="255" id="reportNumber" placeholder="Enter fault report#"/>
                     </Form.Group>
                     
                     <Form.Group className="mb-3">
-                        <Form.Label htmlFor="assigneeUserId">Assignee</Form.Label>
-                        <Form.Select value={props.values.assigneeUserId} onChange={handleChange} id="assigneeUserId" className="form-control">
+                        <Form.Label htmlFor="assignee_userId">Assignee</Form.Label>
+                        <Form.Select value={props.values.assignee_userId} onChange={handleChange} id="assignee_userId" className="form-control">
                             <option value=''>Select User</option>
                             {users.map(user => (
                             <option key={user.id} value={user.id}>
-                            {user.firstname + ' ' + user.lastname}
+                            {user.firstName + ' ' + user.lastName}
                             </option>
                             ))}
                         </Form.Select>
@@ -201,26 +201,26 @@ function ReportForm(props) {
                     <Row>
                         <Col>
                             <Form.Group className="mb-3">
-                                <Form.Label htmlFor="faultySN">Faulty</Form.Label>
+                                <Form.Label htmlFor="faulty_registryId">Faulty</Form.Label>
                                     <Select
-                                        value={{value: props.values.faultySN, label: (props.values.faultySN) ? `#${props.values.faultySN}` : 'Select...'  }}
+                                        value={{value: props.values.faulty_registryId, label: (props.values.faulty_registryId) ? `#${props.values.faulty_registryId}` : 'Select...'  }}
                                         onChange={(e) => handleFaultySNChange(e)}
                                         isSearchable={true}
                                         options={serialNumbersFaulty}
-                                        id="faultySN"
+                                        id="faulty_registryId"
                                         menuPlacement="top"
                                     />
                             </Form.Group>
                         </Col>
                         <Col>
                             <Form.Group className="mb-3">
-                                <Form.Label htmlFor="replacementSN">Replacement</Form.Label>
+                                <Form.Label htmlFor="replacement_registryId">Replacement</Form.Label>
                                     <Select
-                                        value={{value: props.values.replacementSN, label: (props.values.replacementSN) ? `#${props.values.replacementSN}` : 'Select...'  }}
+                                        value={{value: props.values.replacement_registryId, label: (props.values.replacement_registryId) ? `#${props.values.replacement_registryId}` : 'Select...'  }}
                                         onChange={(e) => handleReplacementSNChange(e)}
                                         isSearchable={true}
                                         options={serialNumbersReplacement}
-                                        id="replacementSN"
+                                        id="replacement_registryId"
                                         menuPlacement="top"
                                     />
                             </Form.Group>

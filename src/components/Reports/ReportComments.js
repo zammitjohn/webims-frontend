@@ -21,7 +21,7 @@ function ReportComments(props){
         let formData = new FormData();
         formData.append('text', commentRef.current.value);
         formData.append('reportId', props.reportId);
-        fetch(`${packageJson.apihost}/api/reports/comments/create.php`, {
+        fetch(`${packageJson.apihost}/api/report/comment/create.php`, {
         headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },
@@ -43,7 +43,7 @@ function ReportComments(props){
     }
 
     const fetchData = () => {
-        fetch(`${packageJson.apihost}/api/reports/comments/read.php?reportId=${props.reportId}`, {
+        fetch(`${packageJson.apihost}/api/report/comment/read.php?reportId=${props.reportId}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -94,7 +94,7 @@ function ReportComments(props){
                         {data.map((comment) => (
                             <div className="direct-chat-msg" key={comment.id}> 
                                 <div className="direct-chat-infos clearfix"> 
-                                    <span className="direct-chat-name float-left">{`${comment.firstname} ${comment.lastname}`}</span> 
+                                    <span className="direct-chat-name float-left">{`${comment.firstName} ${comment.lastName}`}</span> 
                                     <span className="direct-chat-timestamp float-right">{moment(comment.timestamp, "YYYY-MM-DD, h:mm:ss").fromNow()}</span>
                                 </div>
                                 <img className="direct-chat-img" src="../../images/generic-user.png" alt="User"/>

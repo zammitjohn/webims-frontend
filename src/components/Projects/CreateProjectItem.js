@@ -14,7 +14,7 @@ function CreateProjectItem() {
   const { id } = useParams();
   const [values, setValues] = useState({ // form values
     inventoryId: id,
-    type: '',
+    projectId: '',
     description: '',
     qty: '',
     notes: '',
@@ -24,11 +24,11 @@ function CreateProjectItem() {
     event.preventDefault();
     let formData = new FormData();
     formData.append('inventoryId', values.inventoryId);
-    formData.append('type', values.type);
+    formData.append('projectId', values.projectId);
     formData.append('description', values.description);
     formData.append('qty', values.qty);
     formData.append('notes', values.notes);
-    fetch(`${packageJson.apihost}/api/projects/create.php`, {
+    fetch(`${packageJson.apihost}/api/project/item/create.php`, {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },
@@ -40,7 +40,7 @@ function CreateProjectItem() {
           (response) => {
             if (response.status) {
               toast.success(response.message);
-              navigate(`/projects/${values.type}`, { replace: false });
+              navigate(`/project/${values.projectId}`, { replace: false });
             } else {
               toast.error(response.message);  
             }

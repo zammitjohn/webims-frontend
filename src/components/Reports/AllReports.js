@@ -21,8 +21,9 @@ function AllReports() {
     const columns = [
         {
             name: 'Report',
-            selector: row => row.id,
+            selector: row => parseInt(row.id),
             cell: row => (row.id == null) ? "" : `#${row.id} ${(row.name) ? (row.name) : ""}`,
+            sortable: true,
         },
         {
             name: 'Description',
@@ -56,7 +57,7 @@ function AllReports() {
     });
 
     const fetchData = () => { // fetch reports
-        fetch(`${packageJson.apihost}/api/reports/read.php`, {
+        fetch(`${packageJson.apihost}/api/report/read.php`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },

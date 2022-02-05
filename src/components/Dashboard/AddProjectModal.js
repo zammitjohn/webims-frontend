@@ -12,7 +12,7 @@ function AddProjectModal(props){
         event.preventDefault();
         let formData = new FormData();
         formData.append('name', projectNameRef.current.value);
-        fetch(`${packageJson.apihost}/api/projects/types/create.php`, {
+        fetch(`${packageJson.apihost}/api/project/create.php`, {
         headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },

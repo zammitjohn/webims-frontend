@@ -6,11 +6,11 @@ import packageJson from '../../../package.json';
 function ProjectsImportModal(props) {
 
     const [selectedFilename, setSelectedFilename] = useState('');
+    const [warehouses, setWarehouses] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [types, setTypes] = useState([]);
     const [selectedValues, setSelectedValues] = useState({ // form values
-        category: '',
-        type: '',
+        warehouseId: '',
+        warehouse_categoryId: '',
         file: []
       });
 
@@ -31,12 +31,11 @@ function ProjectsImportModal(props) {
 
         toast.info('Importing data'); // show toast
         let formData = new FormData();
-        formData.append('type', props.type);
-        formData.append('inventory_category', selectedValues.category);
-        formData.append('inventory_type', selectedValues.type);
+        formData.append('id', props.id);
+        formData.append('warehouse_categoryId', selectedValues.warehouse_categoryId);
         formData.append('file', selectedValues.file);
 
-        fetch(`${packageJson.apihost}/api/projects/import.php`, {
+        fetch(`${packageJson.apihost}/api/project/import.php`, {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },  
@@ -66,11 +65,22 @@ function ProjectsImportModal(props) {
         props.handleModalClose(); // close modal
     }
 
+    const handleWarehouseChange = (event) => {
+        const { value } = event.target;
+        const fieldValue = { 
+            warehouseId : value,
+            warehouse_categoryId : '',
+        };
+        setSelectedValues({
+            ...selectedValues,
+            ...fieldValue,
+        });
+    };
+
     const handleCategoryChange = (event) => {
         const { value } = event.target;
         const fieldValue = { 
-            category : value,
-            type : '',
+            warehouse_categoryId : value,
         };
         setSelectedValues({
             ...selectedValues,
@@ -78,21 +88,10 @@ function ProjectsImportModal(props) {
         });
     };
 
-    const handleTypeChange = (event) => {
-        const { value } = event.target;
-        const fieldValue = { 
-            type : value,
-        };
-        setSelectedValues({
-            ...selectedValues,
-            ...fieldValue,
-        });
-    };
-
-    useEffect(() => {
+    useEffect(() => { // trigger the following on warehouse change
         if (localStorage.getItem('UserSession')) {
-            let categoryId = (selectedValues.category) ? selectedValues.category : null; 
-            fetch(`${packageJson.apihost}/api/inventory/types/read.php?category=${categoryId}`, {
+            let warehouseId = (selectedValues.warehouseId) ? selectedValues.warehouseId : null;
+            fetch(`${packageJson.apihost}/api/warehouse/category/read.php?warehouseId=${warehouseId}`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -101,19 +100,19 @@ function ProjectsImportModal(props) {
                 .then(res => res.json()) 
                 .then(
                 (response) => {
-                    setTypes(response);
+                    setCategories(response);
                 },
                 (error) => {
                     console.log(error);
                 }
             )
         }
-    }, [selectedValues.category])
+    }, [selectedValues.warehouseId])
 
     useEffect(() => {
         if (localStorage.getItem('UserSession')) {
-            //populate categories
-            fetch(`${packageJson.apihost}/api/inventory/categories/read.php`, {
+            //populate warehouses
+            fetch(`${packageJson.apihost}/api/warehouse/read.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
@@ -122,16 +121,14 @@ function ProjectsImportModal(props) {
                 .then(res => res.json())
                 .then(
                     (response) => {
-                        setCategories(response);
+                        setWarehouses(response);
                     },
                     (error) => {
                         console.log(error);
                     }
                 )
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
 
     return(
         <Modal show={props.modalShow} onHide={props.handleModalClose} centered>
@@ -140,25 +137,25 @@ function ProjectsImportModal(props) {
             </Modal.Header>
             <Modal.Body>
                 <p>Select CSV data file to import. Data file must use the following format: <i>SKU,description,quantity,notes</i> (header and blank lines are ignored).</p>
-                <Form.Group>
-                    <b>Allocate items from:</b>
+                <b>Allocate items from:</b>
+                <Form.Group className="mb-3">
                     <Row>
-                        <Col md="8">
-                            <Form.Select onChange={handleCategoryChange} value={selectedValues.category} className="form-control">
+                        <Col md="7">
+                            <Form.Select value={selectedValues.warehouseId} onChange={handleWarehouseChange} id="warehouseId" className="form-control">
+                                <option value='null'>Select Warehouse</option>
+                                {warehouses.map(warehouse => (
+                                    <option key={warehouse.id} value={warehouse.id}>
+                                    {warehouse.name}
+                                    </option>
+                                ))}    
+                            </Form.Select>  
+                        </Col>
+                        <Col md="5">
+                            <Form.Select value={selectedValues.warehouse_categoryId} onChange={handleCategoryChange} id="warehouse_categoryId" className="form-control">
                                 <option value='null'>Select Category</option>
                                 {categories.map(category => (
                                 <option key={category.id} value={category.id}>
                                     {category.name}
-                                </option>
-                                ))}    
-                            </Form.Select>
-                        </Col>
-                        <Col md="4">
-                            <Form.Select onChange={handleTypeChange} value={selectedValues.type} className="form-control">
-                                <option value='null'>Select Type</option>
-                                {types.map(type => (
-                                <option key={type.id} value={type.id}>
-                                    {type.name}
                                 </option>
                                 ))}  
                             </Form.Select>

@@ -39,7 +39,7 @@ function InventoryTransactionsModal(props){
 
 
     const transactionDownload = (id) => {
-        fetch(`${packageJson.apihost}/api/transactions/download.php?id=${id}`, {
+        fetch(`${packageJson.apihost}/api/inventory/transaction/download.php?id=${id}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -72,7 +72,7 @@ function InventoryTransactionsModal(props){
         });
         let data = ({return: isReturn, items: transactionItems});
     
-        fetch(`${packageJson.apihost}/api/transactions/create.php`, {
+        fetch(`${packageJson.apihost}/api/inventory/transaction/create.php`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -115,7 +115,7 @@ function InventoryTransactionsModal(props){
                 <Tabs activeKey={tabActiveKey} className="mb-3">
                     <Tab eventKey="page1" title="Select Items">
                         <Form.Group className="mb-3">
-                            <Form.Label htmlFor="category">Select one or more items</Form.Label>
+                            <Form.Label>Select one or more items</Form.Label>
                             <AsyncSelect
                                 isClearable
                                 defaultValue={selectedItems}
@@ -138,7 +138,7 @@ function InventoryTransactionsModal(props){
                         
                         <Form onSubmit={handleSubmit}>
                             <Form.Group className="mb-3">
-                            <Form.Label htmlFor="category">Item quantities</Form.Label>
+                            <Form.Label>Item quantities</Form.Label>
                                 <Table>
                                     <tbody>
                                         {selectedItems.map((item) => (

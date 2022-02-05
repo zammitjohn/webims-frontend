@@ -19,7 +19,7 @@ useEffect(() => {
 
 	// fetch projects
 	if (localStorage.getItem('UserSession')) {
-		fetch(`${packageJson.apihost}/api/projects/types/read.php`, {
+		fetch(`${packageJson.apihost}/api/project/read.php`, {
 			headers: {
 				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
 			},
@@ -66,7 +66,7 @@ useEffect(() => {
                 }
  
                 els = [];
-                let projectUrl = `/projects/${project.id}`;
+                let projectUrl = `/project/${project.id}`;
                 els.push(
 					<Link to={projectUrl} className="nav-link" key={key++}>
 						<i className="far fa-circle nav-icon text-warning"></i>

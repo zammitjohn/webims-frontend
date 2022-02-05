@@ -16,7 +16,7 @@ function EditProjectItem() {
   let navigate = useNavigate();
   const [values, setValues] = useState({ // form values
     inventoryId: '',
-    type: '',
+    projectId: '',
     description: '',
     qty: '',
     notes: '',
@@ -29,7 +29,7 @@ function EditProjectItem() {
 
   useEffect(() => { 
     if (localStorage.getItem('UserSession')) {
-      fetch(`${packageJson.apihost}/api/projects/read_single.php?id=${id}`, { // fetch form data
+      fetch(`${packageJson.apihost}/api/project/item/read_single.php?id=${id}`, { // fetch form data
         headers: {
           'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },
@@ -40,7 +40,7 @@ function EditProjectItem() {
           (response) => {
             setValues(values => ({ 
               inventoryId: (response.inventoryId) ? response.inventoryId : '',
-              type: (response.type) ? response.type : '',
+              projectId: (response.projectId) ? response.projectId : '',
               description: (response.description) ? response.description : '',
               qty: (response.qty) ? response.qty : '',
               notes: (response.notes) ? response.notes : '',
@@ -63,7 +63,7 @@ function EditProjectItem() {
     if (window.confirm("Are you sure you want to delete the item?")) {
       let formData = new FormData();
       formData.append('id', id);
-      fetch(`${packageJson.apihost}/api/projects/delete.php`, {
+      fetch(`${packageJson.apihost}/api/project/item/delete.php`, {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },
@@ -75,7 +75,7 @@ function EditProjectItem() {
             (response) => {
               if (response.status) {
                 toast.success(response.message);
-                navigate(`../${values.type}`, { replace: true });
+                navigate(`../${values.projectId}`, { replace: true });
               } else {
                 toast.error(response.message);  
               }
@@ -95,11 +95,11 @@ function EditProjectItem() {
     let formData = new FormData();
     formData.append('id', id);
     formData.append('inventoryId', values.inventoryId);
-    formData.append('type', values.type);
+    formData.append('projectId', values.projectId);
     formData.append('description', values.description);
     formData.append('qty', values.qty);
     formData.append('notes', values.notes);
-    fetch(`${packageJson.apihost}/api/projects/update.php`, {
+    fetch(`${packageJson.apihost}/api/project/item/update.php`, {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },
@@ -111,7 +111,7 @@ function EditProjectItem() {
           (response) => {
             if (response.status) {
               toast.success(response.message);
-              navigate(`/projects/${values.type}`, { replace: false });
+              navigate(`/project/${values.projectId}`, { replace: false });
             } else {
               toast.error(response.message);  
             }
