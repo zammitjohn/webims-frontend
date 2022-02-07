@@ -44,7 +44,7 @@ function ProjectItems() {
         },
         {
             name: 'Added By',
-            selector: row => (row.user_fullname == null) ? "" : row.user_fullname,
+            selector: row => (row.user_fullName == null) ? "" : row.user_fullName,
             sortable: true,
             hide: 'md',
         },

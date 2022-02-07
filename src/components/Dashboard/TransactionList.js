@@ -68,7 +68,7 @@ function TransactionList(){
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                         <td><a href="#" className="text-muted" onClick={() => download(transaction.id)} title={`#${transaction.id}`}> <i className="fas fa-download"></i></a></td>
                                         <td>{transaction.description}</td>
-                                        <td>{transaction.user_fullname}</td>
+                                        <td>{transaction.user_fullName}</td>
                                         <td>{transaction.date}</td>
                                     </tr>
                                 ))}
