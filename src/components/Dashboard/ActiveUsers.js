@@ -20,7 +20,8 @@ function ActiveUsers(){
             .then(res => res.json())
             .then(
                 (data) => {
-                    setData(data.slice(0, 4));
+                    // filter not to include current user ID and show first 4 elements only
+                    setData(data.filter(user => user.id !== JSON.parse(localStorage.getItem('UserSession')).userId).slice(0, 4));
                     setStates({
                         isLoaded: true,
                     });
