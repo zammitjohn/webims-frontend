@@ -80,14 +80,15 @@ function EditInventoryItem() {
 
   const deleteObject = () => {
     if (window.confirm("Are you sure you want to delete the item? You cannot delete Inventory items associated to any Fault Reports, Projects or Registry items!")) {
-      let formData = new FormData();
-      formData.append('id', id);
+      let bodyData = {
+        'id': id
+      }
       fetch(`${packageJson.apihost}/api/inventory/delete.php`, {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },
-          method: 'POST',
-          body: formData
+          method: 'DELETE',
+          body: JSON.stringify(bodyData)
           })
           .then(res => res.json())
           .then(
@@ -109,22 +110,23 @@ function EditInventoryItem() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    let formData = new FormData();
-    formData.append('id', id);
-    formData.append('SKU', values.SKU);
-    formData.append('warehouse_categoryId', values.warehouse_categoryId);
-    formData.append('description', values.description);
-    formData.append('supplier', values.supplier);
-    formData.append('qty', values.qty);
-    formData.append('qtyIn', values.qtyIn);
-    formData.append('qtyOut', values.qtyOut);
-    formData.append('notes', values.notes);
+    let bodyData = {
+      'id': id,
+      'SKU': values.SKU,
+      'warehouse_categoryId': values.warehouse_categoryId,
+      'description': values.description,
+      'supplier': values.supplier,
+      'qty': values.qty,
+      'qtyIn': values.qtyIn,
+      'qtyOut': values.qtyOut,
+      'notes': values.notes
+    }
     fetch(`${packageJson.apihost}/api/inventory/update.php`, {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },  
-      method: 'POST',    
-      body: formData
+      method: 'PUT',    
+      body: JSON.stringify(bodyData)
       })
       .then(res => res.json())
       .then(

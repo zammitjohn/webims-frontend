@@ -35,12 +35,13 @@ function Login(props) {
 
     const handleLogin = (event) => {
         event.preventDefault();
-        let formData = new FormData();
-        formData.append('username', values.email);
-        formData.append('password', values.password);
+        let bodyData = {
+            'username': values.email,
+            'password': values.password
+        };
         fetch(`${packageJson.apihost}/api/user/login.php`, {
-            method: 'POST',
-            body: formData,
+            method: 'PUT',
+            body: JSON.stringify(bodyData),
             })
             .then(res => res.json())
             .then(

@@ -70,14 +70,14 @@ function InventoryTransactionsModal(props){
         selectedItems.forEach(function (item) {
             transactionItems.push({item_id: item.value, item_qty: item.selected_qty});
         });
-        let data = ({return: isReturn, items: transactionItems});
+        let bodyData = ({return: isReturn, items: transactionItems});
     
         fetch(`${packageJson.apihost}/api/inventory/transaction/create.php`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(bodyData)
             })
             .then(res => res.json())
             .then(

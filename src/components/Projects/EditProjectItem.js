@@ -61,14 +61,15 @@ function EditProjectItem() {
 
   const deleteObject = () => {
     if (window.confirm("Are you sure you want to delete the item?")) {
-      let formData = new FormData();
-      formData.append('id', id);
+      let bodyData = {
+        'id': id
+      }
       fetch(`${packageJson.apihost}/api/project/item/delete.php`, {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },
-          method: 'POST',
-          body: formData
+          method: 'DELETE',
+          body: JSON.stringify(bodyData)
           })
           .then(res => res.json())
           .then(
@@ -92,19 +93,20 @@ function EditProjectItem() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    let formData = new FormData();
-    formData.append('id', id);
-    formData.append('inventoryId', values.inventoryId);
-    formData.append('projectId', values.projectId);
-    formData.append('description', values.description);
-    formData.append('qty', values.qty);
-    formData.append('notes', values.notes);
+    let bodyData = {
+      'id': id,
+      'inventoryId': values.inventoryId,
+      'projectId': values.projectId,
+      'description': values.description,
+      'qty': values.qty,
+      'notes': values.notes
+    };
     fetch(`${packageJson.apihost}/api/project/item/update.php`, {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },
-      method: 'POST',
-      body: formData
+      method: 'PUT',
+      body: JSON.stringify(bodyData)
       })
       .then(res => res.json())
       .then(

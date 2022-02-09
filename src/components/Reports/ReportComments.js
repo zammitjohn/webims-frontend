@@ -18,15 +18,16 @@ function ReportComments(props){
 
     const handlePost = (event) => {
         event.preventDefault();
-        let formData = new FormData();
-        formData.append('text', commentRef.current.value);
-        formData.append('reportId', props.reportId);
+        let bodyData = {
+            'text': commentRef.current.value,
+            'reportId': props.reportId
+        };
         fetch(`${packageJson.apihost}/api/report/comment/create.php`, {
         headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },
         method: 'POST',
-        body: formData
+        body: JSON.stringify(bodyData)
         })
         .then(res => res.json())
         .then(

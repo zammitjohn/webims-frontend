@@ -7,7 +7,7 @@ function Header() {
 			headers: {
 				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
 			},
-            method: 'POST'
+            method: 'PUT'
             })
             .then(res => res.json())
             .then(

@@ -41,29 +41,30 @@ function CreateReport() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    let formData = new FormData();
-    formData.append('inventoryId', values.inventoryId);
-    formData.append('ticketNumber', values.ticketNumber);
-    formData.append('name', values.name);
-    formData.append('description', values.description);
-    formData.append('reportNumber', values.reportNumber);
-    formData.append('assignee_userId', values.assignee_userId);
-    formData.append('faulty_registryId', values.faulty_registryId);
-    formData.append('replacement_registryId', values.replacement_registryId);
-    formData.append('dateRequested', values.dateRequested);
-    formData.append('dateLeaving', values.dateLeaving);
-    formData.append('dateDispatched', values.dateDispatched);
-    formData.append('dateReturned', values.dateReturned);
-    formData.append('AWB', values.AWB);
-    formData.append('AWBreturn', values.AWBreturn);
-    formData.append('RMA', values.RMA);
-    formData.append('notes', values.notes);
+    let bodyData = {
+      'inventoryId': values.inventoryId,
+      'ticketNumber': values.ticketNumber,
+      'name': values.name,
+      'description': values.description,
+      'reportNumber': values.reportNumber,
+      'assignee_userId': values.assignee_userId,
+      'faulty_registryId': values.faulty_registryId,
+      'replacement_registryId': values.replacement_registryId,
+      'dateRequested': values.dateRequested,
+      'dateLeaving': values.dateLeaving,
+      'dateDispatched': values.dateDispatched,
+      'dateReturned': values.dateReturned,
+      'AWB': values.AWB,
+      'AWBreturn': values.AWBreturn,
+      'RMA': values.RMA,
+      'notes': values.notes
+    };
     fetch(`${packageJson.apihost}/api/report/create.php`, {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },
       method: 'POST',
-      body: formData
+      body: JSON.stringify(bodyData)
       })
       .then(res => res.json())
       .then(

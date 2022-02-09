@@ -98,14 +98,15 @@ function ProjectItems() {
 
     const projectDelete = useCallback(() => {
         if (window.confirm("Are you sure you want to delete the project?")) {
-            let formData = new FormData();
-            formData.append('id', id);
+            let bodyData = {
+                'id': id
+            }
             fetch(`${packageJson.apihost}/api/project/delete.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
-                method: 'POST',
-                body: formData
+                method: 'DELETE',
+                body: JSON.stringify(bodyData)
                 })
                 .then(res => res.json())
                 .then(

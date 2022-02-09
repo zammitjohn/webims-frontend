@@ -23,18 +23,17 @@ function RegisterItemModal(props){
 
     const handleCreate = event => {
         event.preventDefault();
-
-        let formData = new FormData();
-        formData.append('inventoryId', props.inventoryId);
-        formData.append('serialNumber', values.serialNumber);
-        formData.append('datePurchased', values.datePurchased);
-
+        let bodyData = {
+          'inventoryId': props.inventoryId,
+          'serialNumber': values.serialNumber,
+          'datePurchased': values.datePurchased
+        }
         fetch(`${packageJson.apihost}/api/registry/create.php`, {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },  
           method: 'POST',    
-          body: formData
+          body: JSON.stringify(bodyData)
           })
           .then(res => res.json())
           .then(

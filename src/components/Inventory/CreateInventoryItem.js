@@ -24,21 +24,22 @@ function CreateInventoryItem() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    let formData = new FormData();
-    formData.append('SKU', values.SKU);
-    formData.append('warehouse_categoryId', values.warehouse_categoryId);
-    formData.append('description', values.description);
-    formData.append('supplier', values.supplier);
-    formData.append('qty', values.qty);
-    formData.append('qtyIn', values.qtyIn);
-    formData.append('qtyOut', values.qtyOut);
-    formData.append('notes', values.notes);
+    let bodyData = {
+      'SKU': values.SKU,
+      'warehouse_categoryId': values.warehouse_categoryId,
+      'description': values.description,
+      'supplier': values.supplier,
+      'qty': values.qty,
+      'qtyIn': values.qtyIn,
+      'qtyOut': values.qtyOut,
+      'notes': values.notes
+    }
     fetch(`${packageJson.apihost}/api/inventory/create.php`, {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },
       method: 'POST',
-      body: formData
+      body: JSON.stringify(bodyData)
       })
       .then(res => res.json())
       .then(

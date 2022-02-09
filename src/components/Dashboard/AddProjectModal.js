@@ -10,14 +10,15 @@ function AddProjectModal(props){
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        let formData = new FormData();
-        formData.append('name', projectNameRef.current.value);
+        let bodyData = {
+            'name': projectNameRef.current.value
+        };
         fetch(`${packageJson.apihost}/api/project/create.php`, {
         headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
         },
         method: 'POST',
-        body: formData
+        body: JSON.stringify(bodyData)
         })
         .then(res => res.json())
         .then(

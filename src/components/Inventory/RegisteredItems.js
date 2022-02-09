@@ -45,14 +45,15 @@ function RegisteredItems(props){
 
     const handleDelete = (event) => {
         if (window.confirm("Are you sure you want to delete the item?")){
-            let formData = new FormData();
-            formData.append('id', event.target.id);
+            let bodyData = {
+                'id': event.target.id
+            }
             fetch(`${packageJson.apihost}/api/registry/delete.php`, {
                 headers: {
                     'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
                 },
-                method: 'POST',
-                body: formData
+                method: 'DELETE',
+                body: JSON.stringify(bodyData)
                 })
                 .then(res => res.json())
                 .then(

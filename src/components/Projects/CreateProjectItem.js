@@ -22,18 +22,19 @@ function CreateProjectItem() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    let formData = new FormData();
-    formData.append('inventoryId', values.inventoryId);
-    formData.append('projectId', values.projectId);
-    formData.append('description', values.description);
-    formData.append('qty', values.qty);
-    formData.append('notes', values.notes);
+    let bodyData = {
+      'inventoryId': values.inventoryId,
+      'projectId': values.projectId,
+      'description': values.description,
+      'qty': values.qty,
+      'notes': values.notes
+    }
     fetch(`${packageJson.apihost}/api/project/item/create.php`, {
       headers: {
         'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
       },
       method: 'POST',
-      body: formData
+      body: JSON.stringify(bodyData)
       })
       .then(res => res.json())
       .then(
