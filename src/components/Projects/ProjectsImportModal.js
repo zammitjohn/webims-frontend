@@ -14,15 +14,25 @@ function ProjectsImportModal(props) {
         file: []
       });
 
+
+    const fileToBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+
     const handleSelectedFile = event => {
-        setSelectedFilename(event.target.files[0].name);
-        const fieldValue = { 
-            file : event.target.files[0],
-        };    
-        setSelectedValues({
-            ...selectedValues,
-            ...fieldValue,
-        });
+        fileToBase64(event.target.files[0]).then((value) => {
+            setSelectedFilename(event.target.files[0].name);
+            const fieldValue = { 
+                file : value,
+            };    
+            setSelectedValues({
+                ...selectedValues,
+                ...fieldValue,
+            });
+        })
     }
 
     // file upload
@@ -30,17 +40,17 @@ function ProjectsImportModal(props) {
         event.preventDefault();
 
         toast.info('Importing data'); // show toast
-        let formData = new FormData();
-        formData.append('id', props.id);
-        formData.append('warehouse_categoryId', selectedValues.warehouse_categoryId);
-        formData.append('file', selectedValues.file);
-
+        let bodyData = {
+            'id': props.id,
+            'warehouse_categoryId': selectedValues.warehouse_categoryId,
+            'file': selectedValues.file
+        };
         fetch(`${packageJson.apihost}/api/project/import.php`, {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },  
           method: 'POST',    
-          body: formData
+          body: JSON.stringify(bodyData)
           })
           .then(res => res.json())
           .then(

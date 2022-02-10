@@ -9,12 +9,21 @@ function InventoryImportModal(props) {
         file: []
     }]);
 
+    const fileToBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+
     const handleSelectedFile = event => {
-        const newFile = { 
-            name : event.target.files[0].name,
-            file : event.target.files[0]
-        };    
-        setSelectedFile(newFile);
+        fileToBase64(event.target.files[0]).then((value) => {
+          const newFile = { 
+              name : event.target.files[0].name,
+              file : value
+          };    
+          setSelectedFile(newFile);
+        })
     }
 
     // file upload
@@ -22,16 +31,16 @@ function InventoryImportModal(props) {
         event.preventDefault();
 
         toast.info('Importing data');
-        let formData = new FormData();
-        formData.append('warehouseId', props.warehouseId);
-        formData.append('file', selectedFile.file);
-
+        let bodyData = {
+          'warehouseId': props.warehouseId,
+          'file': selectedFile.file
+        };      
         fetch(`${packageJson.apihost}/api/inventory/import.php`, {
           headers: {
             'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
           },  
-          method: 'POST',    
-          body: formData
+          method: 'PUT',    
+          body: JSON.stringify(bodyData)
           })
           .then(res => res.json())
           .then(
