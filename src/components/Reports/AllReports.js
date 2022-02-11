@@ -9,9 +9,9 @@ function AllReports() {
     let navigate = useNavigate();
 
     const RenderReportState = (props) => {
-        if (props.row.isClosed === '1') {        
+        if (props.row.isClosed === 1) {        
             return (<Badge bg="success">Closed</Badge>);
-        } else if (props.row.isRepairable === '0') {
+        } else if (props.row.isRepairable === 0) {
             return (<Badge bg="danger">Unrepairable</Badge>);
         } else {
             return (<Badge bg="warning">Pending</Badge>);

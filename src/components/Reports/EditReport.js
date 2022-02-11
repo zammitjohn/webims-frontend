@@ -79,7 +79,7 @@ function EditReport() {
               AWBreturn: (response.AWBreturn) ? response.AWBreturn : '',
               RMA: (response.RMA) ? response.RMA : '',
               notes: (response.notes) ? response.notes : '',
-              isRepairable: (response.isRepairable === '1') ? true : false
+              isRepairable: (response.isRepairable === 1) ? true : false
             }));
             setStates({
               isLoaded: true,
