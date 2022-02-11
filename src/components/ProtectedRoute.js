@@ -24,7 +24,7 @@ function ProtectedRoute() {
 			//check expiry
 			const today = new Date()
 			if ( (JSON.parse(localStorage.getItem('UserSession')).expiry <= today.toISOString()) && (JSON.parse(localStorage.getItem('UserSession')).expiry !== null) ){
-				localStorage.removeItem('UserSession');
+				localStorage.clear();
 				setLoginState(false);
 
 			} else {
@@ -51,20 +51,20 @@ function ProtectedRoute() {
 				
 							} else {
 								console.log("Session ID not valid or deleted remotely");
-								localStorage.removeItem('UserSession');
+								localStorage.clear();
 								setLoginState(false);
 							}
 						},
 						(error) => {
 							console.log(error);
-							localStorage.removeItem('UserSession');
+							localStorage.clear();
 							setLoginState(false);
 						}
 					)
 			}
 
 		} else {
-			localStorage.removeItem('UserSession');
+			localStorage.clear();
 			setLoginState(false);
 		}
 	}, [navigate]); // perform check whenever the current location changes

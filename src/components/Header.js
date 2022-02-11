@@ -7,13 +7,13 @@ function Header() {
 			headers: {
 				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
 			},
-            method: 'PUT'
+            method: 'PATCH'
             })
             .then(res => res.json())
             .then(
                 (response) => {
                     if (response.status) {
-						localStorage.removeItem('UserSession');
+						localStorage.clear();
 						window.location.href = '/login';
 
                     } else {

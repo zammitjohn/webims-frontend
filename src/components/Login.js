@@ -7,7 +7,7 @@ function Login(props) {
     document.title = "Login";
 
     //DO NOT UNCOMMENT THE FOLLOWING IN PRODUCTION
-    //localStorage.setItem('UserSession', JSON.stringify({userId:"1", sessionId:"test", "expiry":null}));
+    localStorage.setItem('UserSession', JSON.stringify({"userId":1, "sessionId":"test", "expiry":null}));
 
     // incorrect password alert
     const [showError, setShowError] = useState(false);
@@ -40,7 +40,7 @@ function Login(props) {
             'password': values.password
         };
         fetch(`${packageJson.apihost}/api/user/login.php`, {
-            method: 'PUT',
+            method: 'POST',
             body: JSON.stringify(bodyData),
             })
             .then(res => res.json())
