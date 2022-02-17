@@ -71,6 +71,8 @@ function Login(props) {
                     }
                 },
                 (error) => {
+                    setShowError(true);
+                    setErrorMessage("Encountered an error while trying to connect to the server.");
                     console.log(error);
                 }
             )
