@@ -9,7 +9,7 @@ Key features:
 - Multi-warehouse management
 - Convenient fault reporting options
 
-webims-frontend is built using ReactJS. The design is based on AdminLTE.io, a fully responsive Bootstrap template, fits many screen resolutions from small mobile devices to large desktops. webims-frontend uses the powerful [webims-backend-api](https://github.com/zammitjohn/webims-backend-api).
+webims-frontend is built using React. The design is based on AdminLTE.io, a fully responsive Bootstrap template, fits many screen resolutions from small mobile devices to large desktops. webims-frontend uses the powerful [webims-backend-api](https://github.com/zammitjohn/webims-backend-api).
 
 !["WebIMS Demo"](docs/images/demo.png "WebIMS Demo")
 

@@ -67,7 +67,7 @@ function ActiveUsers(){
 
                             {data.map((user) => (
                                 <li key={user.id}>
-                                    <img src="images/generic-user.png" alt="User"/>
+                                    <img src="images/default-user.svg" alt="User"/>
                                     <div className="users-list-name">{user.firstName + ' ' + user.lastName}</div>
                                     <span className="users-list-date">{moment(user.lastAvailable, "YYYY-MM-DD, h:mm:ss").fromNow()}</span>
                                 </li>

@@ -98,7 +98,7 @@ function ReportComments(props){
                                     <span className="direct-chat-name float-left">{`${comment.firstName} ${comment.lastName}`}</span> 
                                     <span className="direct-chat-timestamp float-right">{moment(comment.timestamp, "YYYY-MM-DD, h:mm:ss").fromNow()}</span>
                                 </div>
-                                <img className="direct-chat-img" src="../../images/generic-user.png" alt="User"/>
+                                <img className="direct-chat-img" src="../../images/default-user.svg" alt="User"/>
                                 <div className="direct-chat-text">
                                     {comment.text}
                                 </div>

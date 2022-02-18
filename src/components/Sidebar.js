@@ -21,7 +21,7 @@ function Sidebar() {
 			{/* Sidebar user panel (optional) */}
 			<div className="user-panel mt-3 pb-3 mb-3 d-flex">
 				<div className="image">
-				<img src="/images/generic-user.png" className="img-circle elevation-2" alt=""/>
+				<img src="/images/default-user.svg" className="img-circle elevation-2" alt=""/>
 				</div>
 				<div className="info">
 				<Link to="#" className="d-block">{`${user.firstName} ${user.lastName}`}</Link>
