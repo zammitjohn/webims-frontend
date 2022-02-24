@@ -26,7 +26,7 @@ function ProjectsImportModal(props) {
         fileToBase64(event.target.files[0]).then((value) => {
             setSelectedFilename(event.target.files[0].name);
             const fieldValue = { 
-                file : value,
+                file : value.split(',')[1] // splits the string into an array of strings with the first item (index 0) containing file type and the second item (index 1) containing the base64 encoded data
             };    
             setSelectedValues({
                 ...selectedValues,
