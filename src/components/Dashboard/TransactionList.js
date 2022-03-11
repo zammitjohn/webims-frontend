@@ -1,35 +1,11 @@
 import React, { useState } from 'react';
 import { Table }  from 'react-bootstrap';
-import { toast } from 'react-toastify'
 import packageJson from '../../../package.json';
+import { downloadCSVFile } from '../../utils/common.js';
 
 function TransactionList(){
 
     const [data, setData] = useState([]); // data from api
-
-    const download = (id) => {
-        fetch(`${packageJson.apihost}/api/inventory/transaction/download.php?id=${id}`, {
-            headers: {
-                'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
-            },
-            method: 'GET'
-        })
-        .then(response => response.blob())
-        .then(blob => {
-            toast.info("Downloading");
-            var url = window.URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = `transaction_${id}.csv`;
-            document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
-            a.click();    
-            a.remove();  //afterwards we remove the element again         
-        },
-        (error) => {
-            toast.error("Error occured");
-            console.log(error);
-        });
-    }
 
     const fetchData = () => {
         fetch(`${packageJson.apihost}/api/inventory/transaction/read.php`, {
@@ -66,7 +42,7 @@ function TransactionList(){
                             {data.map((transaction) => (
                                     <tr key={transaction.id}>
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                        <td><a href="#" className="text-muted" onClick={() => download(transaction.id)} title={`#${transaction.id}`}> <i className="fas fa-download"></i></a></td>
+                                        <td><a href="#" className="text-muted" onClick={() => downloadCSVFile('/api/inventory/transaction/download.php', transaction.id, `transaction_${transaction.id}`)} title={`#${transaction.id}`}> <i className="fas fa-download"></i></a></td>
                                         <td>{transaction.description}</td>
                                         <td>{transaction.user_fullName}</td>
                                         <td>{transaction.date}</td>

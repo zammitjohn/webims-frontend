@@ -8,6 +8,7 @@ import ProjectsImportModal from './ProjectsImportModal';
 import { Row, Col }  from 'react-bootstrap';
 import { toast } from 'react-toastify'
 import packageJson from '../../../package.json';
+import { downloadCSVFile } from '../../utils/common.js';
 
 function ProjectItems() {
     // to hide and show buttons
@@ -71,30 +72,6 @@ function ProjectItems() {
         isDataLoaded: false,
         isProjectNameLoaded: false,
       });
-
-    const csvDownload = useCallback(() => {
-        fetch(`${packageJson.apihost}/api/project/download.php?id=${id}`, {
-            headers: {
-                'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
-            },
-            method: 'GET'
-        })
-        .then(response => response.blob())
-        .then(blob => {
-            toast.info("Downloading");
-            var url = window.URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = `project_${projectName}.csv`;
-            document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
-            a.click();    
-            a.remove();  //afterwards we remove the element again         
-        },
-        (error) => {
-            toast.error("Error occured");
-            console.log(error);
-        });
-    }, [id, projectName])
 
     const projectDelete = useCallback(() => {
         if (window.confirm("Are you sure you want to delete the project?")) {
@@ -206,7 +183,7 @@ function ProjectItems() {
                                     <h3 className="card-title">{projectName}</h3>   
                                         <div className="card-tools">
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                            <a href="#" className="btn btn-tool btn-sm" onClick={csvDownload}> <i className="fas fa-download"></i> </a> 
+                                            <a href="#" className="btn btn-tool btn-sm" onClick={() => downloadCSVFile('/api/project/download.php', id, `project_${projectName}`)}> <i className="fas fa-download"></i> </a> 
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a href="#" hidden={!privileges.canUpdate} className="btn btn-tool btn-sm" onClick={handleModalShow}> <i className="fas fa-upload"></i> </a> 
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}

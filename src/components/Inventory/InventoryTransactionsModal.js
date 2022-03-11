@@ -3,6 +3,7 @@ import { Button, Modal, Tabs, Tab, Form, Container, Table }  from 'react-bootstr
 import AsyncSelect from 'react-select/async';
 import { toast } from 'react-toastify'
 import packageJson from '../../../package.json';
+import { downloadCSVFile } from '../../utils/common.js';
 
 function InventoryTransactionsModal(props){
 
@@ -37,31 +38,6 @@ function InventoryTransactionsModal(props){
         setSelectedItems(updatedQtys);
     }
 
-
-    const transactionDownload = (id) => {
-        fetch(`${packageJson.apihost}/api/inventory/transaction/download.php?id=${id}`, {
-            headers: {
-                'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
-            },
-            method: 'GET'
-        })
-        .then(response => response.blob())
-        .then(blob => {
-            toast.info("Downloading");
-            var url = window.URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = `transaction_${id}.csv`;
-            document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
-            a.click();    
-            a.remove();  //afterwards we remove the element again         
-        },
-        (error) => {
-            toast.error("Error occured");
-            console.log(error);
-        });
-    }
-
     const handleSubmit = (event) => {
         event.preventDefault();
 
@@ -83,7 +59,7 @@ function InventoryTransactionsModal(props){
             .then(
                 (response) => {
                     if (response.status) {
-                        transactionDownload(response.id);
+                        downloadCSVFile('/api/inventory/transaction/download.php', response.id, `transaction_${response.id}`)
                         toast.success("Transaction #" + response.id + " created.");
 
                         if (response.returned_count){
