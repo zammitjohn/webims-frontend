@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import packageJson from '../../package.json';
 
 function SidebarProjects() {
 // Local variables will get reset every render upon mutation whereas state will update
+let navigate = useNavigate();
 let elements = [];
 let key = 0;
 const [projects, setProjects] = useState([]);
@@ -41,7 +43,7 @@ useEffect(() => {
 				}
 			)
 	}
-  }, []);
+}, [navigate]); // reload contents on page navigate
 
     if (states.error) {
         console.log(states.error.message);

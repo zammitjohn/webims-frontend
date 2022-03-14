@@ -46,7 +46,7 @@ function AllInventoryItems() {
         },
         {
             name: 'Quantity',
-            selector: row => (row.qty == null) ? "" : row.qty,
+            selector: row => (row.qty == null) ? 0 : parseInt(row.qty),
             sortable: true,
             conditionalCellStyles: [
                 {
@@ -57,7 +57,7 @@ function AllInventoryItems() {
         },
         {
             name: 'Allocated',
-            selector: row => (row.qty_project_item_allocated == null) ? "" : row.qty_project_item_allocated,
+            selector: row => (row.qty_project_item_allocated == null) ? 0 : parseInt(row.qty_project_item_allocated),
             sortable: true,
             hide: 'md',
         },

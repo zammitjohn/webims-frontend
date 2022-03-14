@@ -3,9 +3,10 @@ import { Modal, Form }  from 'react-bootstrap';
 import { toast } from 'react-toastify'
 import CreateButton from '../CreateButton';
 import packageJson from '../../../package.json';
+import { useNavigate } from "react-router-dom";
 
 function AddProjectModal(props){
-
+    let navigate = useNavigate();
     const projectNameRef = useRef(); // Reference projectName from DOM
 
     const handleSubmit = (event) => {
@@ -24,8 +25,8 @@ function AddProjectModal(props){
         .then(
             (response) => {
                 if (response.status) {
-                    /* eslint-disable-next-line jsx-a11y/anchor-is-valid */
-                    toast.success(<div>{response.message} <a href="">Please reload</a></div>);
+                    toast.success(response.message);
+                    navigate(`/project/${response.id}`, { replace: false });
                 } else {
                     toast.error(response.message);
                 }

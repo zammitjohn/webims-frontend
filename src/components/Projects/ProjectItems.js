@@ -30,7 +30,7 @@ function ProjectItems() {
         },
         {
             name: 'Quantity',
-            selector: row => (row.qty == null) ? "" : row.qty,
+            selector: row => (row.qty == null) ? 0 : parseInt(row.qty),
             sortable: true,
         },
         {
@@ -89,9 +89,8 @@ function ProjectItems() {
                 .then(
                     (response) => {
                         if (response.status) {
+                            toast.success(response.message);
                             navigate('/', { replace: true })
-                            /* eslint-disable-next-line jsx-a11y/anchor-is-valid */
-                            toast.success(<div>{response.message} <a href="">Please reload</a></div>);
                         } else {
                             toast.error(response.message);
                         }

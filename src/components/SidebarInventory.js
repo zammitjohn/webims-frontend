@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import packageJson from '../../package.json';
+import { useNavigate } from "react-router-dom";
 
 function SidebarInventory() {
 // Local variables will get reset every render upon mutation whereas state will update
+let navigate = useNavigate();
 let elements = [];
 let key = 0;
 const [categories, setCategories] = useState([]);
@@ -70,7 +72,7 @@ useEffect(() => {
 				}
 			)
 	}
-  }, []);
+}, [navigate]); // reload contents on page navigate
 
 if (states.error) {
 	console.log(states.error.message);
