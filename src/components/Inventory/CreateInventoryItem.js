@@ -14,6 +14,7 @@ function CreateInventoryItem() {
     SKU: '',
     warehouseId: '',
     warehouse_categoryId: '',
+    tag: '',
     description: '',
     supplier: '',
     qty: '',
@@ -27,6 +28,7 @@ function CreateInventoryItem() {
     let bodyData = {
       'SKU': values.SKU,
       'warehouse_categoryId': values.warehouse_categoryId,
+      'tag': values.tag,
       'description': values.description,
       'supplier': values.supplier,
       'qty': values.qty,

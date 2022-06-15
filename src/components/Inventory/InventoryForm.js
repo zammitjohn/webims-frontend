@@ -81,15 +81,15 @@ function InventoryForm(props) {
             <Form.Group className="mb-3">
                 <Row>
                     <Col sm={3}>
-                    <Form.Label htmlFor="warehouseId">Warehouse</Form.Label>
-                    <Form.Select value={props.values.warehouseId} onChange={handleWarehouseChange} id="warehouseId" className="form-control">
-                        <option value='null'>Select Warehouse</option>
-                        {warehouses.map(warehouse => (
-                            <option key={warehouse.id} value={warehouse.id}>
-                            {warehouse.name}
-                            </option>
-                        ))}    
-                    </Form.Select>                          
+                        <Form.Label htmlFor="warehouseId">Warehouse</Form.Label>
+                        <Form.Select value={props.values.warehouseId} onChange={handleWarehouseChange} id="warehouseId" className="form-control">
+                            <option value='null'>Select Warehouse</option>
+                            {warehouses.map(warehouse => (
+                                <option key={warehouse.id} value={warehouse.id}>
+                                {warehouse.name}
+                                </option>
+                            ))}    
+                        </Form.Select>                          
                     </Col>
                     <Col sm={3}>
                         <Form.Label htmlFor="warehouse_categoryId">Category</Form.Label>
@@ -102,6 +102,10 @@ function InventoryForm(props) {
                             ))}  
                         </Form.Select>
                     </Col>
+                    <Col sm={3}>
+                        <Form.Label htmlFor="tag">Tag</Form.Label>
+                        <Form.Control value={props.values.tag} onChange={handleChange} type="text" maxLength="255" id="tag" placeholder="Enter tag"/>
+                    </Col>                    
                 </Row>
             </Form.Group>                   
 

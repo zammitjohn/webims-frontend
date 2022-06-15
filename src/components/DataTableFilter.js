@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { createSearchParams, useNavigate } from "react-router-dom";
+import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
 import { FormControl, InputGroup, Button }  from 'react-bootstrap';
 
 function DataTableFilter(props) {
     const [icon, setIcon] = useState(<i className="fas fa-search" aria-hidden="true"></i>);
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams(); // search params
 
     const handleClear = () => {
         if (props.filterText) {
@@ -12,11 +13,18 @@ function DataTableFilter(props) {
             props.setFilterText('');
         }
         setIcon(<i className="fa fa-search" aria-hidden="true"></i>);
-        navigate({
-            search: `?${createSearchParams({
-                search: ''
-            })}`
-        });
+        if (searchParams.get('tag')) {
+            navigate({
+                search: `?${createSearchParams({
+                    tag: searchParams.get('tag')
+                })}`
+            });
+        } else {
+            navigate({
+                search: `?${createSearchParams({
+                })}`
+            });
+        }
     };
 
     const handleChange  = e => {
@@ -26,18 +34,32 @@ function DataTableFilter(props) {
         } else {
             setIcon(<i className="fa fa-times" aria-hidden="true"></i>);
         }
-        navigate({
-            search: `?${createSearchParams({
-                search: e.target.value
-            })}`
-        });
+
+        if (searchParams.get('tag')) {
+            navigate({
+                search: `?${createSearchParams({
+                    search: e.target.value,
+                    tag: searchParams.get('tag')
+                })}`
+            });
+        } else {
+            navigate({
+                search: `?${createSearchParams({
+                    search: e.target.value
+                })}`
+            });
+        }
     };
 
     useEffect(() => {
+        if (!searchParams.get('search')) {
+            props.setFilterText('');
+        }
+
         if (props.filterText) {
             setIcon(<i className="fa fa-times" aria-hidden="true"></i>);
         }
-	}, [props.filterText]);
+	}, [props, searchParams]);
 
     return (
         <InputGroup className="input-group-sm" style={{paddingLeft: "10px"}} >

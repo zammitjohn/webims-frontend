@@ -2,7 +2,8 @@
 WebIMS is a modern web-based inventory, fault report and warehouse management solution. WebIMS allows you to stay on top of your inventory levels and value across multiple locations, as well as multiple projects. The interface makes it easy to search and filter your inventory and to assess the state of your current stock. It also facilitates tracking of item fault report progresses for better recordkeeping.
 
 Key features:
-- Project allocations and item registration
+- Project allocations 
+- Item registration and tagging
 - Easy table view sorting and filtering
 - Batch comma-separated values (CSV) file imports
 - Transaction recording and database accounting functions 

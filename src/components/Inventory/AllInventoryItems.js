@@ -113,7 +113,7 @@ function AllInventoryItems() {
     });
 
     const fetchData = () => { // fetch inventory
-        fetch(`${packageJson.apihost}/api/inventory/read.php`, {
+        fetch(`${packageJson.apihost}/api/inventory/read.php?tag=${(searchParams.get('tag')) ?  searchParams.get('tag') : ''}`, {
             headers: {
                 'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
             },
@@ -142,7 +142,8 @@ function AllInventoryItems() {
         if (localStorage.getItem('UserSession')) {
             fetchData();
         }
-	}, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [searchParams]);
 
 
     if (states.error) {
@@ -158,7 +159,7 @@ function AllInventoryItems() {
 
                         <div className="card"> 
                             <div className="card-header">
-                                <h3 className="card-title">All items</h3>    
+                                <h3 className="card-title">{(searchParams.get('tag')) ?  <i>{'#' + searchParams.get('tag')}</i> : 'All items'}</h3>    
                                     <div className="card-tools">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                         <a href="#" hidden={!privileges.canUpdate} className="btn btn-tool btn-sm" onClick={handleModalShow}> <i className="fas fa-dolly-flatbed"></i> </a> 

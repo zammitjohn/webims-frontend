@@ -8,10 +8,12 @@ function SidebarInventory() {
 let navigate = useNavigate();
 let elements = [];
 let key = 0;
+const [tags, setTags] = useState([]);
 const [categories, setCategories] = useState([]);
 const [warehouses, setWarehouses] = useState([]);
 const [states, setStates] = useState({ // fetch states
 	error: null,
+	isTagsLoaded: false,
 	isWarehousesLoaded: false,
 	isCategoriesLoaded: false,
 });
@@ -21,8 +23,34 @@ useEffect(() => {
 	// instead of a catch() block so that we don't swallow
 	// exceptions from actual bugs in components.	
 
-	// fetch warehouses
 	if (localStorage.getItem('UserSession')) {
+
+		// fetch tags
+		fetch(`${packageJson.apihost}/api/inventory/read_tags.php`, {
+			headers: {
+				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
+			},
+			method: 'GET'
+			})
+			.then(res => res.json()) 
+			.then(
+				(tags) => {
+					setTags(tags);
+					setStates(prevState => ({
+						...prevState,
+						isTagsLoaded: true,
+					}));
+				},
+				(error) => {
+					setStates(prevState => ({
+						...prevState,
+						isTagsLoaded: true,
+						error
+					}));
+				}
+			)	
+
+		// fetch warehouses
 		fetch(`${packageJson.apihost}/api/warehouse/read.php`, {
 			headers: {
 				'Auth-Key': JSON.parse(localStorage.getItem('UserSession')).sessionId
@@ -77,21 +105,31 @@ useEffect(() => {
 if (states.error) {
 	console.log(states.error.message);
 	return null;
-} else if (!(states.isWarehousesLoaded && states.isCategoriesLoaded)) {
+} else if (!(states.isWarehousesLoaded && states.isCategoriesLoaded && states.isTagsLoaded)) {
 	console.log("Loading...");
 	return null;
 } else {
 	// build elements
-	warehouses.forEach((warehouse) => {
-		let els = [];
+	let tags_els = [];
+	let warehouses_els = [];
 
-		els.push(
+	tags.forEach((tag) => {
+		tags_els.push(
+			<Link to={`inventory?tag=${tag.name}`} className="nav-link" key={key++}>
+				<i className="fas fa-hashtag nav-icon"></i>
+				<p>{tag.name}</p>
+			</Link>	
+		);
+	})
+
+	warehouses.forEach((warehouse) => {
+		warehouses_els.push(
 			<Link to="#" className="nav-link" key={key++}>
 				<i className="far fa-dot-circle nav-icon"></i>
 				<p>{warehouse.name}<i className="right fas fa-angle-left"></i></p>
 			</Link>
 		);
-		els.push(
+		warehouses_els.push(
 			<ul className="nav nav-treeview" key={key++}>
 				<li className="nav-item">
 				<Link to={`inventory/warehouse/${warehouse.id}`} className="nav-link">
@@ -107,7 +145,7 @@ if (states.error) {
 		categories.forEach((category) => {
 			if (warehouse.id === category.warehouseId) {
 				
-				els.push(
+				warehouses_els.push(
 					<ul className="nav nav-treeview" key={key++}>
 						<li className="nav-item">
 						<Link to={`inventory/category/${category.id}`} className="nav-link">
@@ -122,7 +160,7 @@ if (states.error) {
 
 		elements.push(
 			<li className="nav-item has-treeview" key={key++}>
-				{els}
+				{warehouses_els}
 			</li>
 		);
 
@@ -150,9 +188,10 @@ if (states.error) {
 						<p>All items</p>
 					</Link>
 				</li>
-
+				<li className="nav-item" key={key++}>
+					{tags_els}
+				</li>
 				{elements}
-
 			</ul>
 		</li>
 		);	
